@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features>
+  <feature name='audit.ui' version='${pom.version}'>
+    <!-- we need a lot more here, obviously -->
+  </feature>
+</features>

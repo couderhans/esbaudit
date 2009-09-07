@@ -8,6 +8,19 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>ESB Audit</name>
-  <description>CloudMix</description>
+  
+  <modules>
+    <module>features</module>
+  </modules>
+  
+  <!--
+  <pluginRepositories>
+    <pluginRepository>
+      <id>codehaus.repo</id>
+      <name>Codehaus Repository</name>
+      <url>http://repository.codehaus.org/</url>
+    </pluginRepository>
+  </pluginRepositories>
+  -->
 
 </project>
