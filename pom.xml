@@ -9,18 +9,36 @@
   <packaging>pom</packaging>
   <name>ESB Audit</name>
   
+  <properties>
+    <felix-version>1.4.0</felix-version>
+    <esbaudit.osgi.export>${artifactId}</esbaudit.osgi.export>
+    <esbaudit.osgi.import>*</esbaudit.osgi.import>
+    <esbaudit.osgi.private/>
+  </properties>
+  
   <modules>
     <module>features</module>
+    <module>org.fusesource.esb.audit.camel</module>
   </modules>
   
-  <!--
-  <pluginRepositories>
-    <pluginRepository>
-      <id>codehaus.repo</id>
-      <name>Codehaus Repository</name>
-      <url>http://repository.codehaus.org/</url>
-    </pluginRepository>
-  </pluginRepositories>
-  -->
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>${felix-version}</version>
+        <extensions>true</extensions>
+        <inherited>true</inherited>
+        <configuration>
+          <instructions>
+            <Bundle-Name>${artifactId}</Bundle-Name>
+            <Export-Package>${esbaudit.osgi.export}</Export-Package>
+            <Import-Package>${esbaudit.osgi.import}</Import-Package>
+            <Private-Package>${esbaudit.osgi.private}</Private-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
