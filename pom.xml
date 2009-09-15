@@ -29,6 +29,7 @@
     <module>org.fusesource.esb.audit.camel</module>
     <module>org.fusesource.esb.audit.commons</module>
     <module>org.fusesource.esb.audit.testsupport</module>
+    <module>org.fusesource.esb.audit.webui</module>
   </modules>
   
   <build>
