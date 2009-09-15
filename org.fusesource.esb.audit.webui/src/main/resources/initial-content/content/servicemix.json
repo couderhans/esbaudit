@@ -1,0 +1,24 @@
+{
+   "jcr:primaryType":"sling:Folder",
+   "sling:resourceType":"servicemix/dashboard",
+   
+   "dashboard":{
+      "jcr:primaryType":"sling:Folder",
+      "sling:resourceType":"servicemix/dashboard"
+   },
+
+   "navigation":{
+      "jcr:primaryType":"sling:Folder",
+      "sling:resourceType":"servicemix/navigation"
+   },
+   
+   "masterpage-header":{
+      "jcr:primaryType":"sling:Folder",
+      "sling:resourceType":"servicemix/masterpage-header"
+   },
+   
+   "masterpage-footer":{
+      "jcr:primaryType":"sling:Folder",
+      "sling:resourceType":"servicemix/masterpage-footer"
+   }
+}

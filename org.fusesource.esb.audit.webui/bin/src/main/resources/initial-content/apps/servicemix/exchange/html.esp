@@ -1,0 +1,176 @@
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<html>
+<head>
+<title><%= currentNode.getName() %></title>
+<link rel="stylesheet" type="text/css" href="/theme/master.css"/>
+<script type="text/javascript" src="/scripts/dojo.js">
+<!-- the DOJO JavaScript Toolkit -->
+</script>
+</head>
+
+<body>
+
+<% sling.include("/servicemix/masterpage-header.div"); %>
+
+<script type="text/javascript">
+
+    function createXMLHttpRequest() {
+        var xmlHttp;
+        if (window.ActiveXObject) {
+	        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        else if(window.XMLHttpRequest) {
+            xmlHttp = new XMLHttpRequest();
+        }
+        return xmlHttp;
+    }
+
+    function addEvent(obj, event, funct) {
+        if (obj.attachEvent) {
+            obj['e' + event + funct] = funct;  
+            obj['x' + event + funct] = function() {
+                obj['e' + event + funct](window.event);
+            }
+            obj.attachEvent('on' + event, obj['x' + event + funct]);
+        } else // other browser
+            obj.addEventListener(event, funct, false);
+    }
+
+    function modify() {
+        var place = document.getElementById("modify_message");
+        while(place.childNodes.length > 0) {
+            place.removeChild(place.childNodes[0]);
+        }
+        dojo.xhrGet({
+            url: "<%= currentNode.name %>/In.json",
+            handleAs: "json",
+            load: function(response, ioArgs) {
+                      var textarea = document.createElement("textarea");
+                      textarea.setAttribute("rows", "8");
+                      textarea.setAttribute("cols", "100");
+                      textarea.setAttribute("id", "textarea");
+                      textarea.value = response.Content;
+                      var button = document.createElement("button");
+                      button.appendChild(document.createTextNode("send"));
+                      addEvent(button, "click", putExchangeToQueue);
+                      place.appendChild(textarea);
+                      place.appendChild(button);
+                  },
+            error: function(error) {
+                       alert(error);
+                   }
+        });
+    }
+
+    function putExchangeToQueue() {
+        var url = "../../../queue";
+        var newContent = document.getElementById("textarea").value;
+        var mep = "<%= currentNode['pattern'] %>";
+        var endpoint = "<%= currentNode['endpoint'] %>";
+        var service = "<%= currentNode['service'] %>";
+        var queryString = "newContent=" + newContent + "&mep=" + mep + "&endpoint=" + endpoint + "&service=" + service;
+        <% for (property in currentNode.getProperties()) { 
+                if (property.match("org.apache.servicemix") || property.match("javax.jbi")) { %>
+                    queryString = queryString + "&<%= property %>=<%= currentNode[property] %>";
+                <% }
+           }
+        %>
+        xmlHttp = createXMLHttpRequest();
+        xmlHttp.onreadystatechange = processSave;
+        xmlHttp.open("POST", url, true);
+        xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");
+        xmlHttp.send(queryString);
+    }
+
+    function processSave() {
+        if ((xmlHttp.readyState == 4) && (xmlHttp.status == 200)) {    
+            // alert("Status: " + xmlHttp.status +": "+ xmlHttp.statusText);
+        }
+        else {
+            // alert("Status: Error while loading page" + xmlHttp.status +": "+ xmlHttp.statusText);
+        }
+    }
+</script>
+
+<div id="main">
+  <div id="contain">
+    <div id="article">
+      <table id="exchange_info">
+      <tr>
+	  <td>Status</td>
+	  <td><%= currentNode['exchangeStatus'] %> <img src="<%= currentNode['statusIcon']%>" /></td>
+	</tr>
+	<tr>
+	  <td>MEP</td>
+	  <td><%= currentNode['pattern'] %> <img src="<%= currentNode['mepIcon']%>" /></td>
+	</tr>
+	<tr>
+	  <td>Endpoint</td>
+	  <%
+	     var path = "/servicemix/endpoints/"+currentNode['endpointId']+".html";
+	  %>
+	  <td><a href="<%= path %>"><%= currentNode['endpoint'] %></a></td>
+	</tr>
+	<% for (property in currentNode.getProperties()) {
+            if (property.match("org.apache.servicemix") || property.match("javax.jbi")) { %>
+      <tr>
+	  <td><%= property %></td>
+	  <td><%= currentNode[property] %></td>
+	</tr>
+	<% }
+    } 
+    %>
+      </table>
+      </div>
+
+      <% if (currentNode.In) { %>
+      <div id="article">
+    <h4>In message</h4>
+    <% sling.include(currentNode.In + ".div"); %>
+    <div id="in_message">
+    <form action="#">
+	    <input type="button" value="modify" onClick="modify();"/>
+	  </form>
+	</div>
+	
+	<div id="modify_message">	  
+	</div>
+      </div>
+      <%}%>
+
+      <% if (currentNode.Out) { %>
+      <div id="article">
+	<h4>Out message</h4>
+	<% sling.include(currentNode.Out + ".div"); %>
+      </div>
+      <%}%>
+      <% if (currentNode.Fault) { %>
+      <div id="article">
+	<h4>Fault message</h4>
+	<% sling.include(currentNode.Fault + ".div"); %>
+      </div>
+      <%}%>
+
+  </div>
+</div>
+
+
+<% sling.include("/servicemix/masterpage-footer.div"); %> 
+
+</body>
+</html>
+
