@@ -56,5 +56,6 @@
     <bundle>mvn:org.apache.sling/org.apache.sling.jcr.jackrabbit.accessmanager/2.0.2-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.jcr.jackrabbit.usermanager/2.0.2-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.launchpad.content/2.0.4-incubator</bundle>
+    <bundle>mvn:org.fusesource.esb.audit.webui</bundle>
   </feature>
 </features>
