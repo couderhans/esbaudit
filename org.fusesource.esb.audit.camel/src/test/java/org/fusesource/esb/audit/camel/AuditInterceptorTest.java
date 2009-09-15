@@ -12,7 +12,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.jackrabbit.core.TransientRepository;
 
-public class InterceptorStrategyTest extends ContextTestSupport {
+public class AuditInterceptorTest extends AbstractAuditTestSupport {
 	
     private TransientRepository repository;
 
@@ -58,7 +58,7 @@ public class InterceptorStrategyTest extends ContextTestSupport {
         return new RouteBuilder() {
             @Override
             public void configure() throws Exception {
-                getContext().addInterceptStrategy(new AuditInterceptStrategy(repository));
+                getContext().addInterceptStrategy(new AuditInterceptStrategy(getRepository()));
                 from("direct:a").to("mock:a");
                 from("direct:in-only").to("mock:in-only");
                 from("direct:in-out").to("mock:in-out");
@@ -66,15 +66,14 @@ public class InterceptorStrategyTest extends ContextTestSupport {
         };
     }
 	
-    private void assertRepoNotNull(String exchangeId) throws RepositoryException {
-        Session session = repository.login();
+    private void assertRepoNotNull(String exchangeId) throws Exception {
+        Session session = getRepository().login();
         Node exchanges = session.getRootNode().getNode("exchanges");
         NodeIterator it =  exchanges.getNodes();
         while(it.hasNext()) {
             System.out.println(it.next());
         }
         assertNotNull(exchanges.getNode(exchangeId));
-        repository.shutdown();
     }
 
 }

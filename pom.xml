@@ -28,6 +28,7 @@
     <module>features</module>
     <module>org.fusesource.esb.audit.camel</module>
     <module>org.fusesource.esb.audit.commons</module>
+    <module>org.fusesource.esb.audit.testsupport</module>
   </modules>
   
   <build>
@@ -105,6 +106,11 @@
       <dependency>
         <groupId>org.fusesource.esb.audit</groupId>
         <artifactId>org.fusesource.esb.audit.commons</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.fusesource.esb.audit</groupId>
+        <artifactId>org.fusesource.esb.audit.testsupport</artifactId>
         <version>${pom.version}</version>
       </dependency>
     </dependencies>
