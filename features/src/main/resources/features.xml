@@ -14,8 +14,9 @@
         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
         See the License for the specific language governing permissions and
         limitations under the License.
-    -->
+-->
 <features>
+  <repository>mvn:org.apache.camel.karaf/features/${camel.version}/xml/features</repository>
   <feature name="sling">
     <feature>webconsole</feature>
     <bundle>mvn:org.apache.felix/org.apache.felix.bundlerepository/1.3.0-SNAPSHOT</bundle>
@@ -56,6 +57,16 @@
     <bundle>mvn:org.apache.sling/org.apache.sling.jcr.jackrabbit.accessmanager/2.0.2-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.jcr.jackrabbit.usermanager/2.0.2-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.launchpad.content/2.0.4-incubator</bundle>
-    <bundle>mvn:org.fusesource.esb.audit.webui</bundle>
+    <bundle>mvn:org.fusesource.esb.audit/org.fusesource.esb.audit.webui/1.0-SNAPSHOT</bundle>
+  </feature>
+  <feature name="audit.camel">
+    <feature>spring-dm</feature>
+    <feature>camel-osgi</feature>
+    <bundle>mvn:org.apache.sling/org.apache.sling.jcr.api/2.0.2-incubator</bundle>
+    <bundle>mvn:org.apache.jackrabbit/jackrabbit-jcr-commons/1.6.0</bundle>
+    <bundle>mvn:org.fusesource.esb.audit/org.fusesource.esb.audit.commons/1.0-SNAPSHOT</bundle>
+    <bundle>mvn:org.fusesource.esb.audit/org.fusesource.esb.audit.camel/1.0-SNAPSHOT</bundle>
+  </feature>
+  <feature name="audit.nmr">
   </feature>
 </features>

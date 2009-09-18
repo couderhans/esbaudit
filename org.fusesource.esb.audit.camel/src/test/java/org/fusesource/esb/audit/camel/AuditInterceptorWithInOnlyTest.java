@@ -41,7 +41,7 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
         
         Exchange exchange = inOnly.getExchanges().get(0);
         
-        assertNode("exchanges/" + exchange.getExchangeId() + "/in", new NodeAssertions() {
+        assertNode("content/exchanges/" + exchange.getExchangeId() + "/in", new NodeAssertions() {
 			
 			public void check(Node node) throws Exception {
 				assertNotNull(node.getProperty("content"));
@@ -66,7 +66,7 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
 
         System.out.println("PROPERTIES ERROR: " + exchange.getProperties().toString());
         
-        assertNode("exchanges/" + exchange.getExchangeId() + "/in", new NodeAssertions() {
+        assertNode("content/exchanges/" + exchange.getExchangeId() + "/in", new NodeAssertions() {
 			
 			public void check(Node node) throws Exception {
 				assertNotNull(node.getProperty("status"));
@@ -89,7 +89,7 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
         
         Exchange exchange = file.getExchanges().get(0);
         
-        assertNode("exchanges/" + exchange.getExchangeId() + "/in", new NodeAssertions() {
+        assertNode("content/exchanges/" + exchange.getExchangeId() + "/in", new NodeAssertions() {
 			
 			public void check(Node node) throws Exception {
 				assertNotNull(node.getProperty("status"));

@@ -76,7 +76,8 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
 	
     private void assertRepoNotNull(String exchangeId) throws Exception {
         Session session = getRepository().login();
-        Node exchanges = session.getRootNode().getNode("exchanges");
+        Node content = session.getRootNode().getNode("content");
+        Node exchanges = content.getNode("exchanges");
         NodeIterator it =  exchanges.getNodes();
         while(it.hasNext()) {
             System.out.println(it.next());

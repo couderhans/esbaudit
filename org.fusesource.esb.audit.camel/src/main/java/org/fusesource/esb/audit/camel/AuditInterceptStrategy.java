@@ -17,7 +17,9 @@
 
 package org.fusesource.esb.audit.camel;
 
+import javax.jcr.Credentials;
 import javax.jcr.Repository;
+import javax.jcr.SimpleCredentials;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Processor;
@@ -26,10 +28,21 @@ import org.apache.camel.spi.InterceptStrategy;
 
 public class AuditInterceptStrategy implements InterceptStrategy {
 
+	
     private Repository repository;
+	private String username;
+	private String password;
+	private Credentials credentials;
 
     public AuditInterceptStrategy(Repository repository) throws Exception {
-        this.repository = repository;
+        this(repository, "user", "pass");
+    }
+    
+    public AuditInterceptStrategy(Repository repository, String username, String password) {
+    	super();
+    	this.repository = repository;
+    	this.username = username;
+    	this.password = password;
     }
 
     public Processor wrapProcessorInInterceptors(CamelContext context,
@@ -42,5 +55,12 @@ public class AuditInterceptStrategy implements InterceptStrategy {
     public Repository getRepository() {
         return repository;
     }
+
+	public Credentials getCredentials() {
+        if (credentials == null) {
+	        credentials = new SimpleCredentials(this.username, this.password.toCharArray());
+	    }
+        return credentials;
+	}
 
 }

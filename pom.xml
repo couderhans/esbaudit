@@ -30,6 +30,7 @@
     <module>org.fusesource.esb.audit.commons</module>
     <module>org.fusesource.esb.audit.testsupport</module>
     <module>org.fusesource.esb.audit.webui</module>
+    <module>demo</module>
   </modules>
   
   <build>

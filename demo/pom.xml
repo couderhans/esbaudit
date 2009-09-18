@@ -9,9 +9,13 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   
-  <artifactId>org.fusesource.esb.audit.testsupport</artifactId>
+  <artifactId>org.fusesource.esb.audit.demo</artifactId>
   <packaging>bundle</packaging>
-  <name>ESB Audit :: TestSupport</name>
+  <name>ESB Audit :: DEMO</name>
+  
+  <properties>
+    <esbaudit.osgi.import>org.apache.camel.spi,*</esbaudit.osgi.import>
+  </properties>
   
   <dependencies>
     <dependency>
@@ -35,7 +39,6 @@
       <groupId>org.apache.servicemix</groupId>
       <artifactId>servicemix-utils</artifactId>
     </dependency>
-    
     <!--  Test Dependencies -->
     <dependency>
       <groupId>junit</groupId>
