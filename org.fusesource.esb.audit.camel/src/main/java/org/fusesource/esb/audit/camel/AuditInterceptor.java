@@ -26,22 +26,19 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
-import javax.jcr.ValueFormatException;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
-import javax.jcr.version.VersionException;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.spi.Synchronization;
 import org.apache.jackrabbit.value.DateValue;
-import org.hamcrest.core.IsNot;
 
 public class AuditInterceptor extends DelegateProcessor {
 
     private final AuditInterceptStrategy strategy;
     private Session session;
+    
+    
 
     public AuditInterceptor(AuditInterceptStrategy strategy, Processor target) {
         super(target);
@@ -60,7 +57,7 @@ public class AuditInterceptor extends DelegateProcessor {
 					node = getOrCreate(getSession().getRootNode(), "exchanges/" + exchange.getExchangeId() + "/in");
 					node.setProperty("created", new DateValue(new GregorianCalendar()));
 					node.setProperty("endpointId", exchange.getFromEndpoint().toString());
-					node.setProperty("status", "isFailed");
+					node.setProperty("status", ExchangeStatus.Error.toString());
 			        getSession().save();
 				} catch (RepositoryException e) {
 					e.printStackTrace();
@@ -74,7 +71,7 @@ public class AuditInterceptor extends DelegateProcessor {
 					node.setProperty("created", new DateValue(new GregorianCalendar()));
 					node.setProperty("endpointId", exchange.getFromEndpoint().toString());
 				    node.setProperty("content", exchange.getIn().getBody().toString());
-					node.setProperty("status", "isTransacted");
+					node.setProperty("status", ExchangeStatus.Done.toString());
 			        getSession().save();
 				} catch (RepositoryException e) {
 					e.printStackTrace();

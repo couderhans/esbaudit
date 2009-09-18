@@ -14,25 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.fusesource.esb.audit.camel;
 
-import java.util.Map;
-
-import javax.jcr.LoginException;
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 
-import org.apache.camel.Body;
 import org.apache.camel.Exchange;
-import org.apache.camel.Headers;
-import org.apache.camel.OutHeaders;
 import org.apache.camel.Processor;
+import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.direct.DirectEndpoint;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.model.language.ExpressionDefinition;
-import org.fusesource.esb.audit.commons.RepositoryUtils;
 import org.fusesource.esb.audit.testsupport.MockOrderService;
 import org.fusesource.esb.audit.testsupport.NodeAssertions;
 import org.fusesource.esb.audit.testsupport.MockOrderService.OrderFailedException;
@@ -55,7 +46,7 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
 			public void check(Node node) throws Exception {
 				assertNotNull(node.getProperty("content"));
 				assertEquals(PAYLOAD, node.getProperty("content").getString());
-				assertEquals("isTransacted",node.getProperty("status").getString());
+				assertEquals(ExchangeStatus.Done.toString(),node.getProperty("status").getString());
 			}
 		});
     }
@@ -79,7 +70,7 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
 			
 			public void check(Node node) throws Exception {
 				assertNotNull(node.getProperty("status"));
-				assertEquals("isTransacted",node.getProperty("status").getString());
+				assertEquals(ExchangeStatus.Done.toString(),node.getProperty("status").getString());
 			}
 		});
    	
@@ -89,7 +80,11 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
     	
     	MockEndpoint file = getMockEndpoint("mock:file");
     	file.expectedMessageCount(1);
-    	template.sendBody("direct:file", PAYLOAD);
+    	template.send("direct:file", new Processor() {
+    		public void process(Exchange exchange) throws Exception {
+    			exchange.getIn().setBody(PAYLOAD);
+    		}
+    	});
         file.assertIsNotSatisfied();
         
         Exchange exchange = file.getExchanges().get(0);
@@ -99,7 +94,7 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
 			public void check(Node node) throws Exception {
 				assertNotNull(node.getProperty("status"));
 				System.out.println("STATUS: " + node.getProperty("status").getString());
-				assertEquals("isFailed",node.getProperty("status").getString());
+				assertEquals(ExchangeStatus.Error.toString(),node.getProperty("status").getString());
 			}
 		});
   	
@@ -117,6 +112,9 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
                    .handled(true)
                    .bean(MockOrderService.class, "orderFailed")
                    .to("mock:error");
+                
+                // let's not handle any runtime exceptions
+                onException(RuntimeCamelException.class).handled(false);
 
             	from("direct:in-only").to("mock:in-only");
             	              
@@ -128,7 +126,7 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
                 
                 from("direct:file")
                     .to("mock:file")
-                    .to("file:/opt/etc/src/something/somethingfaulty");
+                    .throwException(new RuntimeCamelException("Something is completely going wrong here!"));
             }
         };
     }
