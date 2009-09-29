@@ -57,7 +57,6 @@
     <bundle>mvn:org.apache.sling/org.apache.sling.jcr.jackrabbit.accessmanager/2.0.2-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.jcr.jackrabbit.usermanager/2.0.2-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.launchpad.content/2.0.4-incubator</bundle>
-    <bundle>mvn:org.fusesource.esb.audit/org.fusesource.esb.audit.webui/1.0-SNAPSHOT</bundle>
   </feature>
   <feature name="audit.camel">
     <feature>spring-dm</feature>
@@ -68,5 +67,9 @@
     <bundle>mvn:org.fusesource.esb.audit/org.fusesource.esb.audit.camel/1.0-SNAPSHOT</bundle>
   </feature>
   <feature name="audit.nmr">
+  </feature>
+  <feature name="audit.webui">
+    <feature>sling</feature>    
+    <bundle>mvn:org.fusesource.esb.audit/org.fusesource.esb.audit.webui/1.0-SNAPSHOT</bundle>
   </feature>
 </features>

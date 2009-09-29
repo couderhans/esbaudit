@@ -1,7 +1,0 @@
-{
-   "jcr:primaryType":"sling:Folder",
-
-   "servicemix":{
-      "jcr:primaryType":"sling:Folder"
-   }
-}

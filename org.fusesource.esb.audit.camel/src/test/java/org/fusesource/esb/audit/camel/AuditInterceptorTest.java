@@ -37,6 +37,7 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
         template.sendBody("direct:a", MESSAGE);
         a.assertIsSatisfied();
         assertRepoNotNull(a.getExchanges().get(0).getExchangeId());
+        assertRepoType(a.getExchanges().get(0).getExchangeId());
     }
 
     public void testInOnly() throws Exception {
@@ -45,6 +46,7 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
         template.sendBody("direct:in-only", MESSAGE);
         inOnly.assertIsSatisfied();
         assertRepoNotNull(inOnly.getExchanges().get(0).getExchangeId());
+        assertRepoType(inOnly.getExchanges().get(0).getExchangeId());
     }
 
     public void testInOut() throws Exception {
@@ -53,8 +55,9 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
         template.sendBody("direct:in-out", MESSAGE);
         inOut.assertIsSatisfied();
         assertRepoNotNull(inOut.getExchanges().get(0).getExchangeId());
+        assertRepoType(inOut.getExchanges().get(0).getExchangeId());
     }
-
+    
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         // TODO Auto-generated method stub
@@ -72,13 +75,26 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
     private void assertRepoNotNull(String exchangeId) throws Exception {
         Session session = getRepository().login();
         Node content = session.getRootNode().getNode("content");
-        Node servicemix = content.getNode("servicemix");
+        Node servicemix = content.getNode("audit");
         Node exchanges = servicemix.getNode("exchanges");
         NodeIterator it = exchanges.getNodes();
         while (it.hasNext()) {
             System.out.println(it.next());
         }
         assertNotNull(exchanges.getNode(exchangeId));
+    }
+    
+    private void assertRepoType(String exchangeId) throws Exception {
+        Session session = getRepository().login();
+        Node content = session.getRootNode().getNode("content");
+        Node servicemix = content.getNode("audit");
+        Node exchanges = servicemix.getNode("exchanges");
+        NodeIterator it = exchanges.getNodes();
+        while (it.hasNext()) {
+            System.out.println(it.next());
+        }
+        System.out.println("NODE Properties: " + exchanges.getNode(exchangeId).getProperty("sling:resourceType").getValue());
+        assertEquals(exchanges.getNode(exchangeId).getProperty("sling:resourceType").getValue().getString(), "audit/camel/exchange");
     }
 
 }

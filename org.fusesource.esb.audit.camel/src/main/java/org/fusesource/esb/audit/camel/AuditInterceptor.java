@@ -74,8 +74,9 @@ public class AuditInterceptor extends DelegateProcessor {
     }
 
     protected void failure(Exchange exchange) throws Exception, RepositoryException {
-        Node node = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/servicemix/exchanges/"
+        Node node = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
                 + exchange.getExchangeId().toString());
+        System.out.println("Node path: " + node.getPath().toString());
         audit(exchange, node, ExchangeStatus.Error.toString());
         audit(exchange.getIn(), RepositoryUtils.getOrCreate(node, "in"));
         if (exchange.hasOut()) {
@@ -84,8 +85,9 @@ public class AuditInterceptor extends DelegateProcessor {
     }
 
     protected void complete(Exchange exchange) throws Exception, RepositoryException {
-        Node node = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/servicemix/exchanges/"
+        Node node = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
                 + exchange.getExchangeId().toString());
+        System.out.println("Node path: " + node.getPath().toString());
         audit(exchange, node, ExchangeStatus.Done.toString());
         audit(exchange.getIn(), RepositoryUtils.getOrCreate(node, "in"));
         if (exchange.hasOut()) {
@@ -94,6 +96,7 @@ public class AuditInterceptor extends DelegateProcessor {
     }
 
     private void audit(Exchange exchange, Node node, String status) throws Exception, RepositoryException {
+        node.setProperty("sling:resourceType", "audit/camel/exchange");
         node.setProperty("created", new DateValue(new GregorianCalendar()));
         node.setProperty("endpointId", exchange.getFromEndpoint().toString());
         node.setProperty("status", status);

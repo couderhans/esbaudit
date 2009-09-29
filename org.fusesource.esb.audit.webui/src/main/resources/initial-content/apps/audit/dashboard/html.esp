@@ -1,0 +1,18 @@
+<h1>Welkom</h1>
+<%
+   var queryManager = currentNode.getSession().getWorkspace().getQueryManager(); 
+   var query = queryManager.createQuery("audit/exchanges order by @jcr:created descending", "xpath");
+   var result = query.execute().getNodes();
+
+%>
+
+<table id="postbody"> 
+<%
+        while(result.hasNext()) { 
+            actualNode = result.nextNode();
+            %>
+                <tr><td><%= actualNode["exchangeId"] %></td></tr>
+            <% 
+        }
+%>
+</table>

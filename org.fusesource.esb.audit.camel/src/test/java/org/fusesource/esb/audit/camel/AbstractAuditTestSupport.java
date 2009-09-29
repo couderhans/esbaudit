@@ -17,6 +17,8 @@
 
 package org.fusesource.esb.audit.camel;
 
+import javax.jcr.NamespaceException;
+import javax.jcr.NamespaceRegistry;
 import javax.jcr.Repository;
 import javax.jcr.Session;
 
@@ -33,6 +35,12 @@ public abstract class AbstractAuditTestSupport extends ContextTestSupport {
     protected void setUp() throws Exception {
         super.setUp();
         session = getRepository().login();
+        NamespaceRegistry registry = session.getWorkspace().getNamespaceRegistry();
+        try {
+            registry.getURI("sling");
+        } catch (NamespaceException e) {
+            registry.registerNamespace("sling", "http://jackrabbit.apache.org/sling/1.0");
+        }
     }
 
     public static Repository getRepository() throws Exception {
