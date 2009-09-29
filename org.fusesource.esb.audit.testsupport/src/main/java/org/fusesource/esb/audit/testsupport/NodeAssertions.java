@@ -21,6 +21,6 @@ import javax.jcr.Node;
 
 public interface NodeAssertions {
 
-	void check(Node node) throws Exception;
+    void check(Node node) throws Exception;
 
 }

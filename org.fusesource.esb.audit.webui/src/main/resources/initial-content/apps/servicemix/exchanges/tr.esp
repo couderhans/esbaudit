@@ -16,10 +16,7 @@
     limitations under the License.
 
 -->
-<div id="menu">
-  <h4 class="menu_capture">menu</h4>
-  <ul class="alternate" type="square">
-    <li><a href="/servicemix.html">dashboard</a></li>
-    <li><a href="/servicemix/config.html">config</a></li>
-  </ul>
-</div>
+<tr>  
+  <td><img src="/icons/arrow_right.png" alt="right arrow" /></td>
+  <td><a href="<%=currentNode%>.html"><%=currentNode['correlationId'] %></a></td>
+</tr>

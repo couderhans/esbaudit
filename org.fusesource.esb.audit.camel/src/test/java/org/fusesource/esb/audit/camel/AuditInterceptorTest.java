@@ -17,20 +17,16 @@
 
 package org.fusesource.esb.audit.camel;
 
-import java.io.IOException;
-
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.apache.camel.ContextTestSupport;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.jackrabbit.core.TransientRepository;
 
 public class AuditInterceptorTest extends AbstractAuditTestSupport {
-	
+
     private TransientRepository repository;
 
     private static final String MESSAGE = "<just><a>test</a></just>";
@@ -50,7 +46,7 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
         inOnly.assertIsSatisfied();
         assertRepoNotNull(inOnly.getExchanges().get(0).getExchangeId());
     }
-	
+
     public void testInOut() throws Exception {
         MockEndpoint inOut = getMockEndpoint("mock:in-out");
         inOut.expectedMessageCount(1);
@@ -58,7 +54,6 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
         inOut.assertIsSatisfied();
         assertRepoNotNull(inOut.getExchanges().get(0).getExchangeId());
     }
-	
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
@@ -73,13 +68,14 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
             }
         };
     }
-	
+
     private void assertRepoNotNull(String exchangeId) throws Exception {
         Session session = getRepository().login();
         Node content = session.getRootNode().getNode("content");
-        Node exchanges = content.getNode("exchanges");
-        NodeIterator it =  exchanges.getNodes();
-        while(it.hasNext()) {
+        Node servicemix = content.getNode("servicemix");
+        Node exchanges = servicemix.getNode("exchanges");
+        NodeIterator it = exchanges.getNodes();
+        while (it.hasNext()) {
             System.out.println(it.next());
         }
         assertNotNull(exchanges.getNode(exchangeId));

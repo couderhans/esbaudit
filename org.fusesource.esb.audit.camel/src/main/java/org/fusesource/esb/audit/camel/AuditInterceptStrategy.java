@@ -28,39 +28,37 @@ import org.apache.camel.spi.InterceptStrategy;
 
 public class AuditInterceptStrategy implements InterceptStrategy {
 
-	
     private Repository repository;
-	private String username;
-	private String password;
-	private Credentials credentials;
+    private String username;
+    private String password;
+    private Credentials credentials;
 
     public AuditInterceptStrategy(Repository repository) throws Exception {
         this(repository, "user", "pass");
     }
-    
+
     public AuditInterceptStrategy(Repository repository, String username, String password) {
-    	super();
-    	this.repository = repository;
-    	this.username = username;
-    	this.password = password;
+        super();
+        this.repository = repository;
+        this.username = username;
+        this.password = password;
     }
 
-    public Processor wrapProcessorInInterceptors(CamelContext context,
-        ProcessorDefinition definition, Processor target, Processor nexttarget)
-            throws Exception {
+    public Processor wrapProcessorInInterceptors(CamelContext context, ProcessorDefinition definition, Processor target,
+            Processor nexttarget) throws Exception {
         System.out.println("wrapping " + target);
         return new AuditInterceptor(this, target);
     }
-	
+
     public Repository getRepository() {
         return repository;
     }
 
-	public Credentials getCredentials() {
+    public Credentials getCredentials() {
         if (credentials == null) {
-	        credentials = new SimpleCredentials(this.username, this.password.toCharArray());
-	    }
+            credentials = new SimpleCredentials(this.username, this.password.toCharArray());
+        }
         return credentials;
-	}
+    }
 
 }

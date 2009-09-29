@@ -24,20 +24,19 @@ import javax.jcr.Session;
 import org.fusesource.esb.audit.commons.RepositoryUtils;
 
 public class Assertions {
-	
-	private Assertions() {
-		// hide the constructor -- only static methods
-	}
-	
-	public static final void assertNodeExists(Session session, String path) throws Exception {
-		assertNotNull("Node " + path + " does not exist in the JCR repository",
-				      RepositoryUtils.get(session.getRootNode(), path));
-	}
-	
-	public static final void assertNode(Session session, String path, NodeAssertions assertions) throws Exception {
-		assertNodeExists(session, path);
-		Node node = RepositoryUtils.get(session.getRootNode(), path);
-		assertions.check(node);
-	}
+
+    private Assertions() {
+        // hide the constructor -- only static methods
+    }
+
+    public static final void assertNodeExists(Session session, String path) throws Exception {
+        assertNotNull("Node " + path + " does not exist in the JCR repository", RepositoryUtils.get(session.getRootNode(), path));
+    }
+
+    public static final void assertNode(Session session, String path, NodeAssertions assertions) throws Exception {
+        assertNodeExists(session, path);
+        Node node = RepositoryUtils.get(session.getRootNode(), path);
+        assertions.check(node);
+    }
 
 }

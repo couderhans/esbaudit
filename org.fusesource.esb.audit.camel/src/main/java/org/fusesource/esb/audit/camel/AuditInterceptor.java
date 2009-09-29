@@ -17,15 +17,12 @@
 
 package org.fusesource.esb.audit.camel;
 
-import static org.fusesource.esb.audit.commons.RepositoryUtils.getOrCreate;
-
 import java.util.GregorianCalendar;
 
 import javax.jcr.LoginException;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.SimpleCredentials;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -39,8 +36,6 @@ public class AuditInterceptor extends DelegateProcessor {
 
     private final AuditInterceptStrategy strategy;
     private Session session;
-    
-    
 
     public AuditInterceptor(AuditInterceptStrategy strategy, Processor target) {
         super(target);
@@ -49,63 +44,68 @@ public class AuditInterceptor extends DelegateProcessor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-       System.out.println("Processing Exchange");
+        System.out.println("Processing Exchange");
         exchange.addOnCompletion(new Synchronization() {
-			
-			public void onFailure(Exchange exchange) {
-				System.out.println("onFAILURE");
-				Node node;
-				try {
-					node = getOrCreate(getSession().getRootNode(), "content/exchanges/" + exchange.getExchangeId() + "/in");
-					node.setProperty("created", new DateValue(new GregorianCalendar()));
-					node.setProperty("endpointId", exchange.getFromEndpoint().toString());
-					node.setProperty("status", ExchangeStatus.Error.toString());
-			        getSession().save();
-				} catch (RepositoryException e) {
-					e.printStackTrace();
-				}
+
+            public void onFailure(Exchange exchange) {
+                try {
+                    failure(exchange);
+                } catch (RepositoryException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-			
-			public void onComplete(Exchange exchange) {
-				Node node;
-				try {
-					node = getOrCreate(getSession().getRootNode(), "content/exchanges/" + exchange.getExchangeId() + "/in");
-					node.setProperty("created", new DateValue(new GregorianCalendar()));
-					node.setProperty("endpointId", exchange.getFromEndpoint().toString());
-				    node.setProperty("content", exchange.getIn().getBody().toString());
-					node.setProperty("status", ExchangeStatus.Done.toString());
-			        getSession().save();
-				} catch (RepositoryException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+
+            public void onComplete(Exchange exchange) {
+                try {
+                    complete(exchange);
+                } catch (RepositoryException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
         super.proceed(exchange);
     }
 
-    /* TODO
-    protected void failure(Exchange exchange) {
-		// TODO Save status, endpoint, ...
-    	Node node = RepositoryUtils.getOrCreate("content/exchanges/", exchange.getExchangeId());
-    	
-        audit(exchange, node);
+    protected void failure(Exchange exchange) throws Exception, RepositoryException {
+        Node node = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/servicemix/exchanges/"
+                + exchange.getExchangeId().toString());
+        audit(exchange, node, ExchangeStatus.Error.toString());
         audit(exchange.getIn(), RepositoryUtils.getOrCreate(node, "in"));
-    	if (exchange.hasOut()) {
-    		audit(exchange.getOut(), RepositoryUtils.getOrCreate(node, "out"));
-    	}
-		
-	}
+        if (exchange.hasOut()) {
+            audit(exchange.getOut(), RepositoryUtils.getOrCreate(node, "out"));
+        }
+    }
 
-	private void audit(Exchange exchange, Node node) {
-		// TODO Exchange properties + status opslaan
-		
-	}
+    protected void complete(Exchange exchange) throws Exception, RepositoryException {
+        Node node = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/servicemix/exchanges/"
+                + exchange.getExchangeId().toString());
+        audit(exchange, node, ExchangeStatus.Done.toString());
+        audit(exchange.getIn(), RepositoryUtils.getOrCreate(node, "in"));
+        if (exchange.hasOut()) {
+            audit(exchange.getOut(), RepositoryUtils.getOrCreate(node, "out"));
+        }
+    }
 
-	private void audit(Message in, Node node) {
-		// TODO Message properties + content opslaan
-	}
-*/
-	protected Session getSession() throws LoginException, RepositoryException {
+    private void audit(Exchange exchange, Node node, String status) throws Exception, RepositoryException {
+        node.setProperty("created", new DateValue(new GregorianCalendar()));
+        node.setProperty("endpointId", exchange.getFromEndpoint().toString());
+        node.setProperty("status", status);
+        getSession().save();
+    }
+
+    private void audit(Message message, Node node) throws Exception, RepositoryException {
+        node.setProperty("content", message.getBody(String.class));
+        getSession().save();
+    }
+
+    protected Session getSession() throws LoginException, RepositoryException {
         if (session == null) {
             session = strategy.getRepository().login(strategy.getCredentials());
         }

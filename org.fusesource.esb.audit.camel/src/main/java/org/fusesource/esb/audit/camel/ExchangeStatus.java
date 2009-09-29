@@ -2,6 +2,6 @@ package org.fusesource.esb.audit.camel;
 
 public enum ExchangeStatus {
 
-	Active, Error, Done;
-	
+    Active, Error, Done;
+
 }

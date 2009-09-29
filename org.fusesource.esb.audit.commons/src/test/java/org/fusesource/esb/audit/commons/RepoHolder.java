@@ -49,11 +49,11 @@ public class RepoHolder {
     }
 
     public static RepoHolder getInstance() {
-        
+
         if (instance == null) {
-            instance = new RepoHolder();    
+            instance = new RepoHolder();
         }
-        
+
         return instance;
     }
 

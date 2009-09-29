@@ -17,43 +17,40 @@
 
 package org.fusesource.esb.audit.camel;
 
-import java.io.IOException;
-
 import javax.jcr.Repository;
 import javax.jcr.Session;
 
 import org.apache.camel.ContextTestSupport;
 import org.fusesource.esb.audit.testsupport.Assertions;
-import org.fusesource.esb.audit.testsupport.MockOrderService;
 import org.fusesource.esb.audit.testsupport.NodeAssertions;
 import org.fusesource.esb.audit.testsupport.RepositoryHolder;
 
 public abstract class AbstractAuditTestSupport extends ContextTestSupport {
-	
-	protected Session session;
-	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		session = getRepository().login();
-	}
 
-	public static Repository getRepository() throws Exception {
-		return RepositoryHolder.getRepository();
-	}
-	
-	public void assertNodeExists(String path) throws Exception {
-		Assertions.assertNodeExists(session, path);
-	}
-	
-	public void assertNode(String path, NodeAssertions assertions) throws Exception {
-		Assertions.assertNode(session, path, assertions);
-	}
-	
-	@Override
-	protected void tearDown() throws Exception {
-		session.logout();
-		super.tearDown();
-	}
+    protected Session session;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        session = getRepository().login();
+    }
+
+    public static Repository getRepository() throws Exception {
+        return RepositoryHolder.getRepository();
+    }
+
+    public void assertNodeExists(String path) throws Exception {
+        Assertions.assertNodeExists(session, path);
+    }
+
+    public void assertNode(String path, NodeAssertions assertions) throws Exception {
+        Assertions.assertNode(session, path, assertions);
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        session.logout();
+        super.tearDown();
+    }
 
 }
