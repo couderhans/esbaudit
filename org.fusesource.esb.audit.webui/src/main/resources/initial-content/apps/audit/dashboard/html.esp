@@ -1,18 +1,74 @@
-<h1>Welkom</h1>
-<%
-   var queryManager = currentNode.getSession().getWorkspace().getQueryManager(); 
-   var query = queryManager.createQuery("audit/exchanges order by @jcr:created descending", "xpath");
-   var result = query.execute().getNodes();
+<html>
+<head>
+  <title>Auditor Dashboard</title>
+  <style type="text/css">
+  @import "../../../dijit/themes/tundra/tundra.css";
+  @import "../../../dojo/resources/dojo.css";
+  @import "../../../dijit/tests/css/dijitTests.css";
+  @import "../../../dojox/grid/_grid/tundraGrid.css";
+  </style>
+  <script type="text/javascript"
+  src="../../../dojo/dojo.js"
+  djConfig="isDebug: true,
+  parseOnLoad: true, usePlainJson: true"></script>
+  <script type="text/javascript">
 
-%>
+    dojo.require("dojo.parser");
+    dojo.require("dojox.grid.DataGrid");
+    dojo.require("dojox.data.SlingNodeStore");
+    dojo.require("dojox.data.SlingPropertyStore");
+    dojo.require("dojox.grid._data.model");
 
-<table id="postbody"> 
-<%
-        while(result.hasNext()) { 
-            actualNode = result.nextNode();
-            %>
-                <tr><td><%= actualNode["exchangeId"] %></td></tr>
-            <% 
-        }
-%>
-</table>
+    var store4 = new dojox.data.SlingNodeStore({
+        url: '/content/audit/exchanges'
+    });
+
+    dojo.addOnLoad(function() {
+        // set the layout structure:
+        var layout4 = [{
+            field: 'Title',
+            name: 'Exchange Id',
+            width: '200px'
+        },
+        {
+            field: 'Createdr',
+            name: 'Date Created',
+            width: '50px'
+        },
+        {
+            field: 'endpointId',
+            name: 'Endpoint',
+            width: 'auto'
+        }];
+
+        // create a new grid:
+        var grid4 = new dojox.grid.DataGrid({
+            query: {
+                'jcr:primaryType' : ['sling:Folder','rep:audit']
+            },
+            store: store4,
+            clientSort: true,
+            rowSelector: '20px',
+            structure: layout4
+        },
+        document.createElement('div'));
+
+        // append the new grid to the div "gridContainer4":
+        dojo.byId("gridContainer4").appendChild(grid4.domNode);
+
+        // Call startup, in order to render the grid:
+        grid4.startup();
+    });
+  </script>
+
+</head>
+
+<body class="tundra">
+
+
+<div id="gridContainer4" style="width: 400px; height: 200px;">
+</div>
+
+
+</body>
+
