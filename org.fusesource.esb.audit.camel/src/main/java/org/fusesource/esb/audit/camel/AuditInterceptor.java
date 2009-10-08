@@ -97,6 +97,7 @@ public class AuditInterceptor extends DelegateProcessor {
 
     private void audit(Exchange exchange, Node node, String status) throws Exception, RepositoryException {
         node.setProperty("sling:resourceType", "audit/camel/exchange");
+        node.setProperty("exchangeId", exchange.getExchangeId().toString());
         node.setProperty("created", new DateValue(new GregorianCalendar()));
         node.setProperty("endpointId", exchange.getFromEndpoint().toString());
         node.setProperty("status", status);
