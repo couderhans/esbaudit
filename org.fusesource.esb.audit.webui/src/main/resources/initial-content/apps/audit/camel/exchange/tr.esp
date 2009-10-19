@@ -16,27 +16,6 @@
     limitations under the License.
 
 -->
-<html>
-<head>
-<title>Apache ServiceMix :: Browse the archive</title>
-</head>
-<body>
-
-
-  <div id="article">
-    <h4>Message flows:</h4>
-
-    <table>
-      <% var current = 0;
-	 for (var flow in currentNode.getChildren()) {
-	 sling.include(currentNode[flow] + ".tr");
-	 if (++current >= 50) break;
-      }
-      %>
-    </table>
-  </div>
-
-
-
-</body>
-</html>
+<tr>
+  <td><a href="<%=currentNode%>.html"><%=currentNode['correlationId'] %></a></td>
+</tr>

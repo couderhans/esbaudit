@@ -132,7 +132,7 @@ public class AuditInterceptor extends DelegateProcessor {
     }
 
     private void audit(Node step, String status) throws RepositoryException {
-        step.setProperty("sling:resourceType", "audit/camel/exchange");
+        step.setProperty("sling:resourceType", "audit/camel/exchange/step");
         step.setProperty("created", new Date().toString());
         LOG.info("Creation of new step node");
         getSession().save();

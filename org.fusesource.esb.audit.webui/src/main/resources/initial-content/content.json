@@ -5,5 +5,7 @@
         "jcr:primaryType":"sling:Folder",
         "sling:resourceType":"audit/dashboard"
    }
+
+   
 }
 

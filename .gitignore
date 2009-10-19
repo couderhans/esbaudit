@@ -2,3 +2,7 @@ target
 .project
 *.log
 *~
+.idea
+*.iml
+profiles*
+settings*
