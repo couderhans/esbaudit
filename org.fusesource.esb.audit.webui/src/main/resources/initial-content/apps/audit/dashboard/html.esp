@@ -5,9 +5,9 @@
   The ASF licenses this file to You under the Apache License, Version 2.0
   (the "License"); you may not use this file except in compliance with
   the License.  You may obtain a copy of the License at
- 
+
        http://www.apache.org/licenses/LICENSE-2.0
- 
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,57 +23,50 @@
   <style type="text/css">
            @import "../../../dojo/resources/dojo.css";
            @import "../../../dojox/grid/_grid/tundraGrid.css";
-           @import "../../../dijit/tests/css/dijitTests.css";
            @import "../../../dijit/themes/tundra/tundra.css";
 
   </style>
 
   <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true, usePlainJson: true"></script>
-
-  <script type="text/javascript">
-            dojo.require("dojox.grid.Grid");
-            dojo.require("dijit.Tree");
-            dojo.require("dojox.data.SlingNodeStore");
-            dojo.require("dojox.data.SlingPropertyStore");
-            dojo.require("dojox.grid._data.model");
-            dojo.require("dojox.grid._data.editors");
-            dojo.require("dojo.parser");
-  </script>
-
 </head>
 
 <body class="tundra">
   <h1>Auditor DashBoard</h1>
 
   <h3>List of Exchanges:</h3>
-
-  <div dojoType="dojox.data.SlingNodeStore" url="/content/audit/exchanges" statement="//*[sling:resourceType='audit/camel/exchange']" searchprops="['endpointId','jcr:created']" jsId="nodeStore"></div>
-
+  
   <script type="text/javascript">
-  var tableview = {
-    cells: [
-      [
-        {name: "Exchange Id", field: 0, width:"300px" },
-        {name: "Created", field: "jcr:created", width:"400px" },
-        {name: "Endpoint Id", field: "endpointId", width:"400px" },
-      ]
-    ]
-  };
-  
-  var tablestructure = [ tableview ];
+
+     function  addLiElement(where, l, text) {
+     	       
+	       var place = document.getElementById(where);	
+	       var li = document.createElement("li");
+	       li.innerHTML = "<a href='" + l + ".html'>" + text  + "</a>";
+  	       place.appendChild(li);    
+     }
+
+      //or shorter
+      dojo.xhrGet({
+          url: "content.query.json?queryType=xpath&statement=//*[sling:resourceType='audit/camel/exchange']",
+          handleAs: "json",
+          load: function(response, ioArgs) {
+		     for (var i in response) {
+		        var ad = "http://localhost:8181/content/audit/exchanges/" + response[i]['name'];
+			addLiElement("exchanges", ad, response[i]['name']);
+		     }
+                }
+      });
+
   </script>
-	
+
   <blockquote>
-     
-    <div id="grid" 
-         dojoType="dojox.Grid" 
-         elasticView="2" layoutAlign="left" 
-         store="nodeStore"
-         structure="tablestructure"  
-         style="height:300px;width:800px">
-    </div>
-  
+
+    <ul id="exchanges">
+      
+    </ul>
+
   </blockquote>
-  
+
+
 </body>
 </html>

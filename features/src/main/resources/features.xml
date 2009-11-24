@@ -19,7 +19,7 @@
   <repository>mvn:org.apache.camel.karaf/features/${camel.version}/xml/features</repository>
   <feature name="sling">
     <feature>webconsole</feature>
-    <bundle>mvn:org.apache.felix/org.apache.felix.bundlerepository/1.3.0-SNAPSHOT</bundle>
+    <bundle>mvn:org.apache.felix/org.apache.felix.bundlerepository/1.4.0</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.extensions.threaddump/0.1.2-incubator</bundle>
     <bundle>mvn:org.apache.felix/org.apache.felix.eventadmin/1.0.0</bundle>
     <bundle>mvn:org.apache.felix/org.apache.felix.metatype/1.0.2</bundle>
@@ -57,8 +57,8 @@
     <bundle>mvn:org.apache.sling/org.apache.sling.jcr.jackrabbit.accessmanager/2.0.2-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.jcr.jackrabbit.usermanager/2.0.2-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.launchpad.content/2.0.4-incubator</bundle>
-    <bundle>mvn:org.apache.sling/org.apache.sling.extensions.dojo/1.1.0.002-SNAPSHOT</bundle>
-    <bundle>mvn:org.apache.sling/org.apache.sling.extensions.dojo.sling/2.0.0-SNAPSHOT</bundle>
+    <!-- <bundle>mvn:org.apache.sling/org.apache.sling.extensions.dojo/1.1.0.002-SNAPSHOT</bundle>
+    <bundle>mvn:org.apache.sling/org.apache.sling.extensions.dojo.sling/2.0.0-SNAPSHOT</bundle> -->
   </feature>
   <feature name="audit.camel">
     <feature>spring-dm</feature>

@@ -86,10 +86,10 @@ public class AuditInterceptor extends DelegateProcessor {
                 + exchange.getExchangeId().toString());
         LOG.info("Node path - Active Exchange: " + node.getPath().toString());
     	audit(exchange, node, ExchangeStatus.Active.toString());
-        Node step = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
-                + exchange.getExchangeId().toString() + "/step" + steps);
-
-        audit(step, ExchangeStatus.Active.toString());
+        Node step = RepositoryUtils.getOrCreate(node, "steps");
+        LOG.info("Number of steps: " + steps);
+        audit(RepositoryUtils.getOrCreate(step, "step" + steps), ExchangeStatus.Active.toString());
+        audit(exchange.getIn(), RepositoryUtils.getOrCreate(step, "step" + steps));
     }
 
     protected void failure(Exchange exchange) throws Exception, RepositoryException {
@@ -123,6 +123,7 @@ public class AuditInterceptor extends DelegateProcessor {
         node.setProperty("status", status);
         if (node.hasProperty("steps")) {
             steps = node.getProperty("steps").getValue().getLong();
+            LOG.info("Set property steps" + steps);
             node.setProperty("steps",steps++);
         } else {
             steps = 1;

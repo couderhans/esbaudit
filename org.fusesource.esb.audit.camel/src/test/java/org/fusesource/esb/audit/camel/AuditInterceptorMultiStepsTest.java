@@ -26,7 +26,7 @@ public class AuditInterceptorMultiStepsTest extends AbstractAuditTestSupport {
 
         final Exchange exchange = step1.getExchanges().get(0);
 
-        assertNode("content/audit/exchanges/" + exchange.getExchangeId(), new NodeAssertions() {
+        assertNode("content/audit/exchanges/" + exchange.getExchangeId() + "/steps", new NodeAssertions() {
 
             public void check(Node node) throws Exception {
             	System.out.println("step next");
