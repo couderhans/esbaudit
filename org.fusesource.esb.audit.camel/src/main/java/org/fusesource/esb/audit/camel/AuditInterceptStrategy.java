@@ -17,14 +17,14 @@
 
 package org.fusesource.esb.audit.camel;
 
-import javax.jcr.Credentials;
-import javax.jcr.Repository;
-import javax.jcr.SimpleCredentials;
-
 import org.apache.camel.CamelContext;
 import org.apache.camel.Processor;
 import org.apache.camel.model.ProcessorDefinition;
 import org.apache.camel.spi.InterceptStrategy;
+
+import javax.jcr.Credentials;
+import javax.jcr.Repository;
+import javax.jcr.SimpleCredentials;
 
 public class AuditInterceptStrategy implements InterceptStrategy {
 

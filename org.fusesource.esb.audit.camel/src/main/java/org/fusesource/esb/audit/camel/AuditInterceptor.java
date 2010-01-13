@@ -17,14 +17,6 @@
 
 package org.fusesource.esb.audit.camel;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import javax.jcr.LoginException;
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
@@ -32,8 +24,14 @@ import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.spi.Synchronization;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.jackrabbit.value.DateValue;
 import org.fusesource.esb.audit.commons.RepositoryUtils;
+
+import javax.jcr.LoginException;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AuditInterceptor extends DelegateProcessor {
 
@@ -82,8 +80,11 @@ public class AuditInterceptor extends DelegateProcessor {
     }
 
     protected void createActive(Exchange exchange) throws Exception, RepositoryException {
+    	Node bydate = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
+                + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
+        bydate.setProperty("sling:resourceType", "audit/exchanges");
         Node node = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
-                + exchange.getExchangeId().toString());
+                + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString() + "/" + exchange.getExchangeId().toString());
         LOG.info("Node path - Active Exchange: " + node.getPath().toString());
     	audit(exchange, node, ExchangeStatus.Active.toString());
         Node step = RepositoryUtils.getOrCreate(node, "steps");
@@ -93,8 +94,11 @@ public class AuditInterceptor extends DelegateProcessor {
     }
 
     protected void failure(Exchange exchange) throws Exception, RepositoryException {
+    	Node bydate = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
+                + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
+        bydate.setProperty("sling:resourceType", "audit/exchanges");
         Node node = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
-                + exchange.getExchangeId().toString());
+                + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString() + "/" + exchange.getExchangeId().toString());
 
         LOG.info("Node path - FAILURE: " + node.getPath().toString());
         audit(exchange, node, ExchangeStatus.Error.toString());
@@ -105,8 +109,11 @@ public class AuditInterceptor extends DelegateProcessor {
     }
 
     protected void complete(Exchange exchange) throws Exception, RepositoryException {
+    	Node bydate = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
+                + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
+        bydate.setProperty("sling:resourceType", "audit/exchanges");
         Node node = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
-                + exchange.getExchangeId().toString());
+                + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString() + "/" + exchange.getExchangeId().toString());
         LOG.info("Node path - COMPLETE: " + node.getPath().toString());
         audit(exchange, node, ExchangeStatus.Done.toString());
         audit(exchange.getIn(), RepositoryUtils.getOrCreate(node, "in"));

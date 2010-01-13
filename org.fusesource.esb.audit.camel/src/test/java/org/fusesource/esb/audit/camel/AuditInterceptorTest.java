@@ -17,13 +17,15 @@
 
 package org.fusesource.esb.audit.camel;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Session;
-
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.jackrabbit.core.TransientRepository;
+
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.Session;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AuditInterceptorTest extends AbstractAuditTestSupport {
 
@@ -57,7 +59,7 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
         assertRepoNotNull(inOut.getExchanges().get(0).getExchangeId());
         assertRepoType(inOut.getExchanges().get(0).getExchangeId());
     }
-    
+
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         // TODO Auto-generated method stub
@@ -75,26 +77,28 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
     private void assertRepoNotNull(String exchangeId) throws Exception {
         Session session = getRepository().login();
         Node content = session.getRootNode().getNode("content");
-        Node servicemix = content.getNode("audit");
-        Node exchanges = servicemix.getNode("exchanges");
-        NodeIterator it = exchanges.getNodes();
+        Node audit = content.getNode("audit");
+        Node exchanges = audit.getNode("exchanges");
+        Node bydate = exchanges.getNode(new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
+        NodeIterator it = bydate.getNodes();
         while (it.hasNext()) {
             System.out.println(it.next());
         }
-        assertNotNull(exchanges.getNode(exchangeId));
+        assertNotNull(bydate.getNode(exchangeId));
     }
-    
+
     private void assertRepoType(String exchangeId) throws Exception {
         Session session = getRepository().login();
         Node content = session.getRootNode().getNode("content");
-        Node servicemix = content.getNode("audit");
-        Node exchanges = servicemix.getNode("exchanges");
-        NodeIterator it = exchanges.getNodes();
+        Node audit = content.getNode("audit");
+        Node exchanges = audit.getNode("exchanges");
+        Node bydate = exchanges.getNode(new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
+        NodeIterator it = bydate.getNodes();
         while (it.hasNext()) {
             System.out.println(it.next());
         }
-        System.out.println("NODE Properties: " + exchanges.getNode(exchangeId).getProperty("sling:resourceType").getValue());
-        assertEquals(exchanges.getNode(exchangeId).getProperty("sling:resourceType").getValue().getString(), "audit/camel/exchange");
+        System.out.println("NODE Properties: " + bydate.getNode(exchangeId).getProperty("sling:resourceType").getValue());
+        assertEquals(bydate.getNode(exchangeId).getProperty("sling:resourceType").getValue().getString(), "audit/camel/exchange");
     }
 
 }

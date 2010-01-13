@@ -17,15 +17,15 @@
 
 package org.fusesource.esb.audit.camel;
 
-import javax.jcr.NamespaceException;
-import javax.jcr.NamespaceRegistry;
-import javax.jcr.Repository;
-import javax.jcr.Session;
-
 import org.apache.camel.ContextTestSupport;
 import org.fusesource.esb.audit.testsupport.Assertions;
 import org.fusesource.esb.audit.testsupport.NodeAssertions;
 import org.fusesource.esb.audit.testsupport.RepositoryHolder;
+
+import javax.jcr.NamespaceException;
+import javax.jcr.NamespaceRegistry;
+import javax.jcr.Repository;
+import javax.jcr.Session;
 
 public abstract class AbstractAuditTestSupport extends ContextTestSupport {
 

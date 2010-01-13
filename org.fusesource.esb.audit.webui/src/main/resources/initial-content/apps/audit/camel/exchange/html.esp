@@ -23,83 +23,50 @@
   <style type="text/css">
            @import "../../../dojo/resources/dojo.css";
            @import "../../../dojox/grid/_grid/tundraGrid.css";
-           @import "../../../dijit/tests/css/dijitTests.css";
            @import "../../../dijit/themes/tundra/tundra.css";
 
   </style>
 
   <script type="text/javascript" src="../../../dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true, usePlainJson: true"></script>
-
-  <script type="text/javascript">
-            dojo.require("dojox.grid.Grid");
-            dojo.require("dijit.Tree");
-            dojo.require("dojox.data.SlingNodeStore");
-            dojo.require("dojox.data.SlingPropertyStore");
-            dojo.require("dojox.grid._data.model");
-            dojo.require("dojox.grid._data.editors");
-            dojo.require("dojo.parser");
-  </script>
-
 </head>
 
-<body>
-
+<body class="tundra">
   <h1>Auditor DashBoard</h1>
-  <h3>Exchange: <%=currentNode['exchangeId']%></h3>
-  <h3>Exchange: <%=currentNode%></h3>
 
-  <div dojoType="dojox.data.SlingNodeStore"
-       url="/content"
-       statement="/<%=currentNode%>/steps/*"
-       searchprops="['content']"
-       jsId="nodeStore">
-  </div>
-
+  <h3>List of Exchanges:</h3>
+  
   <script type="text/javascript">
 
-    var tableview = {
-      cells: [
-        [
-          {name: "Body", field: 0, width:"300px" },
-          {name: "Content", field: "content", width:"400px" },
-        ]
-      ]
-    };
+     function  addLiElement(where, l, text) {
+     	       
+	       var place = document.getElementById(where);	
+	       var li = document.createElement("li");
+	       li.innerHTML = "<a href='" + l + ".html'>" + text  + "</a>";
+  	       place.appendChild(li);    
+     }
 
-    var tablestructure = [ tableview ];
+      //or shorter
+      dojo.xhrGet({
+          url: "content.query.json?queryType=xpath&statement=//*[sling:resourceType='audit/camel/exchange']",
+          handleAs: "json",
+          load: function(response, ioArgs) {
+		     for (var i in response) {
+		        var ad = "http://localhost:8181/content/audit/exchanges/" + response[i]['name'];
+			addLiElement("exchanges", ad, response[i]['name']);
+		     }
+                }
+      });
+
   </script>
 
-
   <blockquote>
-    <table>
-      <tr>
-        <td><b>Status:</b></td>
-        <td><%=currentNode['status']%></td>
-      </tr>
-      <tr>
-        <td><b>Created:</b></td>
-        <td><%=currentNode['created']%></td>
-      </tr>
-      <tr>
-        <td><b>Endpoint:</b></td>
-        <td><%=currentNode['endpointId']%></td>
-      </tr>
-    </table>
+
+    <ul id="exchanges">
+      
+    </ul>
+
   </blockquote>
-
-  <blockquote>
-    <div id="grid"
-         dojoType="dojox.Grid"
-         layoutAlign="left"
-         store="nodeStore"
-         structure="tablestructure"
-         style="height:300px;width:800px">
-    </div>
-  </blockquote>
-
-
 
 
 </body>
-
 </html>

@@ -1,9 +1,9 @@
 package org.fusesource.esb.audit.camel;
 
+import junit.framework.TestCase;
+
 import javax.jcr.Credentials;
 import javax.jcr.SimpleCredentials;
-
-import junit.framework.TestCase;
 
 public class AuditInterceptStrategyTest extends TestCase {
 

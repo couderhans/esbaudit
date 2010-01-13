@@ -17,16 +17,18 @@
 
 package org.fusesource.esb.audit.camel;
 
-import javax.jcr.Node;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.fusesource.esb.audit.testsupport.MockOrderService;
-import org.fusesource.esb.audit.testsupport.NodeAssertions;
 import org.fusesource.esb.audit.testsupport.MockOrderService.OrderFailedException;
+import org.fusesource.esb.audit.testsupport.NodeAssertions;
+
+import javax.jcr.Node;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
 
@@ -40,7 +42,7 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
 
         Exchange exchange = inOnly.getExchanges().get(0);
 
-        assertNode("content/audit/exchanges/" + exchange.getExchangeId(), new NodeAssertions() {
+        assertNode("content/audit/exchanges/" + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString() + "/" + exchange.getExchangeId(), new NodeAssertions() {
 
             public void check(Node node) throws Exception {
                 assertNotNull(node.getProperty("status"));
@@ -48,7 +50,7 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
             }
         });
 
-        assertNode("content/audit/exchanges/" + exchange.getExchangeId() + "/in", new NodeAssertions() {
+        assertNode("content/audit/exchanges/" + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString() + "/" + exchange.getExchangeId() + "/in", new NodeAssertions() {
 
             public void check(Node node) throws Exception {
                 assertNotNull(node.getProperty("content"));
@@ -72,7 +74,7 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
 
         System.out.println("PROPERTIES ERROR: " + exchange.getProperties().toString());
 
-        assertNode("content/audit/exchanges/" + exchange.getExchangeId(), new NodeAssertions() {
+        assertNode("content/audit/exchanges/" + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString() + "/" + exchange.getExchangeId(), new NodeAssertions() {
 
             public void check(Node node) throws Exception {
                 assertNotNull(node.getProperty("status"));
@@ -95,7 +97,7 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
 
         Exchange exchange = file.getExchanges().get(0);
 
-        assertNode("content/audit/exchanges/" + exchange.getExchangeId(), new NodeAssertions() {
+        assertNode("content/audit/exchanges/" + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString() + "/" + exchange.getExchangeId(), new NodeAssertions() {
 
             public void check(Node node) throws Exception {
                 assertNotNull(node.getProperty("status"));

@@ -1,11 +1,3 @@
 {
-   "jcr:primaryType":"sling:Folder",
-   
-   audit: {
-        "jcr:primaryType":"sling:Folder",
-        "sling:resourceType":"audit/dashboard"
-   }
-
-   
+   "jcr:primaryType":"sling:Folder"
 }
-

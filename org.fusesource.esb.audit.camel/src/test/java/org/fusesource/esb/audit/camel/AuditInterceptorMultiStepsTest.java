@@ -1,14 +1,15 @@
 package org.fusesource.esb.audit.camel;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-
 import org.apache.camel.Exchange;
-import org.apache.camel.Expression;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.jackrabbit.core.TransientRepository;
 import org.fusesource.esb.audit.testsupport.NodeAssertions;
+
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class AuditInterceptorMultiStepsTest extends AbstractAuditTestSupport {
@@ -26,7 +27,7 @@ public class AuditInterceptorMultiStepsTest extends AbstractAuditTestSupport {
 
         final Exchange exchange = step1.getExchanges().get(0);
 
-        assertNode("content/audit/exchanges/" + exchange.getExchangeId() + "/steps", new NodeAssertions() {
+        assertNode("content/audit/exchanges/" + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString() + "/" + exchange.getExchangeId() + "/steps", new NodeAssertions() {
 
             public void check(Node node) throws Exception {
             	System.out.println("step next");

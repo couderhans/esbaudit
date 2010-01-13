@@ -1,3 +1,7 @@
 {
-   "jcr:primaryType":"sling:Folder"
+   "jcr:primaryType":"sling:Folder",
+
+   "audit":{
+      "jcr:primaryType":"sling:Folder"
+   }
 }
