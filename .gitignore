@@ -6,3 +6,6 @@ target
 *.iml
 profiles*
 settings*
+.settings
+.classpath
+*bin*

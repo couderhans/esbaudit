@@ -17,8 +17,15 @@
 
 package org.fusesource.esb.audit.camel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.jcr.LoginException;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+
 import org.apache.camel.Exchange;
-import org.apache.camel.Message;
 import org.apache.camel.Processor;
 import org.apache.camel.processor.DelegateProcessor;
 import org.apache.camel.spi.Synchronization;
@@ -26,25 +33,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.fusesource.esb.audit.commons.RepositoryUtils;
 
-import javax.jcr.LoginException;
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class AuditInterceptor extends DelegateProcessor {
 
     private static final Log LOG = LogFactory.getLog(AuditInterceptor.class);
-
     private final AuditInterceptStrategy strategy;
     private Session session;
-    private long steps;
 
     public AuditInterceptor(AuditInterceptStrategy strategy, Processor target) {
-        super(target);
-        this.strategy = strategy;
+    	super(target);
+    	this.strategy = strategy;
     }
+
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -80,75 +79,25 @@ public class AuditInterceptor extends DelegateProcessor {
     }
 
     protected void createActive(Exchange exchange) throws Exception, RepositoryException {
-    	Node bydate = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
-                + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
-        bydate.setProperty("sling:resourceType", "audit/exchanges");
-        Node node = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
-                + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString() + "/" + exchange.getExchangeId().toString());
-        LOG.info("Node path - Active Exchange: " + node.getPath().toString());
-    	audit(exchange, node, ExchangeStatus.Active.toString());
-        Node step = RepositoryUtils.getOrCreate(node, "steps");
-        LOG.info("Number of steps: " + steps);
-        audit(RepositoryUtils.getOrCreate(step, "step" + steps), ExchangeStatus.Active.toString());
-        audit(exchange.getIn(), RepositoryUtils.getOrCreate(step, "step" + steps));
+
+        LOG.info("Node path - Active Exchange: " + exchange.getExchangeId().toString());
+        exchange.setProperty("status", ExchangeStatus.Active.toString());
+    	audit(getSession(), exchange);
+
     }
 
     protected void failure(Exchange exchange) throws Exception, RepositoryException {
-    	Node bydate = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
-                + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
-        bydate.setProperty("sling:resourceType", "audit/exchanges");
-        Node node = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
-                + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString() + "/" + exchange.getExchangeId().toString());
 
-        LOG.info("Node path - FAILURE: " + node.getPath().toString());
-        audit(exchange, node, ExchangeStatus.Error.toString());
-        audit(exchange.getIn(), RepositoryUtils.getOrCreate(node, "in"));
-        if (exchange.hasOut()) {
-            audit(exchange.getOut(), RepositoryUtils.getOrCreate(node, "out"));
-        }
+        LOG.info("Node path - FAILURE: " + exchange.getExchangeId().toString());
+        exchange.setProperty("status", ExchangeStatus.Error.toString());
+        audit(getSession(), exchange);
+
     }
 
     protected void complete(Exchange exchange) throws Exception, RepositoryException {
-    	Node bydate = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
-                + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
-        bydate.setProperty("sling:resourceType", "audit/exchanges");
-        Node node = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content/audit/exchanges/"
-                + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString() + "/" + exchange.getExchangeId().toString());
-        LOG.info("Node path - COMPLETE: " + node.getPath().toString());
-        audit(exchange, node, ExchangeStatus.Done.toString());
-        audit(exchange.getIn(), RepositoryUtils.getOrCreate(node, "in"));
-        if (exchange.hasOut()) {
-            audit(exchange.getOut(), RepositoryUtils.getOrCreate(node, "out"));
-        }
-    }
-
-    private void audit(Exchange exchange, Node node, String status) throws Exception, RepositoryException {
-        node.setProperty("sling:resourceType", "audit/camel/exchange");
-        node.setProperty("exchangeId", exchange.getExchangeId().toString());
-        node.setProperty("created", new Date().toString());
-        node.setProperty("endpointId", exchange.getFromEndpoint().getEndpointUri().toString());
-        node.setProperty("status", status);
-        if (node.hasProperty("steps")) {
-            steps = node.getProperty("steps").getValue().getLong();
-            LOG.info("Set property steps" + steps);
-            node.setProperty("steps",steps++);
-        } else {
-            steps = 1;
-            node.setProperty("steps", steps);
-        }
-        getSession().save();
-    }
-
-    private void audit(Node step, String status) throws RepositoryException {
-        step.setProperty("sling:resourceType", "audit/camel/exchange/step");
-        step.setProperty("created", new Date().toString());
-        LOG.info("Creation of new step node");
-        getSession().save();
-    }
-
-    private void audit(Message message, Node node) throws Exception, RepositoryException {
-        node.setProperty("content", message.getBody(String.class));
-        getSession().save();
+        LOG.info("Node path - COMPLETE: " + exchange.getExchangeId().toString());
+        exchange.setProperty("status", ExchangeStatus.Done.toString());
+        audit(getSession(), exchange);
     }
 
     protected Session getSession() throws LoginException, RepositoryException {
@@ -157,4 +106,31 @@ public class AuditInterceptor extends DelegateProcessor {
         }
         return session;
     }
+
+
+    private void audit(Session session, Exchange exchange) throws Exception {
+    	String name = "content/audit/exchanges/"
+                       + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString()
+                       + "/" + (exchange.hasOut() ? "/out/" : "") 
+                       + exchange.getExchangeId().toString();
+        Node node = RepositoryUtils.get(session.getRootNode(), name);
+        if (node == null) {
+        	node = RepositoryUtils.getOrCreate(session.getRootNode(), name);
+        	node.addMixin("mix:versionable");
+        	node.setProperty("sling:resourceType", "audit/camel/exchange");
+        	node.setProperty("exchangeId", exchange.getExchangeId().toString());
+        	node.setProperty("created", new Date().toString());
+   	    } else {
+   	    	node.checkout();
+   	    }
+        node.setProperty("endpointId", exchange.getFromEndpoint().getEndpointUri().toString());
+        node.setProperty("status", exchange.getProperty("status").toString());
+        node.setProperty("content", exchange.getIn().getBody(String.class));
+        LOG.info("ENDPOINT: " + exchange.getFromEndpoint().getEndpointUri().toString().split(":")[0]);
+
+        session.save();
+        node.checkin();
+    }
+
+
 }

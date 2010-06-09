@@ -17,9 +17,11 @@
 
 package org.fusesource.esb.audit.camel;
 
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.jackrabbit.core.TransientRepository;
+import org.fusesource.esb.audit.commons.RepositoryUtils;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -38,8 +40,8 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
         a.expectedMessageCount(1);
         template.sendBody("direct:a", MESSAGE);
         a.assertIsSatisfied();
-        assertRepoNotNull(a.getExchanges().get(0).getExchangeId());
-        assertRepoType(a.getExchanges().get(0).getExchangeId());
+        assertRepoNotNull(a.getExchanges().get(0));
+        assertRepoType(a.getExchanges().get(0));
     }
 
     public void testInOnly() throws Exception {
@@ -47,8 +49,8 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
         inOnly.expectedMessageCount(1);
         template.sendBody("direct:in-only", MESSAGE);
         inOnly.assertIsSatisfied();
-        assertRepoNotNull(inOnly.getExchanges().get(0).getExchangeId());
-        assertRepoType(inOnly.getExchanges().get(0).getExchangeId());
+        assertRepoNotNull(inOnly.getExchanges().get(0));
+        assertRepoType(inOnly.getExchanges().get(0));
     }
 
     public void testInOut() throws Exception {
@@ -56,8 +58,8 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
         inOut.expectedMessageCount(1);
         template.sendBody("direct:in-out", MESSAGE);
         inOut.assertIsSatisfied();
-        assertRepoNotNull(inOut.getExchanges().get(0).getExchangeId());
-        assertRepoType(inOut.getExchanges().get(0).getExchangeId());
+        assertRepoNotNull(inOut.getExchanges().get(0));
+        assertRepoType(inOut.getExchanges().get(0));
     }
 
     @Override
@@ -74,31 +76,37 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
         };
     }
 
-    private void assertRepoNotNull(String exchangeId) throws Exception {
-        Session session = getRepository().login();
+    private void assertRepoNotNull(Exchange exchange) throws Exception {
+
+    	Session session = getRepository().login();
+
         Node content = session.getRootNode().getNode("content");
         Node audit = content.getNode("audit");
         Node exchanges = audit.getNode("exchanges");
         Node bydate = exchanges.getNode(new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
         NodeIterator it = bydate.getNodes();
+
         while (it.hasNext()) {
-            System.out.println(it.next());
+        	System.out.println("NODE:" + it.next());
         }
-        assertNotNull(bydate.getNode(exchangeId));
+
+        assertNotNull(bydate.getNode(exchange.getExchangeId().toString()));
     }
 
-    private void assertRepoType(String exchangeId) throws Exception {
-        Session session = getRepository().login();
+    private void assertRepoType(Exchange exchange) throws Exception {
+
+   	Session session = getRepository().login();
+
         Node content = session.getRootNode().getNode("content");
         Node audit = content.getNode("audit");
         Node exchanges = audit.getNode("exchanges");
         Node bydate = exchanges.getNode(new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
         NodeIterator it = bydate.getNodes();
+
         while (it.hasNext()) {
-            System.out.println(it.next());
+        	System.out.println("NODE:" + it.next());
         }
-        System.out.println("NODE Properties: " + bydate.getNode(exchangeId).getProperty("sling:resourceType").getValue());
-        assertEquals(bydate.getNode(exchangeId).getProperty("sling:resourceType").getValue().getString(), "audit/camel/exchange");
+        assertEquals(bydate.getNode(exchange.getExchangeId().toString()).getProperty("sling:resourceType").getValue().getString(), "audit/camel/exchange");
     }
 
 }

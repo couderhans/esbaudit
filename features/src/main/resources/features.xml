@@ -30,8 +30,8 @@
     <bundle>mvn:org.apache.sling/org.apache.sling.commons.mime/2.0.4-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.commons.osgi/2.0.4-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.jcr.api/2.0.2-incubator</bundle>
-    <bundle>mvn:org.apache.jackrabbit/jackrabbit-api/1.5.0</bundle>
-    <bundle>mvn:org.apache.jackrabbit/jackrabbit-jcr-commons/1.5.0</bundle>
+    <bundle>mvn:org.apache.jackrabbit/jackrabbit-api/1.6.0</bundle>
+    <bundle>mvn:org.apache.jackrabbit/jackrabbit-jcr-commons/1.6.0</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.jcr.base/2.0.4-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.jcr.jackrabbit.server/2.0.4-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.jcr.webdav/2.0.6-incubator</bundle>
@@ -49,29 +49,36 @@
     <bundle>mvn:org.apache.sling/org.apache.sling.servlets.get/2.0.4-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.servlets.post/2.0.4-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.servlets.resolver/2.0.6-incubator</bundle>
+    <bundle>mvn:org.apache.sling/org.apache.sling.jcr.jackrabbit.accessmanager/2.0.2-incubator</bundle>
+    <bundle>mvn:org.apache.sling/org.apache.sling.jcr.jackrabbit.usermanager/2.0.2-incubator</bundle>
+    <bundle>mvn:org.apache.sling/org.apache.sling.launchpad.content/2.0.4-incubator</bundle>
+  </feature>
+  <feature name="sling-scripting">
     <bundle>mvn:org.apache.sling/org.apache.sling.scripting.api/2.0.2-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.scripting.core/2.0.4-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.scripting.javascript/2.0.4-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.scripting.jsp/2.0.6-incubator</bundle>
     <bundle>mvn:org.apache.sling/org.apache.sling.scripting.jsp.taglib/2.0.4-incubator</bundle>
-    <bundle>mvn:org.apache.sling/org.apache.sling.jcr.jackrabbit.accessmanager/2.0.2-incubator</bundle>
-    <bundle>mvn:org.apache.sling/org.apache.sling.jcr.jackrabbit.usermanager/2.0.2-incubator</bundle>
-    <bundle>mvn:org.apache.sling/org.apache.sling.launchpad.content/2.0.4-incubator</bundle>
-    <!-- <bundle>mvn:org.apache.sling/org.apache.sling.extensions.dojo/1.1.0.002-SNAPSHOT</bundle>
-    <bundle>mvn:org.apache.sling/org.apache.sling.extensions.dojo.sling/2.0.0-SNAPSHOT</bundle> -->
   </feature>
-  <feature name="audit.camel">
+  <feature name="sling-dojo">
+    <bundle>mvn:org.apache.sling/org.apache.sling.extensions.dojo/1.1.0.002-SNAPSHOT</bundle>
+    <bundle>mvn:org.apache.sling/org.apache.sling.extensions.dojo.sling/2.0.0-SNAPSHOT</bundle>
+  </feature>
+  <feature name="audit-camel">
     <feature>spring-dm</feature>
     <feature>camel-osgi</feature>
-    <bundle>mvn:org.apache.sling/org.apache.sling.jcr.api/2.0.2-incubator</bundle>
-    <bundle>mvn:org.apache.jackrabbit/jackrabbit-jcr-commons/1.6.0</bundle>
+    <feature>sling</feature>
     <bundle>mvn:org.fusesource.esb.audit/org.fusesource.esb.audit.commons/1.0-SNAPSHOT</bundle>
     <bundle>mvn:org.fusesource.esb.audit/org.fusesource.esb.audit.camel/1.0-SNAPSHOT</bundle>
   </feature>
-  <feature name="audit.nmr">
+  <feature name="audit-nmr">
   </feature>
-  <feature name="audit.webui">
-    <feature>sling</feature>    
+  <feature name="audit-webui">
+    <feature>sling-scripting</feature>
+    <feature>sling-dojo</feature>    
     <bundle>mvn:org.fusesource.esb.audit/org.fusesource.esb.audit.webui/1.0-SNAPSHOT</bundle>
+  </feature>
+  <feature name="audit-demo">
+    <bundle>mvn:org.fusesource.esb.audit/org.fusesource.esb.audit.demo/1.0-SNAPSHOT</bundle>
   </feature>
 </features>

@@ -4,4 +4,5 @@
    "audit":{
       "jcr:primaryType":"sling:Folder"
    }
+   
 }
