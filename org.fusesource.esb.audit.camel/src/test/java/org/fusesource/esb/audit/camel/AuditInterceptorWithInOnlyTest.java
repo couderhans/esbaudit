@@ -17,10 +17,9 @@
 
 package org.fusesource.esb.audit.camel;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.Session;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -28,108 +27,117 @@ import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.fusesource.esb.audit.testsupport.MockOrderService;
-import org.fusesource.esb.audit.testsupport.NodeAssertions;
 import org.fusesource.esb.audit.testsupport.MockOrderService.OrderFailedException;
 
 public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
 
-    private static String PAYLOAD = "Just a simple payload";
+	private static String PAYLOAD = "Just a simple payload";
 
-    public void testInOnlyWithBody() throws Exception {
+	public void testInOnlyWithBody() throws Exception {
 
-    	MockEndpoint inOnly = getMockEndpoint("mock:in-only");
+		MockEndpoint inOnly = getMockEndpoint("mock:in-only");
 
-    	inOnly.expectedMessageCount(1);
-        template.sendBody("direct:in-only", PAYLOAD);
-        inOnly.assertIsSatisfied();
+		inOnly.expectedMessageCount(1);
+		template.sendBody("direct:in-only", PAYLOAD);
+		inOnly.assertIsSatisfied();
 
-        Exchange exchange = inOnly.getExchanges().get(0);
+		Exchange exchange = inOnly.getExchanges().get(0);
+        assertStatus(exchange, ExchangeStatus.Done.toString());
+        assertPayload(exchange);
+	}
 
-        assertNode("content/audit/exchanges/" 
-        		+ new SimpleDateFormat("ddMMyyyy").format(new Date()).toString()
-   		        + "/" + exchange.getExchangeId(), new NodeAssertions() {
+	public void testInOnlyWithErrorHandler() throws Exception {
 
-            public void check(Node node) throws Exception {
-                assertNotNull(node.getProperty("status"));
-                assertEquals(ExchangeStatus.Done.toString(), node.getProperty("status").getString());
-                assertNotNull(node.getProperty("content"));
-                assertEquals(PAYLOAD, node.getProperty("content").getString());
-            }
-        });
+		MockEndpoint error = getMockEndpoint("mock:error");
+		error.expectedMessageCount(1);
+		MockEndpoint result = getMockEndpoint("mock:result");
+		result.expectedMessageCount(0);
+		template.sendBodyAndHeader("direct:start", "Order: fail", "customerid",	"555");
 
-    }
+		error.assertIsSatisfied();
+		result.assertIsSatisfied();
 
-    public void testInOnlyWithErrorHandler() throws Exception {
+		Exchange exchange = error.getExchanges().get(0);
+		System.out.println("PROPERTIES ERROR: " + exchange.getProperties().toString());
+        assertStatus(exchange, ExchangeStatus.Done.toString());
 
-        MockEndpoint error = getMockEndpoint("mock:error");
-        error.expectedMessageCount(1);
-        MockEndpoint result = getMockEndpoint("mock:result");
-        result.expectedMessageCount(0);
-        template.sendBodyAndHeader("direct:start", "Order: fail", "customerid", "555");
+	}
 
-        error.assertIsSatisfied();
-        result.assertIsSatisfied();
+	public void testInOnlyWithError() throws Exception {
 
-        Exchange exchange = error.getExchanges().get(0);
+		MockEndpoint file = getMockEndpoint("mock:file");
+		file.expectedMessageCount(1);
+		template.send("direct:file", new Processor() {
+			public void process(Exchange exchange) throws Exception {
+				exchange.getIn().setBody(PAYLOAD);
+			}
+		});
+		file.assertIsSatisfied();
 
-        System.out.println("PROPERTIES ERROR: " + exchange.getProperties().toString());
+		Exchange exchange = file.getExchanges().get(0);
+        assertStatus(exchange, ExchangeStatus.Error.toString());
 
-        assertNode("content/audit/exchanges/" 
-        		+ new SimpleDateFormat("ddMMyyyy").format(new Date()).toString()
-                + "/" + exchange.getExchangeId(), new NodeAssertions() {
+	}
 
-            public void check(Node node) throws Exception {
-                assertNotNull(node.getProperty("status"));
-                assertEquals(ExchangeStatus.Done.toString(), node.getProperty("status").getString());
-            }
-        });
+	private void assertStatus(Exchange exchange, String status) throws Exception {
 
-    }
+		Session session = getRepository().login();
 
-    public void testInOnlyWithError() throws Exception {
+		Node content = session.getRootNode().getNode("content");
+		Node audit = content.getNode("audit");
+		Node exchanges = audit.getNode("exchanges");
+		Node camel = exchanges.getNode("camel");
+		NodeIterator it = camel.getNodes();
 
-        MockEndpoint file = getMockEndpoint("mock:file");
-        file.expectedMessageCount(1);
-        template.send("direct:file", new Processor() {
-            public void process(Exchange exchange) throws Exception {
-                exchange.getIn().setBody(PAYLOAD);
-            }
-        });
-        file.assertIsSatisfied();
+		while (it.hasNext()) {
+			System.out.println("NODE:" + it.next());
+		}
+		assertEquals(camel.getNode(exchange.getExchangeId().toString())
+				.getProperty("status").getValue().getString(), status);
+	}
+	
+	private void assertPayload(Exchange exchange) throws Exception {
 
-        Exchange exchange = file.getExchanges().get(0);
-        assertNode("content/audit/exchanges/" 
-        		+ new SimpleDateFormat("ddMMyyyy").format(new Date()).toString()
-        		+ "/" + exchange.getExchangeId(), new NodeAssertions() {
+		Session session = getRepository().login();
 
-            public void check(Node node) throws Exception {
-                assertNotNull(node.getProperty("status"));
-                System.out.println("STATUS: " + node.getProperty("status").getString());
-                assertEquals(ExchangeStatus.Error.toString(), node.getProperty("status").getString());
-            }
-        });
+		Node content = session.getRootNode().getNode("content");
+		Node audit = content.getNode("audit");
+		Node exchanges = audit.getNode("exchanges");
+		Node camel = exchanges.getNode("camel");
+		NodeIterator it = camel.getNodes();
 
-    }
+		while (it.hasNext()) {
+			System.out.println("NODE:" + it.next());
+		}
+		assertEquals(camel.getNode(exchange.getExchangeId().toString())
+				.getProperty("content").getValue().getString(), PAYLOAD);
+	}
 
-    @Override
-    protected RouteBuilder createRouteBuilder() throws Exception {
-        return new RouteBuilder() {
-            @Override
-            public void configure() throws Exception {
+	@Override
+	protected RouteBuilder createRouteBuilder() throws Exception {
+		return new RouteBuilder() {
+			@Override
+			public void configure() throws Exception {
 
-                getContext().addInterceptStrategy(new AuditInterceptStrategy(getRepository()));
-                onException(OrderFailedException.class).handled(true).bean(MockOrderService.class, "orderFailed").to("mock:error");
-                // let's not handle any runtime exceptions
-                onException(RuntimeCamelException.class).handled(false);
+				getContext().addInterceptStrategy(
+						new AuditInterceptStrategy(getRepository()));
+				onException(OrderFailedException.class).handled(true).bean(
+						MockOrderService.class, "orderFailed").to("mock:error");
+				// let's not handle any runtime exceptions
+				onException(RuntimeCamelException.class).handled(false);
 
-                from("direct:in-only").to("mock:in-only");
+				from("direct:in-only").to("mock:in-only");
 
-                errorHandler(deadLetterChannel("mock:error").maximumRedeliveries(1));
-                from("direct:start").bean(MockOrderService.class, "handleOrder").to("mock:result");
-                from("direct:file").to("mock:file").throwException(
-                        new RuntimeCamelException("Something is completely going wrong here!"));
-            }
-        };
-    }
+				errorHandler(deadLetterChannel("mock:error")
+						.maximumRedeliveries(1));
+				from("direct:start")
+						.bean(MockOrderService.class, "handleOrder").to(
+								"mock:result");
+				from("direct:file").to("mock:file").throwException(
+						new RuntimeCamelException(
+								"Something is completely going wrong here!"));
+			}
+		};
+	}
 
 }

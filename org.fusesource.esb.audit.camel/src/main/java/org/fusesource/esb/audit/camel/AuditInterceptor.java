@@ -79,25 +79,21 @@ public class AuditInterceptor extends DelegateProcessor {
     }
 
     protected void createActive(Exchange exchange) throws Exception, RepositoryException {
-
         LOG.info("Node path - Active Exchange: " + exchange.getExchangeId().toString());
         exchange.setProperty("status", ExchangeStatus.Active.toString());
-    	audit(getSession(), exchange);
-
+    	audit(exchange);
     }
 
     protected void failure(Exchange exchange) throws Exception, RepositoryException {
-
         LOG.info("Node path - FAILURE: " + exchange.getExchangeId().toString());
         exchange.setProperty("status", ExchangeStatus.Error.toString());
-        audit(getSession(), exchange);
-
+        audit(exchange);
     }
 
     protected void complete(Exchange exchange) throws Exception, RepositoryException {
         LOG.info("Node path - COMPLETE: " + exchange.getExchangeId().toString());
         exchange.setProperty("status", ExchangeStatus.Done.toString());
-        audit(getSession(), exchange);
+        audit(exchange);
     }
 
     protected Session getSession() throws LoginException, RepositoryException {
@@ -107,19 +103,28 @@ public class AuditInterceptor extends DelegateProcessor {
         return session;
     }
 
+    private void audit(Exchange exchange) throws Exception {
+    	
+    	Node content = RepositoryUtils.getOrCreate(getSession().getRootNode(), "content");
 
-    private void audit(Session session, Exchange exchange) throws Exception {
-    	String name = "content/audit/exchanges/"
-                       + new SimpleDateFormat("ddMMyyyy").format(new Date()).toString()
-                       + "/" + (exchange.hasOut() ? "/out/" : "") 
-                       + exchange.getExchangeId().toString();
-        Node node = RepositoryUtils.get(session.getRootNode(), name);
+    	Node audit = RepositoryUtils.getOrCreate(content, "audit");
+    	audit.setProperty("sling:resourceType", "audit");
+    	
+    	Node exchanges = RepositoryUtils.getOrCreate(audit, "exchanges");
+    	exchanges.setProperty("sling:resourceType", "audit/exchanges");
+    	
+    	Node camel = RepositoryUtils.getOrCreate(exchanges,"camel");
+    	camel.setProperty("sling:resourceType", "audit/exchanges/camel");
+    	
+    	String name = (exchange.hasOut() ? "out/" : "") + exchange.getExchangeId().toString();
+    	
+        Node node = RepositoryUtils.get(camel, name);
         if (node == null) {
-        	node = RepositoryUtils.getOrCreate(session.getRootNode(), name);
+        	node = RepositoryUtils.getOrCreate(camel, name);
         	node.addMixin("mix:versionable");
-        	node.setProperty("sling:resourceType", "audit/camel/exchange");
+        	node.setProperty("sling:resourceType", "audit/exchanges/camel/exchange");
         	node.setProperty("exchangeId", exchange.getExchangeId().toString());
-        	node.setProperty("created", new Date().toString());
+        	node.setProperty("created", new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
    	    } else {
    	    	node.checkout();
    	    }
@@ -128,7 +133,7 @@ public class AuditInterceptor extends DelegateProcessor {
         node.setProperty("content", exchange.getIn().getBody(String.class));
         LOG.info("ENDPOINT: " + exchange.getFromEndpoint().getEndpointUri().toString().split(":")[0]);
 
-        session.save();
+        getSession().save();
         node.checkin();
     }
 

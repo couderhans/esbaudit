@@ -1,0 +1,54 @@
+{
+   "jcr:primaryType":"sling:Folder",
+   "sling:resourceType":"servicemix/dashboard",
+   
+   "dashboard":{
+      "jcr:primaryType":"sling:Folder",
+      "sling:resourceType":"servicemix/dashboard"
+   },
+   
+   "exchanges":{
+      "jcr:primaryType":"sling:Folder",
+      "sling:resourceType":"servicemix/exchanges"
+   },
+
+   "message_flows":{
+      "jcr:primaryType":"sling:Folder",
+      "sling:resourceType":"servicemix/message_flows"
+   },  
+   
+   "endpoints":{
+      "jcr:primaryType":"sling:Folder",
+      "sling:resourceType":"servicemix/endpoints"
+   },
+
+   "navigation":{
+      "jcr:primaryType":"sling:Folder",
+      "sling:resourceType":"servicemix/navigation"
+   },
+   
+   "masterpage-header":{
+      "jcr:primaryType":"sling:Folder",
+      "sling:resourceType":"servicemix/masterpage-header"
+   },
+   
+   "masterpage-footer":{
+      "jcr:primaryType":"sling:Folder",
+      "sling:resourceType":"servicemix/masterpage-footer"
+   },   
+      
+   "config":{
+      "jcr:primaryType":"sling:Folder",
+      "sling:resourceType":"servicemix/config"
+   },
+
+   "queue":{
+      "jcr:primaryType":"sling:Folder",
+      "sling:resourceType":"servicemix/queue"
+   },
+   
+   "search":{
+      "jcr:primaryType":"sling:Folder",
+      "sling:resourceType":"servicemix/search"
+   }
+}

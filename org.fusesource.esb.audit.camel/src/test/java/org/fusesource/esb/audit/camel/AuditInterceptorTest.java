@@ -83,14 +83,15 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
         Node content = session.getRootNode().getNode("content");
         Node audit = content.getNode("audit");
         Node exchanges = audit.getNode("exchanges");
-        Node bydate = exchanges.getNode(new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
-        NodeIterator it = bydate.getNodes();
+        Node camel = exchanges.getNode("camel");
+        //Node bydate = camel.getNode(new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
+        NodeIterator it = camel.getNodes();
 
         while (it.hasNext()) {
         	System.out.println("NODE:" + it.next());
         }
 
-        assertNotNull(bydate.getNode(exchange.getExchangeId().toString()));
+        assertNotNull(camel.getNode(exchange.getExchangeId().toString()));
     }
 
     private void assertRepoType(Exchange exchange) throws Exception {
@@ -100,13 +101,14 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
         Node content = session.getRootNode().getNode("content");
         Node audit = content.getNode("audit");
         Node exchanges = audit.getNode("exchanges");
-        Node bydate = exchanges.getNode(new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
-        NodeIterator it = bydate.getNodes();
+        Node camel = exchanges.getNode("camel");
+        //Node bydate = camel.getNode(new SimpleDateFormat("ddMMyyyy").format(new Date()).toString());
+        NodeIterator it = camel.getNodes();
 
         while (it.hasNext()) {
         	System.out.println("NODE:" + it.next());
         }
-        assertEquals(bydate.getNode(exchange.getExchangeId().toString()).getProperty("sling:resourceType").getValue().getString(), "audit/camel/exchange");
+        assertEquals(camel.getNode(exchange.getExchangeId().toString()).getProperty("sling:resourceType").getValue().getString(), "audit/exchanges/camel/exchange");
     }
 
 }

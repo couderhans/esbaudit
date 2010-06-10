@@ -81,4 +81,8 @@
   <feature name="audit-demo">
     <bundle>mvn:org.fusesource.esb.audit/org.fusesource.esb.audit.demo/1.0-SNAPSHOT</bundle>
   </feature>
+  <feature name="audit">
+    <feature>audit-camel</feature>
+    <feature>audit-webui</feature>
+  </feature>
 </features>
