@@ -19,8 +19,14 @@
 <html>
 
 <head>
-  <title>Apache ServiceMix :: Dashboard</title>
+  <title>Apache ServiceMix ::Dashboard</title>
   <link rel="stylesheet" type="text/css" href="/content/audit/themes/master.css"/>
+  <script type="text/javascript" src="/content/audit/scripts/dojo.js">
+    <!-- the DOJO JavaScript Toolkit -->
+    <!--dojo.onLoad(function() {
+
+    });-->
+  </script>
 </head>
 
 <body>
@@ -96,7 +102,8 @@
             </td>
             <td height="100%" width="100%">
               <!-- Content -->
-              <div class="wiki-content">              
+              <div class="wiki-content">  
+                <% sling.include("audit.div"); %>            
               </div>
               <!-- Content -->
             </td>
