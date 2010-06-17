@@ -31,8 +31,6 @@ import java.util.Date;
 
 public class AuditInterceptorTest extends AbstractAuditTestSupport {
 
-    private TransientRepository repository;
-
     private static final String MESSAGE = "<just><a>test</a></just>";
 
     public void testRoute() throws Exception {
@@ -77,9 +75,6 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
     }
 
     private void assertRepoNotNull(Exchange exchange) throws Exception {
-
-    	Session session = getRepository().login();
-
         Node content = session.getRootNode().getNode("content");
         Node audit = content.getNode("audit");
         Node exchanges = audit.getNode("exchanges");
@@ -95,9 +90,6 @@ public class AuditInterceptorTest extends AbstractAuditTestSupport {
     }
 
     private void assertRepoType(Exchange exchange) throws Exception {
-
-   	Session session = getRepository().login();
-
         Node content = session.getRootNode().getNode("content");
         Node audit = content.getNode("audit");
         Node exchanges = audit.getNode("exchanges");

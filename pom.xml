@@ -8,22 +8,23 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>ESB Audit</name>
-  
+
   <properties>
-    <camel.version>2.0.0</camel.version>
-    <felix.version>1.4.0</felix.version>
+    <bundle.plugin.version>1.4.0</bundle.plugin.version>  
+    <camel.version>2.2.0</camel.version>
     <jackrabbit.version>1.5.0</jackrabbit.version>
     <jcr.version>1.0</jcr.version>
     <junit.version>4.7</junit.version>
+    <karaf.version>1.4.0</karaf.version>
     <servicemix.utils.version>1.2.1</servicemix.utils.version>
     <slf4j.version>1.5.8</slf4j.version>
-    
+
     <esbaudit.osgi.export>${artifactId}</esbaudit.osgi.export>
     <esbaudit.osgi.import>*</esbaudit.osgi.import>
     <esbaudit.osgi.private/>
-    
+
   </properties>
-  
+
   <modules>
     <module>features</module>
     <module>org.fusesource.esb.audit.camel</module>
@@ -32,13 +33,13 @@
     <module>org.fusesource.esb.audit.webui</module>
     <module>demo</module>
   </modules>
-  
+
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>${felix.version}</version>
+        <version>${bundle.plugin.version}</version>
         <extensions>true</extensions>
         <inherited>true</inherited>
         <configuration>
@@ -60,7 +61,7 @@
       </plugin>
     </plugins>
   </build>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -122,5 +123,17 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <!-- we need this to keep up with Sling's ever changing list of bundles -->
+  <repositories>
+    <repository>
+      <id>apache.snapshots</id>
+      <name>Apache Snapshot Repository</name>
+      <url>http://repository.apache.org/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>
 
 </project>

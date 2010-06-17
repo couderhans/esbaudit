@@ -46,7 +46,6 @@ public class AuditInterceptStrategy implements InterceptStrategy {
 
     public Processor wrapProcessorInInterceptors(CamelContext context, ProcessorDefinition definition, Processor target,
             Processor nexttarget) throws Exception {
-        System.out.println("wrapping " + target);
         return new AuditInterceptor(this, target);
     }
 

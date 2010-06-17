@@ -80,9 +80,6 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
 	}
 
 	private void assertStatus(Exchange exchange, String status) throws Exception {
-
-		Session session = getRepository().login();
-
 		Node content = session.getRootNode().getNode("content");
 		Node audit = content.getNode("audit");
 		Node exchanges = audit.getNode("exchanges");
@@ -97,9 +94,6 @@ public class AuditInterceptorWithInOnlyTest extends AbstractAuditTestSupport {
 	}
 	
 	private void assertPayload(Exchange exchange) throws Exception {
-
-		Session session = getRepository().login();
-
 		Node content = session.getRootNode().getNode("content");
 		Node audit = content.getNode("audit");
 		Node exchanges = audit.getNode("exchanges");

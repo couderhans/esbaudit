@@ -19,7 +19,7 @@
 
    "themes":{
       "jcr:primaryType":"sling:Folder",
-      "sling:resourceType":"audit/themes"    
+      "sling:resourceType":"audit/themes"
    },
    
    "lib":{

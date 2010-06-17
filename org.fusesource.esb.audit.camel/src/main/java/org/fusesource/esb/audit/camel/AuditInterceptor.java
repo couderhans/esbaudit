@@ -138,4 +138,11 @@ public class AuditInterceptor extends DelegateProcessor {
     }
 
 
+    @Override
+    protected void doStop() throws Exception {
+        super.doStop();
+
+        LOG.debug("Closing JCR Session for " + this);
+        getSession().logout();
+    }
 }

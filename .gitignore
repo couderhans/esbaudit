@@ -3,9 +3,7 @@ target
 *.log
 *~
 .idea
-*.iml
-profiles*
-settings*
+*.i??
 .settings
 .classpath
 *bin*
