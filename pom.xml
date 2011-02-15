@@ -10,31 +10,51 @@
   <name>ESB Audit</name>
 
   <properties>
-    <bundle.plugin.version>1.4.0</bundle.plugin.version>  
-    <camel.version>2.2.0</camel.version>
-    <jackrabbit.version>1.5.0</jackrabbit.version>
-    <jcr.version>1.0</jcr.version>
-    <junit.version>4.7</junit.version>
-    <karaf.version>1.4.0</karaf.version>
-    <servicemix.utils.version>1.2.1</servicemix.utils.version>
-    <slf4j.version>1.5.8</slf4j.version>
-
-    <esbaudit.osgi.export>${artifactId}</esbaudit.osgi.export>
+    <!-- OSGi stuff -->
+    <bundle.plugin.version>2.1.0</bundle.plugin.version>
+    <esbaudit.osgi.export>${project.artifactId}</esbaudit.osgi.export>
     <esbaudit.osgi.import>*</esbaudit.osgi.import>
     <esbaudit.osgi.private/>
 
+    <!-- Scalate stuff -->
+    <scalate.version>1.4.0</scalate.version>
+
+    <!-- Scala stuff -->
+    <scala.version>2.8.1</scala.version>
+    <scala.plugin.version>2.9.1</scala.plugin.version>
+
+    <!-- Camel -->
+    <camel.version>2.6.0</camel.version>
+
+    <!-- Everything else ... -->
+    <jackrabbit.version>1.5.0</jackrabbit.version>
+    <jcr.version>1.0</jcr.version>
+    <junit.version>4.8</junit.version>
+    <karaf.version>1.4.0</karaf.version>
+    <servicemix.utils.version>1.2.1</servicemix.utils.version>
+    <slf4j.version>1.5.8</slf4j.version>
   </properties>
 
-  <modules>
-    <module>features</module>
-    <module>org.fusesource.esb.audit.camel</module>
-    <module>org.fusesource.esb.audit.commons</module>
-    <module>org.fusesource.esb.audit.testsupport</module>
-    <module>org.fusesource.esb.audit.webui</module>
-    <module>demo</module>
-  </modules>
-
   <build>
+    <defaultGoal>install</defaultGoal>
+    <sourceDirectory>src/main/scala</sourceDirectory>
+    <testSourceDirectory>src/test/scala</testSourceDirectory>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>${bundle.plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.scala-tools</groupId>
+          <artifactId>maven-scala-plugin</artifactId>
+          <version>${scala.plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>
@@ -44,7 +64,7 @@
         <inherited>true</inherited>
         <configuration>
           <instructions>
-            <Bundle-Name>${artifactId}</Bundle-Name>
+            <Bundle-Name>${project.artifactId}</Bundle-Name>
             <Export-Package>${esbaudit.osgi.export}</Export-Package>
             <Import-Package>${esbaudit.osgi.import}</Import-Package>
             <Private-Package>${esbaudit.osgi.private}</Private-Package>
@@ -52,88 +72,10 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
+        <groupId>org.scala-tools</groupId>
+        <artifactId>maven-scala-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.apache.camel</groupId>
-        <artifactId>camel-core</artifactId>
-        <version>${camel.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.camel</groupId>
-        <artifactId>camel-core</artifactId>
-        <version>${camel.version}</version>
-        <type>test-jar</type>
-      </dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${junit.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${junit.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.jackrabbit</groupId>
-        <artifactId>jackrabbit-core</artifactId>
-        <version>${jackrabbit.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>javax.jcr</groupId>
-        <artifactId>jcr</artifactId>
-        <version>${jcr.version}</version>
-      </dependency>
-	  <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>${slf4j.version}</version>
-      </dependency>
-	  <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>${slf4j.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.servicemix</groupId>
-        <artifactId>servicemix-utils</artifactId>
-        <version>${servicemix.utils.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.fusesource.esb.audit</groupId>
-        <artifactId>org.fusesource.esb.audit.commons</artifactId>
-        <version>${pom.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.fusesource.esb.audit</groupId>
-        <artifactId>org.fusesource.esb.audit.testsupport</artifactId>
-        <version>${pom.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
-  <!-- we need this to keep up with Sling's ever changing list of bundles -->
-  <repositories>
-    <repository>
-      <id>apache.snapshots</id>
-      <name>Apache Snapshot Repository</name>
-      <url>http://repository.apache.org/snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </repository>
-  </repositories>
 
 </project>
