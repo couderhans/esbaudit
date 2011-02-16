@@ -17,34 +17,14 @@
  */
 package org.fusesource.esbaudit.backend
 
-import com.mongodb.Mongo
-import com.mongodb.casbah.Imports._
 import model.Flow
 
 /**
- * MongoDB based implementation for {@link Backend}
+ * Adapter to allow interaction with the backend system
  */
-class MongoDB extends Backend with Adapter {
+//TODO: Merge with backend ?
+trait Adapter {
 
-  val connection = MongoConnection()
-  val database = connection("test")
-
-  def all = for (val found <- database("servicemix").find;
-                 val exchange_id = found.getAs[String]("exchange_id"))
-        yield Flow(exchange_id match {
-          case Some(value) => value
-          case None => "**unknown**"
-        })
-
-  def store(flow: Flow) = {
-    val record = MongoDBObject.newBuilder
-    record += "exchange_id" -> flow.id
-    database("servicemix") += record.result.asDBObject
-  }
-}
-
-object MongoDB {
-
-  def apply() = new MongoDB
+  def store(flow: Flow)
 
 }
