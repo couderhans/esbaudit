@@ -1,0 +1,7 @@
+- attributes("title") = "Dashboard"
+%p= uri("/home")
+- val app = new org.fusesource.esbaudit.web.Controller
+%ul
+- for (val flow <- app.all)
+  %li
+    %p= flow
