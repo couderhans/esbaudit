@@ -75,4 +75,30 @@
     </dependency>
   </dependencies>
 
+  <profiles>
+    <profile>
+      <id>createdb</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.scala-tools</groupId>
+            <artifactId>maven-scala-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>script</goal>
+                </goals>
+                <phase>generate-resources</phase>
+                <configuration>
+                  <scriptFile>${basedir}/src/main/scripts/CreateTestDatabase.scala</scriptFile>
+                  <includeScopes>runtime,plugin</includeScopes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>

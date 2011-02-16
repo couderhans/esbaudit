@@ -47,7 +47,7 @@
 
     <!-- Scala stuff -->
     <scala.version>2.8.1</scala.version>
-    <scala.plugin.version>2.9.1</scala.plugin.version>
+    <scala.plugin.version>2.15.2</scala.plugin.version>
 
     <!-- Camel -->
     <camel.version>2.6.0</camel.version>
@@ -92,14 +92,6 @@
           <groupId>org.scala-tools</groupId>
           <artifactId>maven-scala-plugin</artifactId>
           <version>${scala.plugin.version}</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>compile</goal>
-                <goal>testCompile</goal>
-              </goals>
-            </execution>
-          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -123,6 +115,14 @@
       <plugin>
         <groupId>org.scala-tools</groupId>
         <artifactId>maven-scala-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
