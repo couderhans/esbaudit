@@ -29,4 +29,22 @@ class MockAdapter extends Adapter {
   val flows = new ListBuffer[Flow]
 
   def store(flow: Flow) = flows += flow
+
+  def update(flow: Flow) = {
+    flows.find(_.id == flow.id) match {
+      case Some(found) => {
+        //TODO: make this less naive
+        flows -= found
+        flows += Flow(found.id, found.in, flow.status)
+        println(Flow(found.id, found.in, flow.status))
+        println(flows)
+      }
+      case None => throw new IllegalArgumentException("Unable to update %s - flow does not exist in store".format(flow.id))
+    }
+  }
+
+  def reset = {
+    println("Resetting...")
+    flows.clear
+  }
 }

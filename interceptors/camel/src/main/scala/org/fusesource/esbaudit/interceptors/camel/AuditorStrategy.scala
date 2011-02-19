@@ -18,24 +18,55 @@
 package org.fusesource.esbaudit.interceptors.camel
 
 import org.fusesource.esbaudit.backend.Adapter
-import org.fusesource.esbaudit.backend.model.Flow
-import org.apache.camel.spi.InterceptStrategy
 import org.apache.camel.model.ProcessorDefinition
 import org.apache.camel.processor.{DelegateAsyncProcessor, DelegateProcessor}
-import org.apache.camel._
+import org.apache.camel.{Exchange, Message, Processor, AsyncCallback, CamelContext}
+import collection.mutable.ListBuffer
+import org.apache.camel.spi.{Synchronization, InterceptStrategy}
+import org.fusesource.esbaudit.backend.model._
+
 
 /**
  * Auditor strategy to send flows/exchanges/... to a storage adapter
  */
-case class AuditorStrategy(val adapter: Adapter) extends InterceptStrategy {
+case class AuditorStrategy(val adapter: Adapter) extends InterceptStrategy with Synchronization {
+
+  val pending = new ListBuffer[String]
 
   def wrapProcessorInInterceptors(context: CamelContext, definition: ProcessorDefinition[_],
                                   from: Processor, to: Processor) = Auditor(to)
 
 
+  def onComplete(exchange: Exchange) = {
+    println("Done %s".format(exchange))
+    adapter.update(
+      Flow(exchange.getExchangeId,
+           null,
+           Done()))
+  }
+
+
+  def onFailure(exchange: Exchange) = {
+     adapter.update(
+      Flow(exchange.getExchangeId,
+           null,
+           Error()))
+     }
+
   case class Auditor(val delegate: Processor) extends DelegateAsyncProcessor(delegate) {
+
     override def process(exchange: Exchange, callback: AsyncCallback) = {
-      adapter.store(Flow(exchange.getExchangeId))
+
+      if (!pending.contains(exchange.getExchangeId)) {
+        exchange.addOnCompletion(AuditorStrategy.this)
+        pending += exchange.getExchangeId
+
+        adapter.store(
+          Flow(exchange.getExchangeId,
+               org.fusesource.esbaudit.backend.model.Message(exchange.getIn().getBody()),
+               Active()))
+    }
+
       super.process(exchange, callback)
     }
   }

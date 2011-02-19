@@ -25,6 +25,10 @@ package org.fusesource.esbaudit.backend.model
  *
  */
 //TODO Do we need this one?
-case class Flow(val id: String) {
-
+case class Flow(val id: String, val in: Message, val status: Status) {
 }
+
+abstract case class Status
+case class Done extends Status
+case class Error extends Status
+case class Active extends Status

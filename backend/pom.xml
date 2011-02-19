@@ -42,5 +42,31 @@
       <artifactId>mongo-java-driver</artifactId>
     </dependency>
   </dependencies>
-
+  <profiles>
+    <profile>
+      <id>it</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.scala-tools</groupId>
+            <artifactId>maven-scala-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>integration-test</id>
+                <goals>
+                  <goal>script</goal>
+                </goals>
+                <phase>verify</phase>
+                <configuration>
+                  <addToClasspath>${project.build.directory}/${project.build.finalName}.${project.packaging}</addToClasspath>
+                  <scriptFile>${basedir}/src/test/scripts/IntegrationTest.scala</scriptFile>
+                  <includeScopes>compile,test,runtime,system,plugin</includeScopes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

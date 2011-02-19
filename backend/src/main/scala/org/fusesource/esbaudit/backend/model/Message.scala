@@ -15,13 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import org.fusesource.esbaudit.backend.MongoDB
-import org.fusesource.esbaudit.backend.model._
+package org.fusesource.esbaudit.backend.model
 
-log.info("Inserting 50 flows")
-for (i <- 1 to 50) {
-  MongoDB().store(Flow("flow-testing-%05d".format(i),
-                       Message("some body"),
-                       Active()))
+/**
+ * Represents a message in an exchange or a flow
+ */
+case class Message(val body: AnyRef) {
+
+
+
 }
-

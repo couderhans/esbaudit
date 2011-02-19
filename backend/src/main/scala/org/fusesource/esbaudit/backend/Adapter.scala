@@ -17,7 +17,7 @@
  */
 package org.fusesource.esbaudit.backend
 
-import model.Flow
+import model.{Message, Flow}
 
 /**
  * Adapter to allow interaction with the backend system
@@ -26,5 +26,7 @@ import model.Flow
 trait Adapter {
 
   def store(flow: Flow)
+
+  def update(flow: Flow)
 
 }
