@@ -36,6 +36,12 @@
       <groupId>com.mongodb.casbah</groupId>
       <artifactId>casbah_2.8.1</artifactId>
       <type>pom</type>
+        <exclusions>
+            <exclusion>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-library</artifactId>
+            </exclusion>
+        </exclusions>
     </dependency>
     <dependency>
       <groupId>org.mongodb</groupId>
@@ -60,7 +66,7 @@
                 <configuration>
                   <addToClasspath>${project.build.directory}/${project.build.finalName}.${project.packaging}</addToClasspath>
                   <scriptFile>${basedir}/src/test/scripts/IntegrationTest.scala</scriptFile>
-                  <includeScopes>compile,test,runtime,system,plugin</includeScopes>
+                  <includeScopes>compile,test</includeScopes>
                 </configuration>
               </execution>
             </executions>

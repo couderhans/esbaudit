@@ -24,6 +24,7 @@ import org.apache.camel.{Exchange, Message, Processor, AsyncCallback, CamelConte
 import collection.mutable.ListBuffer
 import org.apache.camel.spi.{Synchronization, InterceptStrategy}
 import org.fusesource.esbaudit.backend.model._
+import scala.collection.JavaConversions.asScalaMap
 
 
 /**
@@ -42,7 +43,7 @@ case class AuditorStrategy(val adapter: Adapter) extends InterceptStrategy with 
     adapter.update(
       Flow(exchange.getExchangeId,
            null,
-           Done()))
+           Done(), null))
   }
 
 
@@ -50,7 +51,7 @@ case class AuditorStrategy(val adapter: Adapter) extends InterceptStrategy with 
      adapter.update(
       Flow(exchange.getExchangeId,
            null,
-           Error()))
+           Error(), null))
      }
 
   case class Auditor(val delegate: Processor) extends DelegateAsyncProcessor(delegate) {
@@ -61,13 +62,22 @@ case class AuditorStrategy(val adapter: Adapter) extends InterceptStrategy with 
         exchange.addOnCompletion(AuditorStrategy.this)
         pending += exchange.getExchangeId
 
-        adapter.store(
-          Flow(exchange.getExchangeId,
-               org.fusesource.esbaudit.backend.model.Message(exchange.getIn().getBody()),
-               Active()))
+        adapter.store(toModel(exchange))
     }
 
       super.process(exchange, callback)
     }
+  }
+
+  def toModel(exchange: Exchange) : Flow = {
+    Flow(exchange.getExchangeId,
+         toModel(exchange.getIn()),
+         Active(),
+         asScalaMap(exchange.getProperties).toMap)
+  }
+
+  def toModel(camel: Message) : org.fusesource.esbaudit.backend.model.Message = {
+    org.fusesource.esbaudit.backend.model.Message(camel.getBody(),
+                                                  asScalaMap(camel.getHeaders).toMap)
   }
 }

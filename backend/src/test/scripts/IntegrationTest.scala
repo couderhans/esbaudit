@@ -26,19 +26,19 @@ println
 println("- Creating an active flow")
 // create an new Active Flow
 mongo.store(Flow("flow-testing-00001",
-                 Message("some body"),
-                 Active()))
+                 Message("some body", Map("some" -> "header")),
+                 Active(), Map("property" -> "value")))
 
 println
 println("- Creating another active flow...")
 mongo.store(Flow("flow-testing-00002",
-                 Message("some body"),
-                 Active()))
+                 Message("some body", Map("some" -> "header")),
+                 Active(), Map("property" -> "value")))
 
 println("  ... and marking it done")
 mongo.update(Flow("flow-testing-00002",
                      null,
-                     Done()))
+                     Done(), Map("property" -> "value")))
 
 println
 println("- Display all flow objects in the database")

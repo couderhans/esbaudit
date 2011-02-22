@@ -32,6 +32,10 @@ import org.fusesource.esbaudit.backend.model.Done
 class BasicBusinessAuditTest extends CamelTestSupport with RouteBuilderSupport {
 
   val MESSAGE = "Stand aside! Important message coming through!"
+  val PROPERTY_NAME = "some.property.name"
+  val PROPERTY_VALUE = "some.property.value"
+  val HEADER_NAME = "X-Test: "
+  val HEADER_VALUE = "Header value"
 
   val adapter = new MockAdapter
 
@@ -43,7 +47,11 @@ class BasicBusinessAuditTest extends CamelTestSupport with RouteBuilderSupport {
     getMockEndpoint("mock:simple").expectedMessageCount(1)
 
     val exchange = template.asyncSend("direct:simple", new Processor() {
-      def process(exchange: Exchange) = exchange.getIn.setBody(MESSAGE)
+      def process(exchange: Exchange) = {
+        exchange.setProperty(PROPERTY_NAME, PROPERTY_VALUE)
+        exchange.getIn.setBody(MESSAGE)
+        exchange.getIn.setHeader(HEADER_NAME, HEADER_VALUE)
+      }
     })
 
     assertMockEndpointsSatisfied
@@ -55,6 +63,8 @@ class BasicBusinessAuditTest extends CamelTestSupport with RouteBuilderSupport {
     assertEquals("Flow should match the exchange id", exchange.get.getExchangeId, flow.id)
     assertEquals("Original body should have been audited",
                  MESSAGE, flow.in.body)
+    assertEquals("Flow should contain property key and value", PROPERTY_VALUE, flow.properties(PROPERTY_NAME))
+    assertEquals("Flow should contain message headers also", HEADER_VALUE, flow.in.headers(HEADER_NAME))
     assertEquals("Flow ended succesfully", Done(), flow.status)
   }
 

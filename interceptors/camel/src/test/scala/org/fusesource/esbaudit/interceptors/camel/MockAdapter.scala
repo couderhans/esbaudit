@@ -35,8 +35,8 @@ class MockAdapter extends Adapter {
       case Some(found) => {
         //TODO: make this less naive
         flows -= found
-        flows += Flow(found.id, found.in, flow.status)
-        println(Flow(found.id, found.in, flow.status))
+        flows += Flow(found.id, found.in, flow.status, found.properties)
+        println(Flow(found.id, found.in, flow.status, found.properties))
         println(flows)
       }
       case None => throw new IllegalArgumentException("Unable to update %s - flow does not exist in store".format(flow.id))

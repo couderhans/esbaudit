@@ -25,7 +25,7 @@ package org.fusesource.esbaudit.backend.model
  *
  */
 //TODO Do we need this one?
-case class Flow(val id: String, val in: Message, val status: Status) {
+case class Flow(val id: String, val in: Message, val status: Status, val properties: Map[String, AnyRef]) {
 }
 
 abstract case class Status
