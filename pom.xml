@@ -203,6 +203,7 @@
         <version>${logback.version}</version>
       </dependency>
     </dependencies>
+
   </dependencyManagement>
 
   <dependencies>

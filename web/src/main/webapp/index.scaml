@@ -1,7 +1,34 @@
-- attributes("title") = "Dashboard"
-%p= uri("/home")
 - val app = new org.fusesource.esbaudit.web.Controller
-%ul
-- for (val flow <- app.all)
-  %li
-    %p= flow
+
+
+%header
+  .title
+    .logo
+      %img(src="theme/images/logodesign2.png")
+    .new-logo
+      %img(src="theme/images/new-logo.png")
+  .menu
+    ESB Audit
+%div
+  .tabs
+%article
+  .widget
+    .title List of Flows
+    .body
+      %table(id="list")
+        %thead
+          %tr
+            %th ID
+            %th Message
+            %th Message Headers
+            %th Properties
+            %th Status
+        %tbody
+          - for (val flow <- app.page(25))
+            %tr
+              %td= flow.id
+              %td= flow.in.body
+              %td= flow.in.headers
+              %td= flow.properties
+              %td= flow.status
+

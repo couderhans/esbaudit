@@ -17,8 +17,8 @@
  */
 package org.fusesource.esbaudit.web
 
-import com.mongodb.Mongo
 import org.fusesource.esbaudit.backend.MongoDB
+import org.fusesource.esbaudit.backend.model._
 
 /**
  * Web application controller
@@ -28,5 +28,12 @@ class Controller {
   val backend = MongoDB()
 
   def all = backend.all
+
+
+  //def map = backend.all map { Flow => (Flow.id, Flow.status) }
+  def page(end: Int) = all.slice(0, end)
+  //def page: Iterable[Flow] = all
+  //def pages =  all.sliding(0, 25) map { Flow => (Flow.id, Flow.status) }
+  //def page(end: Int) = pages.slice(0, 10)
 
 }

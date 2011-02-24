@@ -1,24 +1,133 @@
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow:hidden;
+}
+
 body {
   font-family: Verdana, Arial, sans-serif;  
   margin: 0px auto;
-  width: 95%;
-  font-size: .8em;
-}
-
-header {
-  display: block;
   width: 100%;
-  height: 4em;
-  background-color: #778899;
+  font-size: .8em;
+  background-color: #f7f7f7;
 }
 
-header h1 {
+/* header stuff */
+header .title {
+  width: 100%;
+  height: 55px;
+  background-color: #43d0f5;
+  /*background-color: #f3f3f3;*/
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #000000;
+  text-align: centre;
+  top: Opx;
+}
+
+header .title .new-logo {
+  position: absolute;
+  top: 1px;
+  left: 57px;
+}
+
+header .menu {
   margin: 0;
-  padding-right: 1em;
-  text-align: right;
+  padding-right: .64em;
+  text-align: center;
+  width: 100%;
+  height: 28px;
+  background-color: #336699;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1.8em;
+  border-bottom: solid 2px silver;
+
+}
+
+header .item-selected {
+  position: absolute;
+  width: 150px;
+  height: 8px;
+  top: 58px;
+  left: 32px;
+  padding: 0 1em 1em;
+  background-position: bottom right;
+  text-align: center;
+  font-weight: bold;
+  border-right: solid 1px #ffffff;
+  border-left: solid 1px #ffffff;
+  color: #ffffff;
 }
 
 article {
-  display: block;
-  margin: 1em;
+  position: absolute;
+  left: 32px;
+  top: 151px;
+  width: 96%;
+  height: 100%;
+  background-color: #ffffff;
+  border: solid 1px silver;
 }
+
+article .widget {
+  position: relative;
+  left: 45px;
+  top: 91px;
+  width: 94%;
+  border: solid 2px silver;
+}
+
+article .widget .title {
+  height: 32px;
+  color: #ffffff;
+  font-weight: bold;
+  background-color: #336699;
+}
+
+article .widget .body table#list {
+  position: relative;
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+  rowspan: 0px;
+}
+
+article .widget .body table#list thead tr {
+  width: 100%;
+  height: 23px;
+  background-color: #e2e2e2;
+  padding: 0;
+}
+
+article .widget .body table#list thead tr th {
+  padding: 0px;
+  margin: 0px;
+}
+
+article .widget .body table#list tbody td {
+  padding: 0px;
+  margin: 0px;
+  color: #499e49;
+  background-color: #e2e2e2;
+  border-bottom: solid 1px silver;
+}
+
+div .tabs {
+  position: absolute;
+  left: 32px;
+  top: 112px;
+  width: 152px;
+  height: 40px;;
+  background-color: #ffffff;
+  z-index: 1;
+  background-color: #f7f7f7;
+  background-image: url('/theme/images/tab2.png');
+}
+
+
+
+
+
+

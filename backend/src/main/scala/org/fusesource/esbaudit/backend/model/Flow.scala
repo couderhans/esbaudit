@@ -28,7 +28,9 @@ package org.fusesource.esbaudit.backend.model
 case class Flow(val id: String, val in: Message, val status: Status, val properties: Map[String, AnyRef]) {
 }
 
-abstract case class Status
-case class Done extends Status
-case class Error extends Status
-case class Active extends Status
+abstract case class Status(val value: String) {
+  override def toString = value
+}
+case class Done extends Status("done")
+case class Error extends Status("error")
+case class Active extends Status("active")
