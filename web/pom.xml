@@ -71,7 +71,21 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-server</artifactId>
+    </dependency>
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>java.net.m2</id>
+      <name>java.net Maven 2 Repo</name>
+      <url>http://download.java.net/maven/2</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>true</enabled></snapshots>
+    </repository>
+  </repositories>
 
   <profiles>
     <profile>

@@ -1,0 +1,30 @@
+-@ import val it : Flow
+%article
+  %h1= "Flow %s".format(id)
+
+  %p= "Status: %s".format(status)
+
+  %h2 Properties
+  %ul
+    - for (val property <- properties)
+      %li
+        property._1
+        &rarr;
+        = property._2
+
+  %h2 Message
+
+  %h2 Headers
+  %ul
+    - for (val header <- in.headers)
+      %li
+        header._1
+        &rarr;
+        = header._2
+
+
+  %h3 Body
+  %p= in.body
+
+  %a{:href => "/"}
+    %p Back

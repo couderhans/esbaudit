@@ -26,4 +26,6 @@ trait Backend {
 
   def all: Iterator[Flow]
 
+  def flow(id: String): Option[Flow]
+
 }

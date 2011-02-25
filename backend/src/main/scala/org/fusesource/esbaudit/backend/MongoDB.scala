@@ -100,6 +100,15 @@ class MongoDB(val collection: String) extends Backend with Adapter {
     database(collection) += record.result.asDBObject
   }
 
+
+  def flow(id: String) : Option[Flow] = {
+    val query = MongoDBObject("exchange_id" -> id)
+    database(collection).findOne(query) match {
+      case Some(record) => Some(toFlow(record))
+      case None => None
+    }
+  }
+
   def update(flow: Flow) = println("Not updating %s - not implemented yet".format(flow))
 
 }

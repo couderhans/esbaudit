@@ -1,14 +1,5 @@
 - val app = new org.fusesource.esbaudit.web.Controller
 
-
-%header
-  .title
-    .logo
-      %img(src="theme/images/logodesign2.png")
-    .new-logo
-      %img(src="theme/images/new-logo.png")
-  .menu
-    ESB Audit
 %div
   .tabs
 %article
@@ -25,8 +16,11 @@
             %th Status
         %tbody
           - for (val flow <- app.page(25))
+
             %tr
-              %td= flow.id
+              %td
+                %a{:title => {flow.id},
+                   :href => {"flows/flow/%s".format(flow.id)}}= flow.id
               %td= flow.in.body
               %td= flow.in.headers
               %td= flow.properties

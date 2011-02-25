@@ -6,11 +6,24 @@
 
     <head>
       <title>ESB Audit</title>
-      <link rel="stylesheet" type="text/css" href="${uri("theme/master.css")}"/>
+      <link rel="stylesheet" type="text/css" href="${uri("/theme/master.css")}"/>
      </head>
 
     <body>
-        <%= body %>
+    <header>
+        <div class="title">
+            <div class="logo">
+                <img src="${uri("/theme/images/logodesign2.png")}"/>
+            </div>
+            <div class="new-logo">
+                <img src="${uri("/theme/images/new-logo.png")}"/>
+            </div>
+        </div>
+        <div class="menu">
+            ESB Audit
+        </div>
+    </header>
+    <%= body %>
     </body>
 
 
