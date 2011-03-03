@@ -32,10 +32,16 @@ class MongoDB(val collection: String) extends Backend with Adapter {
 
   def all = for (val found <- database(collection).find) yield toFlow(found)
 
+  def flowsByTags(tags: Seq[String]) = {
+    val query = "tags" $all tags
+    for (val found <- database(collection).find(query)) yield toFlow(found)
+
+  }
+
   def toFlow(record: DBObject) = {
-    println(record.get("in"))
     record.getAs[String]("exchange_id") match {
-      case Some(id) => Flow(id, toMessage(record.getAs[DBObject]("in")), toStatus(record.getAs[String]("status")), toMap(record.getAs[DBObject]("properties")))
+      case Some(id) => Flow(id, toMessage(record.getAs[DBObject]("in")), toStatus(record.getAs[String]("status")),
+                                toMap(record.getAs[DBObject]("properties")), toSeq(record.getAs[BasicDBList]("tags")))
       case None => null  //TODO: Log a WARNING instead
     }
   }
@@ -62,11 +68,18 @@ class MongoDB(val collection: String) extends Backend with Adapter {
     val result = scala.collection.mutable.Map[String, AnyRef]()
     option match {
       case Some(record) => {
-        for( val row <- record.keySet) println(row)
         for(val row <- record) result += row._1 -> row._2
         result.toMap
       }
       case None => null
+    }
+  }
+
+  def toSeq(option: Option[BasicDBList]) : Seq[String] = {
+    //val result = scala.collection.mutable.Seq[String]()
+   option match {
+      case Some(list) => for (item <- list.toSeq) yield item.toString
+      case None => Seq()
     }
   }
 
@@ -96,6 +109,8 @@ class MongoDB(val collection: String) extends Backend with Adapter {
     in += "headers" -> headers.result.asDBObject
 
     record += "in" -> in.result.asDBObject
+
+    record += "tags" -> flow.tags
 
     database(collection) += record.result.asDBObject
   }

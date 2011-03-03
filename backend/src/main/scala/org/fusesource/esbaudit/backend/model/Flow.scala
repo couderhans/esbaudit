@@ -25,7 +25,10 @@ package org.fusesource.esbaudit.backend.model
  *
  */
 //TODO Do we need this one?
-case class Flow(val id: String, val in: Message, val status: Status, val properties: Map[String, AnyRef]) {
+case class Flow(val id: String, val in: Message, val status: Status, val properties: Map[String, AnyRef], val tags: Seq[String] = Seq()) {
+
+  def documentType = properties.getOrElse(Flow.DOCUMENT_TYPE, "Unknown")
+
 }
 
 abstract case class Status(val value: String) {
@@ -34,3 +37,9 @@ abstract case class Status(val value: String) {
 case class Done extends Status("done")
 case class Error extends Status("error")
 case class Active extends Status("active")
+
+object Flow  {
+
+  val DOCUMENT_TYPE = "org_fusesource_esbaudit_backend_model_Flow_DOCUMENT_TYPE"
+
+}

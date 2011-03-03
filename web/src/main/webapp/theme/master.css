@@ -76,14 +76,15 @@ article .widget {
   left: 45px;
   top: 91px;
   width: 94%;
-  border: solid 2px silver;
+  border: solid 4px silver;
+  spacing: 0;
 }
 
 article .widget .title {
   height: 32px;
   color: #ffffff;
   font-weight: bold;
-  background-color: #336699;
+  background-color: #silver;
 }
 
 article .widget .body table#list {
@@ -99,6 +100,7 @@ article .widget .body table#list thead tr {
   height: 23px;
   background-color: #e2e2e2;
   padding: 0;
+  border-spacing: 0px;
 }
 
 article .widget .body table#list thead tr th {
@@ -109,6 +111,8 @@ article .widget .body table#list thead tr th {
 article .widget .body table#list tbody td {
   padding: 0px;
   margin: 0px;
+  border-width: 0px;
+  border-spacing: 0px;
   color: #499e49;
   background-color: #e2e2e2;
   border-bottom: solid 1px silver;

@@ -20,12 +20,57 @@ import org.fusesource.esbaudit.backend.model._
 
 log.info("Inserting 50 flows")
 
-for (i <- 1 to 50) {
+for (i <- 1 to 10) {
 
   MongoDB().store(Flow("flow-testing-%05d".format(i),
                        Message("some body", Map("my-header-%05d".format(i) -> "my-value-%05d".format(i))),
                        Active(),
-                       Map("my-property-%05d".format(i) -> "my-value-%05d".format(i))))
+                       Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
+                           Flow.DOCUMENT_TYPE -> "Invoice"),
+                       Seq("Invoice", "Test")))
 
 }
 
+for (i <- 11 to 20) {
+
+  MongoDB().store(Flow("flow-testing-%05d".format(i),
+                       Message("some body", Map("my-header-%05d".format(i) -> "my-value-%05d".format(i))),
+                       Active(),
+                       Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
+                           Flow.DOCUMENT_TYPE -> "Invoice"),
+                       Seq("po", "inbound")))
+
+}
+
+for (i <- 21 to 30) {
+
+  MongoDB().store(Flow("flow-testing-%05d".format(i),
+                       Message("some body", Map("my-header-%05d".format(i) -> "my-value-%05d".format(i))),
+                       Active(),
+                       Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
+                           Flow.DOCUMENT_TYPE -> "Invoice"),
+                       Seq("da", "outbound")))
+
+}
+
+for (i <- 31 to 40) {
+
+  MongoDB().store(Flow("flow-testing-%05d".format(i),
+                       Message("some body", Map("my-header-%05d".format(i) -> "my-value-%05d".format(i))),
+                       Active(),
+                       Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
+                           Flow.DOCUMENT_TYPE -> "Invoice"),
+                       Seq("po", "outbound")))
+
+}
+
+for (i <- 41 to 50) {
+
+  MongoDB().store(Flow("flow-testing-%05d".format(i),
+                       Message("some body", Map("my-header-%05d".format(i) -> "my-value-%05d".format(i))),
+                       Active(),
+                       Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
+                           Flow.DOCUMENT_TYPE -> "Invoice"),
+                       Seq("da", "inbound")))
+
+}

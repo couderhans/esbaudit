@@ -1,8 +1,19 @@
-- val app = new org.fusesource.esbaudit.web.Controller
-
+-@ import val it : org.fusesource.esbaudit.web.FlowsByTagResource
 %div
   .tabs
 %article
+  %h1= "Showing flow for %s".format(tags)
+  %table
+    %tr
+      - for (tag <- selected)
+        %td
+          %a{:title => {tag},
+             :href => {urlRemove(tag)}}= tag
+    %tr
+      - for (tag <- remaining)
+        %td
+          %a{:title => {tag},
+             :href => {urlAdd(tag)}}= tag
   .widget
     .title List of Flows
     .body
@@ -14,7 +25,7 @@
             %th Document type
             %th Tags
         %tbody
-          - for (flow <- app.page(25))
+          - for (val flow <- flows)
             %tr
               -
                 val icon: String = flow.status.toString match {
@@ -29,7 +40,4 @@
                 %a{:title => {flow.id},
                    :href => {"flows/flow/%s".format(flow.id)}}= flow.id
               %td= flow.documentType
-              %td
-                - for (tag <- flow.tags)
-                  %a{:title => {tag},
-                     :href => {"flows/tag/%s".format(tag)}}= tag
+              %td= flow.tags

@@ -28,4 +28,6 @@ trait Backend {
 
   def flow(id: String): Option[Flow]
 
+  def flowsByTags(tags: Seq[String]) : Iterator[Flow]
+
 }

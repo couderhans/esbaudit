@@ -27,13 +27,13 @@ println("- Creating an active flow")
 // create an new Active Flow
 mongo.store(Flow("flow-testing-00001",
                  Message("some body", Map("some" -> "header")),
-                 Active(), Map("property" -> "value")))
+                 Active(), Map("property" -> "value"), Seq("invoice")))
 
 println
 println("- Creating another active flow...")
 mongo.store(Flow("flow-testing-00002",
                  Message("some body", Map("some" -> "header")),
-                 Active(), Map("property" -> "value")))
+                 Active(), Map("property" -> "value"), Seq("po", "inbound")))
 
 println("  ... and marking it done")
 mongo.update(Flow("flow-testing-00002",
@@ -53,5 +53,12 @@ for (record <- mongo.database(mongo.collection).find()) {
 }
 
 println
+println("- Display all flows tagged as invoice in the database")
+for (flow <- mongo.flowsByTags(Seq("po","invoice"))) {
+  println("  %s".format(flow))
+}
+
+println
 println("- Dropping collection %s".format(collection))
 mongo.database.getCollection(collection).drop
+

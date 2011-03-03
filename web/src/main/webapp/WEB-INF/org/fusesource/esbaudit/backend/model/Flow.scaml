@@ -8,7 +8,7 @@
   %ul
     - for (val property <- properties)
       %li
-        property._1
+        = property._1
         &rarr;
         = property._2
 
@@ -18,7 +18,7 @@
   %ul
     - for (val header <- in.headers)
       %li
-        header._1
+        = header._1
         &rarr;
         = header._2
 
