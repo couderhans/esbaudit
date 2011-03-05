@@ -65,6 +65,7 @@ class BasicBusinessAuditTest extends CamelTestSupport with RouteBuilderSupport {
                  MESSAGE, flow.in.body)
     assertEquals("Flow should contain property key and value", PROPERTY_VALUE, flow.properties(PROPERTY_NAME))
     assertEquals("Flow should contain message headers also", HEADER_VALUE, flow.in.headers(HEADER_NAME))
+    assertTrue("Flow should have been tagged with 'po'", flow.tags.contains("po"))
     assertEquals("Flow ended succesfully", Done(), flow.status)
   }
 
@@ -90,7 +91,7 @@ class BasicBusinessAuditTest extends CamelTestSupport with RouteBuilderSupport {
 
   override def createCamelContext = {
     val context = super.createCamelContext
-    context.addInterceptStrategy(AuditorStrategy(adapter))
+    context.addInterceptStrategy(AuditorStrategy(adapter).addTag("po"))
     context
   }
 

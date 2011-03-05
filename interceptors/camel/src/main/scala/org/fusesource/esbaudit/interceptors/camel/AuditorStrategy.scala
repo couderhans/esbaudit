@@ -34,9 +34,15 @@ case class AuditorStrategy(val adapter: Adapter) extends InterceptStrategy with 
 
   val pending = new ListBuffer[String]
 
+  var tags = Set[String]()
+
   def wrapProcessorInInterceptors(context: CamelContext, definition: ProcessorDefinition[_],
                                   from: Processor, to: Processor) = Auditor(to)
 
+  def addTag(tag: String) : AuditorStrategy = {
+    tags += tag
+    this;
+  }
 
   def onComplete(exchange: Exchange) = {
     println("Done %s".format(exchange))
@@ -73,7 +79,8 @@ case class AuditorStrategy(val adapter: Adapter) extends InterceptStrategy with 
     Flow(exchange.getExchangeId,
          toModel(exchange.getIn()),
          Active(),
-         asScalaMap(exchange.getProperties).toMap)
+         asScalaMap(exchange.getProperties).toMap,
+         tags.toSeq)
   }
 
   def toModel(camel: Message) : org.fusesource.esbaudit.backend.model.Message = {
