@@ -17,7 +17,7 @@ import org.fusesource.esbaudit.backend.{Backend, MongoDB}
 @Path("/flows/tag/{id}")
 class FlowsByTagResource(@PathParam("id") val tags: String) {
 
-  val backend : Backend = MongoDB()
+  lazy val backend : Backend = MongoDB()
 
   lazy val selected = tags.split("\\+").toSeq
   lazy val remaining = List("inbound", "outbound", "po", "da")--selected.toList
