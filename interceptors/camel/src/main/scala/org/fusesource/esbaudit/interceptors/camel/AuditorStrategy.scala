@@ -49,15 +49,16 @@ case class AuditorStrategy(val adapter: Adapter) extends InterceptStrategy with 
     adapter.update(
       Flow(exchange.getExchangeId,
            null,
-           Done(), null))
+           Done(), null, null, null))
   }
 
 
   def onFailure(exchange: Exchange) = {
-     adapter.update(
+    println("Error %s".format(exchange))
+    adapter.update(
       Flow(exchange.getExchangeId,
            null,
-           Error(), null))
+           Error(), null, null, exchange.getException))
      }
 
   case class Auditor(val delegate: Processor) extends DelegateAsyncProcessor(delegate) {
@@ -80,7 +81,8 @@ case class AuditorStrategy(val adapter: Adapter) extends InterceptStrategy with 
          toModel(exchange.getIn()),
          Active(),
          asScalaMap(exchange.getProperties).toMap,
-         tags.toSeq)
+         tags.toSeq,
+         exchange.getException)
   }
 
   def toModel(camel: Message) : org.fusesource.esbaudit.backend.model.Message = {

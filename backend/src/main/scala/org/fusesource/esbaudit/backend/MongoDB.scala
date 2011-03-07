@@ -41,7 +41,7 @@ class MongoDB(val collection: String) extends Backend with Adapter {
   def toFlow(record: DBObject) = {
     record.getAs[String]("exchange_id") match {
       case Some(id) => Flow(id, toMessage(record.getAs[DBObject]("in")), toStatus(record.getAs[String]("status")),
-                                toMap(record.getAs[DBObject]("properties")), toSeq(record.getAs[BasicDBList]("tags")))
+                                toMap(record.getAs[DBObject]("properties")), toSeq(record.getAs[BasicDBList]("tags")), null)
       case None => null  //TODO: Log a WARNING instead
     }
   }
