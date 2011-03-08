@@ -25,6 +25,8 @@ import org.fusesource.esbaudit.backend.MongoDB
 import org.apache.camel.{Exchange, Processor}
 import org.junit.{Before, Test}
 import org.fusesource.esbaudit.backend.model.Done
+import java.util.concurrent.TimeUnit
+import org.fusesource.esbaudit.backend.model.Error
 
 /**
  * Test to ensure basic business level auditing happens correctly
@@ -89,6 +91,24 @@ class BasicBusinessAuditTest extends CamelTestSupport with RouteBuilderSupport {
     assertEquals("Flow ended succesfully", Done(), flow.status)
   }
 
+  @Test
+  def errorExchangeTest = {
+    getMockEndpoint("mock:error").expectedMessageCount(0)
+
+    val exchange = template.asyncSend("direct:error", new Processor() {
+      def process(exchange: Exchange) = {}
+    })
+
+    assertMockEndpointsSatisfied(100, TimeUnit.MICROSECONDS)
+
+    Thread.sleep(100)
+
+    val flow = adapter.flows.head
+
+    assertEquals("Flow status was Error() as expected", Error(), flow.status)
+
+  }
+
   override def createCamelContext = {
     val context = super.createCamelContext
     context.addInterceptStrategy(AuditorStrategy(adapter).addTag("po"))
@@ -98,5 +118,6 @@ class BasicBusinessAuditTest extends CamelTestSupport with RouteBuilderSupport {
   override def createRouteBuilder = new RouteBuilder {
     "direct:simple" to "mock:simple"
     "direct:hops" to "log:hops" to "mock:hops"
+    "direct:error" throwException(new RuntimeException("Oh oh - this is going wrong!!"))
   }
 }
