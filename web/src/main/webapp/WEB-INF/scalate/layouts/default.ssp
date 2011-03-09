@@ -2,6 +2,13 @@
 <%@ var body: String %>
 <%@ var title: String = "** missing title **" %>
 <% escapeMarkup = false %>
+<link type="text/css" rel="stylesheet" href="${uri("/theme/SyntaxHighlighter.css")}"></link>
+<script language="javascript" src="${uri("/js/shCore.js")}"></script>
+<script language="javascript" src="${uri("/js/shBrushXml.js")}"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.ClipboardSwf="${uri("/flash/clipboard.swf")}";
+dp.SyntaxHighlighter.HighlightAll('code', 'showColumns');
+</script>
 <html dir="ltr">
 
     <head>
@@ -25,6 +32,5 @@
     </header>
     <%= body %>
     </body>
-
 
 </html>

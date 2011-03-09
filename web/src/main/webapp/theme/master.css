@@ -43,7 +43,6 @@ header .menu {
   font-weight: bold;
   font-size: 1.8em;
   border-bottom: solid 2px silver;
-
 }
 
 header .item-selected {
@@ -73,9 +72,9 @@ article {
 
 article .widget {
   position: relative;
-  left: 45px;
+  left: 201px;
   top: 91px;
-  width: 94%;
+  width: 84%;
   border: solid 4px silver;
   spacing: 0;
 }
@@ -118,7 +117,15 @@ article .widget .body table#list tbody td {
   border-bottom: solid 1px silver;
 }
 
-div .tabs {
+a.dashboard {
+  text-decoration: none;
+}
+
+a.dashboard:hover {
+  text-decoration: underline;
+}
+
+div.tabs-dashboard {
   position: absolute;
   left: 32px;
   top: 112px;
@@ -129,6 +136,106 @@ div .tabs {
   background-color: #f7f7f7;
   background-image: url('/theme/images/tab2.png');
 }
+
+div.tabs-dashboard p {
+  font-size: 1.2em;
+  text-align: center;
+}
+
+div.tabs-dashboard-us {
+  position: absolute;
+  left: 32px;
+  top: 112px;
+  width: 152px;
+  height: 40px;;
+  background-color: #ffffff;
+  z-index: 0;
+  background-color: #f7f7f7;
+  background-image: url('/theme/images/tab2.png');
+}
+
+div.tabs-dashboard-us p {
+  font-size: 1.2em;
+  text-align: center;
+}
+
+a.flow {
+  text-decoration: none;
+}
+
+a.flow:hover {
+  text-decoration: underline;
+}
+
+div.tabs-flow {
+  position: absolute;
+  left: 182px;
+  top: 112px;
+  width: 152px;
+  height: 40px;;
+  background-color: #ffffff;
+  z-index: 1;
+  background-color: #f7f7f7;
+  background-image: url('/theme/images/tab2.png');
+}
+
+div.tabs-flow p {
+  font-size: 1.2em;
+  text-align: center;
+}
+
+
+div.tabs-flow-us {
+  position: absolute;
+  left: 182px;
+  top: 112px;
+  width: 152px;
+  height: 40px;;
+  background-color: #ffffff;
+  z-index: 0;
+  background-color: #f7f7f7;
+  background-image: url('/theme/images/tab2.png');
+}
+
+div.tabs-flow-us p {
+  font-size: 1.2em;
+  text-align: center;
+}
+
+div.flow {
+  position: absolute;
+  left: 69px;
+  top: 43px;
+  width: 91%;
+}
+
+div.flow .h1 {
+  width: 100%;
+  height: 25px;
+  background-color: #defffc;
+  color: #336699;
+  font-weight: bold;
+  font-size: 1.8em;
+  border-bottom: solid 1px blue;
+}
+
+div.flow .h2 {
+  width: 100%;
+  height: 25px;
+  background-color: #defffc;
+  font-weight: bold;
+  font-size: 1.4em;
+  border-bottom: solid 1px blue;
+}
+
+div.flow .h3 {
+  width: 100%;
+  height: 25px;
+  background-color: #defffc;
+  font-weight: bold;
+  font-size: 1.0em;
+}
+
 
 
 
