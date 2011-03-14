@@ -34,9 +34,10 @@ class MockAdapter extends Adapter {
     flows.find(_.id == flow.id) match {
       case Some(found) => {
         //TODO: make this less naive
+        println(found)
+        println(flow)
         flows -= found
-        flows += Flow(found.id, found.in, flow.status, found.properties, found.tags, found.exception)
-        println(Flow(found.id, found.in, flow.status, found.properties, found.tags, found.exception))
+        flows += Flow(found.id, (found.data ++ flow.data).toSeq: _*)
         println(flows)
       }
       case None => throw new IllegalArgumentException("Unable to update %s - flow does not exist in store".format(flow.id))

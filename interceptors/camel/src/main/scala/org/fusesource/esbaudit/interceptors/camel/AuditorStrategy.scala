@@ -25,6 +25,7 @@ import collection.mutable.ListBuffer
 import org.apache.camel.spi.{Synchronization, InterceptStrategy}
 import org.fusesource.esbaudit.backend.model._
 import scala.collection.JavaConversions.asScalaMap
+import org.fusesource.esbaudit.backend.model.Flow._
 
 
 /**
@@ -46,10 +47,16 @@ case class AuditorStrategy(val adapter: Adapter) extends InterceptStrategy with 
 
   def onComplete(exchange: Exchange) = {
     println("Done %s".format(exchange))
+
+    if (exchange.hasOut) {
+      adapter.update(
+        Flow(exchange.getExchangeId,
+             OUT_MESSAGE -> toModel(exchange.getOut)))
+    }
+
     adapter.update(
       Flow(exchange.getExchangeId,
-           null,
-           Done(), null, null, null))
+           STATUS -> Done()))
   }
 
 
@@ -57,8 +64,8 @@ case class AuditorStrategy(val adapter: Adapter) extends InterceptStrategy with 
     println("Error %s".format(exchange))
     adapter.update(
       Flow(exchange.getExchangeId,
-           null,
-           Error(), null, null, exchange.getException))
+            STATUS -> Error(),
+            EXCEPTION -> exchange.getException))
      }
 
   case class Auditor(val delegate: Processor) extends DelegateAsyncProcessor(delegate) {
@@ -78,11 +85,11 @@ case class AuditorStrategy(val adapter: Adapter) extends InterceptStrategy with 
 
   def toModel(exchange: Exchange) : Flow = {
     Flow(exchange.getExchangeId,
-         toModel(exchange.getIn()),
-         Active(),
-         asScalaMap(exchange.getProperties).toMap,
-         tags.toSeq,
-         exchange.getException)
+         IN_MESSAGE -> toModel(exchange.getIn()),
+         STATUS -> Active(),
+         PROPERTIES -> asScalaMap(exchange.getProperties).toMap,
+         TAGS -> tags.toSeq,
+         EXCEPTION -> exchange.getException)
   }
 
   def toModel(camel: Message) : org.fusesource.esbaudit.backend.model.Message = {

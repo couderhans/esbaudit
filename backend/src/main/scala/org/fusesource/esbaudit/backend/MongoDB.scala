@@ -21,11 +21,12 @@ import com.mongodb.Mongo
 import com.mongodb.casbah.Imports._
 import scala.collection.JavaConversions._
 import model.{Flow,Message, Active, Status, Done, Error}
+import model.Flow._
 
 /**
  * MongoDB based implementation for {@link Backend}
  */
-class MongoDB(val collection: String) extends Backend with Adapter {
+class MongoDB(val collection: String) extends Backend with Adapter with Log {
 
   val connection = MongoConnection()
   val database = connection("test")
@@ -40,9 +41,14 @@ class MongoDB(val collection: String) extends Backend with Adapter {
 
   def toFlow(record: DBObject) = {
     record.getAs[String]("exchange_id") match {
-      case Some(id) => Flow(id, toMessage(record.getAs[DBObject]("in")), toStatus(record.getAs[String]("status")),
-                                toMap(record.getAs[DBObject]("properties")), toSeq(record.getAs[BasicDBList]("tags")), null)
-      case None => null  //TODO: Log a WARNING instead
+      case Some(id) => Flow(id,
+                            IN_MESSAGE -> toMessage(record.getAs[DBObject]("in")),
+                            OUT_MESSAGE -> toMessage(record.getAs[DBObject]("out")),
+                            STATUS -> toStatus(record.getAs[String]("status")),
+                            TAGS -> toSeq(record.getAs[BasicDBList]("tags")),
+                            PROPERTIES -> toMap(record.getAs[DBObject]("properties")),
+                            EXCEPTION -> record.getAs[DBObject]("exception").toString)
+      case None => warn("Unable to find exchange id in %s", record); null;
     }
   }
 
@@ -83,20 +89,13 @@ class MongoDB(val collection: String) extends Backend with Adapter {
     }
   }
 
-  def oldAll = for (val found <- database(collection).find;
-                 val exchange_id = found.getAs[String]("exchange_id"))
-        yield Flow(exchange_id match {
-          case Some(value) => value
-          case None => "**unknown**"
-        }, Message("//TODO: fix this", Map("fix" -> "this")), Active(), null)
-
   def store(flow: Flow) = {
     val record = MongoDBObject.newBuilder
     record += "exchange_id" -> flow.id
     record += "status" -> flow.status.toString
 
     val properties = MongoDBObject.newBuilder
-    for (property <- flow.properties) properties += property._1 -> property._2
+    for (property <- flow.properties) properties += property._1.replaceAll("\\.", "_") -> property._2
 
     record += "properties" -> properties.result.asDBObject
 
@@ -104,13 +103,11 @@ class MongoDB(val collection: String) extends Backend with Adapter {
     in += "body" -> flow.in.body
 
     val headers = MongoDBObject.newBuilder
-    for (header <- flow.in.headers) headers += header._1 -> header._2
+    for (header <- flow.in.headers) headers += header._1.replaceAll("\\.", "_") -> header._2
 
     in += "headers" -> headers.result.asDBObject
 
     record += "in" -> in.result.asDBObject
-
-    record += "tags" -> flow.tags
 
     database(collection) += record.result.asDBObject
   }
@@ -124,8 +121,9 @@ class MongoDB(val collection: String) extends Backend with Adapter {
     }
   }
 
-  def update(flow: Flow) = println("Not updating %s - not implemented yet".format(flow))
-
+  def update(flow: Flow) = {
+    println("Not updating %s - not implemented yet".format(flow))
+  }
 }
 
 object MongoDB {

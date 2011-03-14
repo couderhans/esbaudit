@@ -17,6 +17,8 @@
  */
 package org.fusesource.esbaudit.backend.model
 
+import org.fusesource.esbaudit.backend.Log
+
 /**
  * Models a Flow
  * - corresponds to a Camel Exchange
@@ -25,10 +27,25 @@ package org.fusesource.esbaudit.backend.model
  *
  */
 //TODO Do we need this one?
-case class Flow(val id: String, val in: Message, val status: Status, val properties: Map[String, AnyRef], val tags: Seq[String] = Seq(), val exception: Exception = null) {
+/* class Flow(val id: String, val in: Message, val status: Status, val properties: Map[String, AnyRef], val tags: Seq[String] = Seq(), val exception: Exception = null, val out: Message = null) { */
+class Flow(val id: String, val data: Map[String, AnyRef]) {
 
-  def documentType = properties.getOrElse(Flow.DOCUMENT_TYPE, "Unknown")
+  import Flow._
 
+  def extract[T](key: String) = data(key).asInstanceOf[T]
+
+  lazy val status = extract[Status](STATUS)
+
+  lazy val in = extract[Message](IN_MESSAGE)
+  lazy val out = extract[Message](OUT_MESSAGE)
+
+  lazy val properties : Map[String, AnyRef] = extract[Map[String, AnyRef]](PROPERTIES)
+
+  lazy val tags = extract[Seq[String]](TAGS)
+
+  lazy val exception = extract[Exception](EXCEPTION)
+
+  override def toString = "Flow[%s](%s)".format(id, data)
 }
 
 abstract case class Status(val value: String) {
@@ -38,8 +55,34 @@ case class Done extends Status("done")
 case class Error extends Status("error")
 case class Active extends Status("active")
 
-object Flow  {
+object Flow extends Log {
 
-  val DOCUMENT_TYPE = "org_fusesource_esbaudit_backend_model_Flow_DOCUMENT_TYPE"
+  val IN_MESSAGE = "in"
+  val OUT_MESSAGE = "out"
+  val STATUS = "status"
+  val TAGS = "tags"
+  val PROPERTIES = "properties"
+  val EXCEPTION = "exception"
+
+  def apply(id: String, data: (String, AnyRef)*) = {
+    new Flow(id, validate(data))
+  }
+
+  def validate(input: Seq[(String, AnyRef)]) = {
+    val result = new scala.collection.mutable.HashMap[String, AnyRef]
+    for (tuple <- input) {
+      tuple._1 match {
+        case IN_MESSAGE if !tuple._2.isInstanceOf[Message] => warn("Invalid type for %s - skipping", tuple)
+        case OUT_MESSAGE if !tuple._2.isInstanceOf[Message] => warn("Invalid type for %s - skipping", tuple)
+        case STATUS if !tuple._2.isInstanceOf[Status] => warn("Invalid type for %s - skipping", tuple)
+        case TAGS if !tuple._2.isInstanceOf[Iterable[String]] => warn("Invalid type for %s - skipping", tuple)
+        case EXCEPTION if !tuple._2.isInstanceOf[Exception] => warn("Invalid type for %s - skipping", tuple)
+        case PROPERTIES if !tuple._2.isInstanceOf[Map[String, AnyRef]] => warn("Invalid type for %s - skipping", tuple)
+        case _ => result += tuple
+      }
+    }
+
+    result.toMap
+  }
 
 }
