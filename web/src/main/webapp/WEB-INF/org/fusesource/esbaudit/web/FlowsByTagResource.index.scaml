@@ -22,7 +22,6 @@
           %tr
             %th Status
             %th ID
-            %th Document type
             %th Tags
         %tbody
           - for (val flow <- flows)
@@ -39,5 +38,4 @@
               %td
                 %a{:title => {flow.id},
                    :href => {"flows/flow/%s".format(flow.id)}}= flow.id
-              %td= flow.documentType
               %td= flow.tags

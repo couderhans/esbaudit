@@ -1,0 +1,219 @@
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: Verdana, Arial, sans-serif;  
+  margin: 0px auto;
+  width: 100%;
+  font-size: .8em;
+  background-color: #336699;
+}
+
+/* header stuff */
+
+
+header {
+  margin: 0;
+  padding-right: .64em;
+  width: 100%;
+  height: 28px;
+  background-color: #336699;
+  border-bottom: solid 1px white;
+}
+
+header .title {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  color: #ffffff;
+  font-size: 1.2em;
+}
+
+article {
+  position: absolute;
+  left: 9px;
+  top: 111px;
+  width: 99%;
+  height: 100%;
+  background-color: #ffffff;
+}
+
+footer {
+  position: absolute;
+  margin: 0;
+  padding-right: .64em;
+  width: 100%;
+  height: 5%;
+  top: 95%;
+background-color: transparent;
+}
+
+footer .title {
+  height: 21px;
+  width: 100%;
+  text-align: center;
+  color: #ffffff;
+  background-color: #336699;
+  border-top: solid 1px #1d5987;
+  border-bottom: solid 1px #1d5987;
+}
+
+
+#datepicker {
+  position: relative;
+  margin: 0px;
+  left: 2px;
+  top: 21px;
+  width: 161px;
+  height: 40px;
+  padding: 12px;
+  font-family: "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif";
+}
+
+#tabs {
+  position: relative;
+  left: 1px;
+  top: 32px;
+  width: 100%;
+ /* border: solid 4px silver;     */
+  spacing: 0;
+}
+
+#tabs .title {
+  height: 32px;
+  color: #ffffff;
+  font-weight: bold;
+  background-color: silver;
+}
+
+#tabs .tabs-1 li {
+  width: 98%;
+}
+
+.tag {
+  background-color: #336699;
+}
+
+.tag a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+#accordion {
+  font-size: 1.1em;
+  height: 100%;
+}
+
+
+a.flow {
+  text-decoration: none;
+}
+
+a.flow:hover {
+  text-decoration: underline;
+}
+
+div.subsection {
+  position: absolute;
+  left: 9px;
+  top: 43px;
+  width: 98%;
+  height: 64px;
+  background-image: url('/theme/main/images/logodesign48x48.png');
+  background-repeat: no-repeat;
+}
+
+div.title-subsection {
+  position: absolute;
+  left: 52px;
+  top: 10px;
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+div.title-logo {
+
+}
+
+div.search {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 48px;
+  background-color: #1d5987;
+}
+
+div.search h2 {
+  position: absolute;
+  top: 1px;
+  left: 23px;
+  color: #ffffff;
+  text-align: middle;
+}
+
+div.search form input {
+  position: absolute;
+  top: 14px;
+  left: 111px;
+  width: 46%;
+}
+
+div.view {
+  position: absolute;
+  left: 21px;
+  top: 25px;
+  width: 91%;
+  height: 91%;
+  background-color: #ffffff;
+}
+
+div.view h2 {
+  color: #336699;
+  border-bottom: solid 1px silver;
+}
+
+div.flow {
+  position: absolute;
+  left: 69px;
+  top: 43px;
+  width: 91%;
+}
+
+div.flow .h1 {
+  width: 100%;
+  height: 25px;
+  background-color: #defffc;
+  color: #336699;
+  font-weight: bold;
+  font-size: 1.8em;
+  border-bottom: solid 1px blue;
+}
+
+ul {
+  text-decoration: none;
+  list-style: none;
+}
+
+#flows {
+  text-decoration: none;
+  height: 25px;
+  border-bottom: solid 1px silver;
+}
+
+#flows a {
+  color: #000000;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+
+
+/* DEMO DATEPICKER */
+
+
+

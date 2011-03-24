@@ -2,35 +2,50 @@
 <%@ var body: String %>
 <%@ var title: String = "** missing title **" %>
 <% escapeMarkup = false %>
-<link type="text/css" rel="stylesheet" href="${uri("/theme/SyntaxHighlighter.css")}"></link>
-<script language="javascript" src="${uri("/js/shCore.js")}"></script>
-<script language="javascript" src="${uri("/js/shBrushXml.js")}"></script>
-<script language="javascript">
-dp.SyntaxHighlighter.ClipboardSwf="${uri("/flash/clipboard.swf")}";
-dp.SyntaxHighlighter.HighlightAll('code', 'showColumns');
-</script>
+
 <html dir="ltr">
 
     <head>
-      <title>ESB Audit</title>
-      <link rel="stylesheet" type="text/css" href="${uri("/theme/master.css")}"/>
+        <title>ESB Audit</title>
+
+        <link rel="stylesheet" type="text/css" href="${uri("/theme/main/master.css")}"/>
+
+        <link type="text/css" rel="stylesheet" href="${uri("/theme/SyntaxHighlighter.css")}"></link>
+        <script language="javascript" src="${uri("/js/shCore.js")}"></script>
+        <script language="javascript" src="${uri("/js/shBrushXml.js")}"></script>
+        <script language="javascript">
+           dp.SyntaxHighlighter.ClipboardSwf="${uri("/flash/clipboard.swf")}";
+           dp.SyntaxHighlighter.HighlightAll('code', 'showColumns');
+        </script>
+
+        <link rel="stylesheet" href="${uri("/theme/custom/jquery-ui-1.8.11.custom.css")}">
+        <script src="${uri("/js/jquery-1.4.4.js")}"></script>
+        <script src="${uri("/js/jquery.ui.core.js")}"></script>
+        <script src="${uri("/js/jquery.ui.widget.js")}"></script>
+        <script src="${uri("/js/jquery.ui.datepicker.js")}"></script>
+        <script src="${uri("/js/jquery.ui.tabs.js")}"></script>
+        <script src="${uri("/js/jquery.ui.accordion.js")}"></script>
+	<script>
+	$(function() {
+		$( "#datepicker" ).datepicker();
+        $( "#accordion" ).accordion({active: 0 });
+        $( "#tabs" ).tabs();
+	});
+	</script>
+
      </head>
 
     <body>
     <header>
-        <div class="title">
-            <div class="logo">
-                <img src="${uri("/theme/images/logodesign2.png")}"/>
-            </div>
-            <div class="new-logo">
-                <img src="${uri("/theme/images/new-logo.png")}"/>
-            </div>
-        </div>
-        <div class="menu">
-            ESB Audit
-        </div>
+      <div class="title">
+        Apache Servicemix ESB Audit
+      </div>
     </header>
     <%= body %>
+    <footer>
+      <div class="title">© 2004-2010 The Apache Software Foundation</div>
+
+    </footer>
     </body>
 
 </html>

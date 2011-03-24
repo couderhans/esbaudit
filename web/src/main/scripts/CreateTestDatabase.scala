@@ -17,6 +17,7 @@
  */
 import org.fusesource.esbaudit.backend.MongoDB
 import org.fusesource.esbaudit.backend.model._
+import org.fusesource.esbaudit.backend.model.Flow._
 
 log.info("Inserting 50 flows")
 
@@ -25,18 +26,18 @@ val BODY = "<?xml version='1.0' encoding='UTF-8'?>\\n<po xmlns='http://www.mycom
 for (i <- 1 to 10) {
 
   MongoDB().store(Flow("flow-testing-%05d".format(i),
-                       Message(BODY, Map("my-header-%05d".format(i) -> "my-value-%05d".format(i))),
-                       Active(),
-                       Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
-                           Flow.DOCUMENT_TYPE -> "Invoice"),
-                       Seq("Invoice", "Test")))
+                       IN_MESSAGE -> Message(BODY.toString(), Map("my-header-%05d".format(i) -> "my-value-%05d".format(i))),
+                       STATUS -> Active(),
+                       PROPERTIES -> Map("my-property-%05d".format(i) -> "my-value-%05d".format(i)),
+                       TAGS -> Seq("Invoice", "Test")
+  ))
 
 }
-
+/*
 for (i <- 11 to 20) {
 
   MongoDB().store(Flow("flow-testing-%05d".format(i),
-                       Message(BODY, Map("my-header-%05d".format(i) -> "my-value-%05d".format(i))),
+                       Message(BODY.toString(), Map("my-header-%05d".format(i) -> "my-value-%05d".format(i))),
                        Active(),
                        Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
                            Flow.DOCUMENT_TYPE -> "Invoice"),
@@ -47,7 +48,7 @@ for (i <- 11 to 20) {
 for (i <- 21 to 30) {
 
   MongoDB().store(Flow("flow-testing-%05d".format(i),
-                       Message(BODY, Map("my-header-%05d".format(i) -> "my-value-%05d".format(i))),
+                       Message(BODY.toString(), Map("my-header-%05d".format(i) -> "my-value-%05d".format(i))),
                        Active(),
                        Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
                            Flow.DOCUMENT_TYPE -> "Invoice"),
@@ -76,3 +77,4 @@ for (i <- 41 to 50) {
                        Seq("da", "inbound")))
 
 }
+*/

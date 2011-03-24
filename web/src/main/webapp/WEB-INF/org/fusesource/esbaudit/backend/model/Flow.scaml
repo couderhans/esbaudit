@@ -1,36 +1,32 @@
 -@ import val it : Flow
-%div
-  %a(class="dashboard" href="/")
-    .tabs-dashboard-us
-      %p Dashboard
-  %a(class="dashboard" href="")
-    .tabs-flow
-      %p Flow
+.subsection
+  .title-subsection
+    ="Flow: " + id + " " +  "Status: %s".format(status)
 %article
   .flow
-    .h1
-      %p= id
-    %p= "Status: %s".format(status)
-    %p
-    .h2 Properties
-    %p
-    %ul
-      - for (val property <- properties)
-        %li
-          = property._1
-          &rarr;
-          = property._2
-    .h2 Message
-    %p
-    .h3 Headers
-    %ul
-      - for (val header <- in.headers)
-        %li
-          = header._1
-          &rarr;
-          = header._2
-    .h3 Body
-    %pre(name="code" class="xml")
-      %p= in.body
-    %a{:href => "/"}
-      %p Back
+    %div(id="accordion")
+      %h3
+        %a(href="#") Properties
+      %div
+        %ul
+          - for (val property <- properties)
+            %li
+              = property._1
+              &rarr;
+              = property._2
+      %h3
+        %a(href="#") Headers
+      %div
+        %ul
+          - for (val header <- in.headers)
+            %li
+              = header._1
+              &rarr;
+              = header._2
+      %h3
+        %a(href="#") Body
+      %div
+        %pre(name="code" class="xml")
+        %p= in.body
+  %a{:href => "/"}
+    %p Back

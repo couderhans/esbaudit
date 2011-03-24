@@ -1,40 +1,29 @@
 - val app = new org.fusesource.esbaudit.web.Controller
-
-%div
-  %a(class="dashboard" href="/")
-    .tabs-dashboard
-      %p Dashboard
-  %a(class="dashboard" href="")
-    .tabs-flow-us
-      %p Flow
+.subsection
+  .title-subsection Dashboard
 %article
-  .widget
-    .title List of Flows
-    .body
-      %table(id="list")
-        %thead
-          %tr
-            %th Status
-            %th ID
-            %th Document type
-            %th Tags
-        %tbody
-          - for (flow <- app.page(25))
-            %tr
-              -
-                val icon: String = flow.status.toString match {
-                  case "active" => "/theme/images/spinner.gif";
-                  case "done" => "/theme/images/done16.png";
-                  case "error" => "/theme/images/error16.png";
-                  case _ => "unknown";
-                }
-              %td
+  .search
+    %h2 Search
+    %form
+      %input
+  .view
+    %div(id="tabs")
+      %ul
+        %li
+          %a(href="#tabs-1") All
+      .tabs-1
+        %p
+          %ul(id="list")
+            - for (flow <- app.page(25))
+              %li(id="flows")
+                -
+                  val icon: String = flow.status.toString() match {
+                    case "active" => "/theme/main/images/spinner.gif";
+                    case "done" => "/theme/main/images/done16.png";
+                    case "error" => "/theme/main/images/error16.png";
+                    case _ => "unknown";
+                  }
                 %img(src=icon)
-              %td
-                %a{:title => {flow.id},
-                   :href => {"flows/flow/%s".format(flow.id)}}= flow.id
-              %td= flow.documentType
-              %td
+                %a{:title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.id
                 - for (tag <- flow.tags)
-                  %a{:title => {tag},
-                     :href => {"flows/tag/%s".format(tag)}}= tag
+                  %a{:class =>"tag", :title => {tag}, :href => {"flows/tag/%s".format(tag)}}= tag
