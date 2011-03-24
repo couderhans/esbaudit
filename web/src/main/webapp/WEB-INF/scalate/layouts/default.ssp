@@ -30,6 +30,8 @@
 		$( "#datepicker" ).datepicker();
         $( "#accordion" ).accordion({active: 0 });
         $( "#tabs" ).tabs();
+        $( "button, input:submit, a", ".tag-button" ).button();
+		$( "a", ".tag-button" ).click(function() { return false; });
 	});
 	</script>
 

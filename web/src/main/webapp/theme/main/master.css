@@ -64,9 +64,9 @@ footer .title {
 
 
 #datepicker {
-  position: relative;
+  position: absolute;
   margin: 0px;
-  left: 2px;
+  left: 88%;
   top: 21px;
   width: 161px;
   height: 40px;
@@ -78,7 +78,7 @@ footer .title {
   position: relative;
   left: 1px;
   top: 32px;
-  width: 100%;
+  width: 85%;
  /* border: solid 4px silver;     */
   spacing: 0;
 }
@@ -95,13 +95,15 @@ footer .title {
 }
 
 .tag {
-  background-color: #336699;
+
 }
 
-.tag a {
-  color: #ffffff;
+.tag button a {
+  width: 45px;
+  color: #000000;
   text-decoration: none;
 }
+
 
 #accordion {
   font-size: 1.1em;
@@ -195,8 +197,14 @@ div.flow .h1 {
 }
 
 ul {
+  margin: 0px;
   text-decoration: none;
   list-style: none;
+}
+
+ul.list {
+  position: absolute;
+  left: 1px;
 }
 
 #flows {
@@ -209,6 +217,17 @@ ul {
   color: #000000;
   text-decoration: none;
   font-weight: bold;
+}
+
+#flows a.tag {
+  font-weight: lighter;
+  font-size: 0.8em;
+}
+
+#flows a.body {
+  font-weight: lighter;
+  font-size: 0.8em;
+  color: #848484;
 }
 
 

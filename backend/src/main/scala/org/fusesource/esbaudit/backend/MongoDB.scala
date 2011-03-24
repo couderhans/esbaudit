@@ -102,6 +102,8 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
     val in = MongoDBObject.newBuilder
     in += "body" -> flow.in.body
 
+    record += "tags" -> flow.tags
+
     val headers = MongoDBObject.newBuilder
     for (header <- flow.in.headers) headers += header._1.replaceAll("\\.", "_") -> header._2
 

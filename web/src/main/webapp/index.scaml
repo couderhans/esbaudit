@@ -10,8 +10,14 @@
     %div(id="tabs")
       %ul
         %li
-          %a(href="#tabs-1") All
-      .tabs-1
+          %a(href="#tab-all") All
+        %li
+          %a(href="#tab-active") Active
+        %li
+          %a(href="#tab-done") Done
+        %li
+          %a(href="#tab-error") Error
+      %div(id="tab-all")
         %p
           %ul(id="list")
             - for (flow <- app.page(25))
@@ -26,4 +32,43 @@
                 %img(src=icon)
                 %a{:title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.id
                 - for (tag <- flow.tags)
-                  %a{:class =>"tag", :title => {tag}, :href => {"flows/tag/%s".format(tag)}}= tag
+                  %button
+                    %a{:class =>"tag", :title => {tag}, :href => {"flows/tag/%s".format(tag)}}= tag
+                %a{:class => "body", :title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.in.body.toString().substring(0, 100)
+      %div(id="tab-active")
+        %p
+          %ul(id="list")
+            - for (flow <- app.page(50))
+              - if(flow.status.toString() == "active")
+                %li(id="flows")
+                  %img(src="/theme/main/images/spinner.gif")
+                  %a{:title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.id
+                  - for (tag <- flow.tags)
+                    %button
+                      %a{:class =>"tag", :title => {tag}, :href => {"flows/tag/%s".format(tag)}}= tag
+                  %a{:class => "body", :title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.in.body.toString().substring(0, 100)
+      %div(id="tab-done")
+        %p
+          %ul(id="list")
+            - for (flow <- app.page(50))
+              - if(flow.status.toString() == "done")
+                %li(id="flows")
+                  %img(src="/theme/main/images/done16.png")
+                  %a{:title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.id
+                  - for (tag <- flow.tags)
+                    %button
+                      %a{:class =>"tag", :title => {tag}, :href => {"flows/tag/%s".format(tag)}}= tag
+                  %a{:class => "body", :title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.in.body.toString().substring(0, 100)
+      %div(id="tab-error")
+        %p
+          %ul(id="list")
+            - for (flow <- app.page(50))
+              - if(flow.status.toString() == "error")
+                %li(id="flows")
+                  %img(src="/theme/main/images/error16.png")
+                  %a{:title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.id
+                  - for (tag <- flow.tags)
+                    %button
+                      %a{:class =>"tag", :title => {tag}, :href => {"flows/tag/%s".format(tag)}}= tag
+                  %a{:class => "body", :title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.in.body.toString().substring(0, 100)
+    %div(id="datepicker")
