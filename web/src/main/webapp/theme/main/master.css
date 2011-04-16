@@ -1,234 +1,60 @@
-html {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  overflow: hidden;
-}
-
-body {
-  font-family: Verdana, Arial, sans-serif;  
-  margin: 0px auto;
-  width: 100%;
-  font-size: .8em;
-  background-color: #336699;
-}
-
-/* header stuff */
+/* General Layout of the body */
+html { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+body { font-family: Verdana, Arial, sans-serif; margin: 0px auto; width: 100%; font-size: .8em; background-color: #bddcfb; }
+a.flow { text-decoration: none; }
+a.flow:hover { text-decoration: underline; }
+ul { margin: 0px; text-decoration: none; list-style: none; }
+ul.list { position: absolute; left: 1px; }
 
 
-header {
-  margin: 0;
-  padding-right: .64em;
-  width: 100%;
-  height: 28px;
-  background-color: #336699;
-  border-bottom: solid 1px white;
-}
+/* Some header stuff, the header contains 2 horizontal bars */
+header           { margin: 0; padding-right: .64em; width: 100%; height: 28px; background-color: #336894; border-bottom: solid 2px white; }
+header .title    { position: absolute; top: 5px; left: 10px; color: #ffffff; font-size: 1.2em; }
+header .subtitle { position: absolute; top: 29px; width: 100%; height: 192px;
+                   background-color: #336894; background-image: url('/theme/main/images/bg.png'); background-repeat: repeat-x; }
+/* Search */
+header .search h2 { position: absolute; top: 0px; left: 52%; color: #ffffff; text-align: ; }
+header .search form input { position: absolute; top: 0px; left: 61%; width: 36%; }
 
-header .title {
-  position: absolute;
-  top: 5px;
-  left: 10px;
-  color: #ffffff;
-  font-size: 1.2em;
-}
+/* Footer stuff */
+footer        { position: absolute; margin: 0; padding-right: .64em; width: 100%; height: 2%; top: 98%; background-color: transparent; }
+footer .title { height: 21px; width: 100%; text-align: center; color: #ffffff; background-color: #336894;
+                border-top: solid 1px #1d5987; border-bottom: solid 1px #1d5987; }
 
-article {
-  position: absolute;
-  left: 9px;
-  top: 111px;
-  width: 99%;
-  height: 100%;
-  background-color: #ffffff;
-}
+/* The article */
+article { position: absolute; left: 9%; top: 73px; width: 82%; height: 100%; background-color: #ffffff;
+          -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; border: solid 3px grey;}
 
-footer {
-  position: absolute;
-  margin: 0;
-  padding-right: .64em;
-  width: 100%;
-  height: 5%;
-  top: 95%;
-background-color: transparent;
-}
+article div.subsection { z-index: 1; position: relative; left: 15px; top: 3px; width: 98%; height: 64px; border-bottom: solid 2px #336699; }
+article div.logo-subsection  { z-index: 1; position: relative; left: 5px; top: 5px; }
+article div.title-subsection { z-index: 1; position: absolute; left: 64px; top: 15px; font-size: 1.8em; font-weight: bold; color: #336699; }
 
-footer .title {
-  height: 21px;
-  width: 100%;
-  text-align: center;
-  color: #ffffff;
-  background-color: #336699;
-  border-top: solid 1px #1d5987;
-  border-bottom: solid 1px #1d5987;
-}
+article .rounded-corners { -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
 
+#datepicker { position: absolute; margin: 0px; left: 86%; top: 21px; width: 161px; height: 40px; padding: 12px;
+              font-family: "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif"; }
 
-#datepicker {
-  position: absolute;
-  margin: 0px;
-  left: 88%;
-  top: 21px;
-  width: 161px;
-  height: 40px;
-  padding: 12px;
-  font-family: "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif";
-}
+#tabs            { position: relative; left: 1px; top: 32px; width: 85%; spacing: 0; }
+#tabs .title     { height: 32px; color: #ffffff; font-weight: bold; background-color: silver; }
+#tabs .tabs-1 li { width: 98%; }
 
-#tabs {
-  position: relative;
-  left: 1px;
-  top: 32px;
-  width: 85%;
- /* border: solid 4px silver;     */
-  spacing: 0;
-}
+.tag button a { width: 45px; color: #000000; text-decoration: none; }
 
-#tabs .title {
-  height: 32px;
-  color: #ffffff;
-  font-weight: bold;
-  background-color: silver;
-}
+#accordion { font-size: 1.1em; height: 100%; }
 
-#tabs .tabs-1 li {
-  width: 98%;
-}
+/* Flow page */
+div.view    { position: relative; left: 21px; top: 25px; width: 91%; height: 91%; background-color: #ffffff; }
+div.view h2 { color: #336699; border-bottom: solid 1px silver; }
 
-.tag {
+div.flow     { position: absolute; left: 69px; top: 73px; width: 91%; }
+div.flow .h1 { width: 100%; height: 25px; background-color: #defffc; color: #336699; font-weight: bold;
+               font-size: 1.8em; border-bottom: solid 1px blue; }
 
-}
+#flows { text-decoration: none; height: 25px; border-bottom: solid 1px silver; }
+#flows a { color: #000000; text-decoration: none; font-weight: bold; }
+#flows a.tag { font-weight: lighter; font-size: 0.8em; }
+#flows a.body { font-weight: lighter; font-size: 0.8em; color: #848484; }
 
-.tag button a {
-  width: 45px;
-  color: #000000;
-  text-decoration: none;
-}
-
-
-#accordion {
-  font-size: 1.1em;
-  height: 100%;
-}
-
-
-a.flow {
-  text-decoration: none;
-}
-
-a.flow:hover {
-  text-decoration: underline;
-}
-
-div.subsection {
-  position: absolute;
-  left: 9px;
-  top: 43px;
-  width: 98%;
-  height: 64px;
-  background-image: url('/theme/main/images/logodesign48x48.png');
-  background-repeat: no-repeat;
-}
-
-div.title-subsection {
-  position: absolute;
-  left: 52px;
-  top: 10px;
-  font-size: 1.8em;
-  font-weight: bold;
-  color: #ffffff;
-}
-
-div.title-logo {
-
-}
-
-div.search {
-  position: absolute;
-  z-index: 1;
-  width: 100%;
-  height: 48px;
-  background-color: #1d5987;
-}
-
-div.search h2 {
-  position: absolute;
-  top: 1px;
-  left: 23px;
-  color: #ffffff;
-  text-align: middle;
-}
-
-div.search form input {
-  position: absolute;
-  top: 14px;
-  left: 111px;
-  width: 46%;
-}
-
-div.view {
-  position: absolute;
-  left: 21px;
-  top: 25px;
-  width: 91%;
-  height: 91%;
-  background-color: #ffffff;
-}
-
-div.view h2 {
-  color: #336699;
-  border-bottom: solid 1px silver;
-}
-
-div.flow {
-  position: absolute;
-  left: 69px;
-  top: 43px;
-  width: 91%;
-}
-
-div.flow .h1 {
-  width: 100%;
-  height: 25px;
-  background-color: #defffc;
-  color: #336699;
-  font-weight: bold;
-  font-size: 1.8em;
-  border-bottom: solid 1px blue;
-}
-
-ul {
-  margin: 0px;
-  text-decoration: none;
-  list-style: none;
-}
-
-ul.list {
-  position: absolute;
-  left: 1px;
-}
-
-#flows {
-  text-decoration: none;
-  height: 25px;
-  border-bottom: solid 1px silver;
-}
-
-#flows a {
-  color: #000000;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-#flows a.tag {
-  font-weight: lighter;
-  font-size: 0.8em;
-}
-
-#flows a.body {
-  font-weight: lighter;
-  font-size: 0.8em;
-  color: #848484;
-}
 
 
 

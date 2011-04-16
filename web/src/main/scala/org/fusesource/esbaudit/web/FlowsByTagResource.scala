@@ -5,13 +5,6 @@ import com.sun.jersey.api.view.ImplicitProduces
 import org.fusesource.esbaudit.backend.model.Flow
 import org.fusesource.esbaudit.backend.{Backend, MongoDB}
 
-/**
- * Created by IntelliJ IDEA.
- * User: system
- * Date: 3/2/11
- * Time: 3:49 PM
- * To change this template use File | Settings | File Templates.
- */
 
 @ImplicitProduces(Array("text/html;qs=5"))
 @Path("/flows/tag/{id}")

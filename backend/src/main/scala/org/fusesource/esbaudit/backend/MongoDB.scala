@@ -33,10 +33,24 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
 
   def all = for (val found <- database(collection).find) yield toFlow(found)
 
+
   def flowsByTags(tags: Seq[String]) = {
     val query = "tags" $all tags
     for (val found <- database(collection).find(query)) yield toFlow(found)
 
+  }
+
+  def search(queried: String) = {
+    val query =
+    if (queried.startsWith("label:")) {
+      val tags = queried.split(":").slice(1,2)
+      "tags" $all tags
+    } else {
+      val builder = MongoDBObject.newBuilder
+      builder += "in.body" -> queried.r
+      builder.result.asDBObject
+    }
+    for (val found <- database(collection).find(query)) yield toFlow(found)
   }
 
   def toFlow(record: DBObject) = {
@@ -94,15 +108,19 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
     record += "exchange_id" -> flow.id
     record += "status" -> flow.status.toString
 
+    if (flow.data.contains(PROPERTIES)) {
     val properties = MongoDBObject.newBuilder
     for (property <- flow.properties) properties += property._1.replaceAll("\\.", "_") -> property._2
 
     record += "properties" -> properties.result.asDBObject
+    }
 
     val in = MongoDBObject.newBuilder
     in += "body" -> flow.in.body
 
-    record += "tags" -> flow.tags
+    if (flow.data.contains(TAGS)) {
+      record += "tags" -> flow.tags
+    }
 
     val headers = MongoDBObject.newBuilder
     for (header <- flow.in.headers) headers += header._1.replaceAll("\\.", "_") -> header._2
@@ -122,6 +140,8 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
       case None => None
     }
   }
+
+
 
   def update(flow: Flow) = {
     println("Not updating %s - not implemented yet".format(flow))

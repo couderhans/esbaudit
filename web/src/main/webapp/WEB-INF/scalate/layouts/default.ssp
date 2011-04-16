@@ -42,6 +42,10 @@
       <div class="title">
         Apache Servicemix ESB Audit
       </div>
+      <div class="search">
+        <h2>Search</h2>
+      </div>
+      <div class="subtitle"></div>
     </header>
     <%= body %>
     <footer>

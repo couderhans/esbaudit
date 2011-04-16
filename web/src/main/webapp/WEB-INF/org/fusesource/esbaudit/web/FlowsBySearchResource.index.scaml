@@ -1,19 +1,8 @@
--@ import val it : org.fusesource.esbaudit.web.FlowsByTagResource
+-@ import val it : org.fusesource.esbaudit.web.FlowsBySearchResource
 %div
   .tabs
 %article
-  %h1= "Showing flow for %s".format(tags)
-  %table
-    %tr
-      - for (tag <- selected)
-        %td
-          %a{:title => {tag},
-             :href => {urlRemove(tag)}}= tag
-    %tr
-      - for (tag <- remaining)
-        %td
-          %a{:title => {tag},
-             :href => {urlAdd(tag)}}= tag
+  %h1= "Showing flow for query %s".format(query)
   .widget
     .title List of Flows
     .body
@@ -28,9 +17,9 @@
             %tr
               -
                 val icon: String = flow.status.toString match {
-                  case "active" => "/theme/images/spinner.gif";
-                  case "done" => "/theme/images/done16.png";
-                  case "error" => "/theme/images/error16.png";
+                  case "active" => "/theme/main/images/spinner.gif";
+                  case "done" => "/theme/main/images/done16.png";
+                  case "error" => "/theme/main/images/error16.png";
                   case _ => "unknown";
                 }
               %td

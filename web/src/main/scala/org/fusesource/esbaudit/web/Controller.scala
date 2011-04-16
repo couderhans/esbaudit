@@ -30,10 +30,7 @@ class Controller {
   def all = backend.all
 
 
-  //def map = backend.all map { Flow => (Flow.id, Flow.status) }
-  def page(end: Int) = all.slice(0, end)
-  //def page: Iterable[Flow] = all
-  //def pages =  all.sliding(0, 25) map { Flow => (Flow.id, Flow.status) }
-  //def page(end: Int) = pages.slice(0, 10)
+  def page(begin: Int, end: Int) = all.slice(begin, end)
+
 
 }

@@ -20,7 +20,7 @@ package org.fusesource.esbaudit.backend.model
 /**
  * Represents a message in an exchange or a flow
  */
-case class Message(val body: AnyRef, val headers: Map[String, AnyRef]) {
+case class Message(val body: AnyRef, val headers: Map[String, AnyRef] = Map()) {
 
 
 

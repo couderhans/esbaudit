@@ -11,5 +11,6 @@ trait Log {
 
   def info(message: String, parameters: AnyRef*) = log.info(message.format(parameters))
   def warn(message: String, parameters: AnyRef*) = log.warn (message.format(parameters))
+  def warn(message: String, exception: Throwable, parameters: AnyRef*) = log.warn(message.format(parameters), exception)
 
 }
