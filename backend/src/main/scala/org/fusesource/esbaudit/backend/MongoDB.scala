@@ -40,16 +40,19 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
 
   }
 
-  def search(queried: String) = {
-    val query =
-    if (queried.startsWith("label:")) {
-      val tags = queried.split(":").slice(1,2)
-      "tags" $all tags
-    } else {
-      val builder = MongoDBObject.newBuilder
-      builder += "in.body" -> queried.r
-      builder.result.asDBObject
+  def search(queryString: String) = {
+    val reqs = for (part <- queryString.split("\\s")) yield {
+      if (part.startsWith("label:")) {
+        val tags = part.split(":").slice(1,2)
+        "tags" $all tags
+      } else {
+        val builder = MongoDBObject.newBuilder
+        builder += "in.body" -> part.r
+        builder.result.asDBObject
+      }
     }
+    val query = reqs.foldLeft(MongoDBObject.empty)(_ ++ _)
+    debug("Querying MongoDB: %s", query)
     for (val found <- database(collection).find(query)) yield toFlow(found)
   }
 

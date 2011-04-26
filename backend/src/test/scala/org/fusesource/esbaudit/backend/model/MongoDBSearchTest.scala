@@ -71,6 +71,9 @@ class MongoDBSearchTest extends MongoAware {
     val flows = mongo.search("COOKIES label:cookie").toBuffer
     assertEquals("We should have found 1 matching flow", 1, flows.size)
     assertEquals("We wanted cookies and not biscuits", flows.head.in.body, "COOKIES IN A JAR")
+
+    val noflows = mongo.search("COOKIES label:biscuit").toBuffer
+    assertEquals("We should have found no matching flows", 0, noflows.size)
   }
 
 
