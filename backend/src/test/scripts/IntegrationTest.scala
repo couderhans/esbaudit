@@ -22,6 +22,7 @@ val collection = "servicemix_%s".format(System.currentTimeMillis)
 println("- Creating collection %s".format(collection))
 val mongo = MongoDB(collection)
 
+
 println
 println("- Creating an active flow")
 // create an new Active Flow
@@ -60,11 +61,11 @@ for (flow <- mongo.flowsByTags(Seq("po","invoice"))) {
 
 println
 println("- Display all flows found by the searcg as in the database")
-for (flow <- mongo.search("KARTON"){
+for (flow <- mongo.search("KARTON")){
   println("  %s".format(flow))
 }
-
+/*
 println
 println("- Dropping collection %s".format(collection))
 mongo.database.getCollection(collection).drop
-
+*/

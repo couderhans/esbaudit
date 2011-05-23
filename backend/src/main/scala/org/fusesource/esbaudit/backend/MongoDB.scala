@@ -28,7 +28,7 @@ import model.Flow._
  */
 class MongoDB(val collection: String) extends Backend with Adapter with Log {
 
-  val connection = MongoConnection()
+  val connection = MongoConnection("127.0.0.1")
   val database = connection("test")
 
   def all = for (val found <- database(collection).find) yield toFlow(found)
