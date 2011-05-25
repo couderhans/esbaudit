@@ -1,22 +1,17 @@
-- val app = new org.fusesource.esbaudit.web.Controller
+-@ import val it : org.fusesource.esbaudit.web.FlowsActive
 %subtitle
   Dashboard ESB Audit
 .menu
   %ul
-    %li
-      .selected All Flows
-    %li
-      %a{:title => "Active", :href => "/flows/active"}
-        Active
+    %li All Flows
+    %li Active
     %li Done
     %li Error
 %article
-  .search
-    Active Flows
   .view
     %div(id="list-all")
       %ul(id="list")
-        - for (flow <- app.page(5, 20))
+        - for (flow <- flows)
           %li(id="flows")
             -
               val icon: String = flow.status.toString() match {

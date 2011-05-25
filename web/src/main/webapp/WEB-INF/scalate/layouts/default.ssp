@@ -39,13 +39,10 @@
 
     <body>
     <header>
+      <img src="/theme/main/images/logodesign66x66.png" class="logo"></img>
       <div class="title">
-        Apache Servicemix ESB Audit
+        <img src="/theme/main/images/smx-logo66x265.png"></img>
       </div>
-      <div class="search">
-        <h2>Search</h2>
-      </div>
-      <div class="subtitle"></div>
     </header>
     <%= body %>
     <footer>

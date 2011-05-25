@@ -40,6 +40,11 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
 
   }
 
+  def flowsByStatus(status: String) = {
+    val query = "status" $all status
+    for (val found <- database(collection).find(query)) yield toFlow(found)
+  }
+
   def search(queryString: String) = {
     val reqs = for (part <- queryString.split("\\s")) yield {
       if (part.startsWith("label:")) {
