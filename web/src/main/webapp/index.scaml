@@ -1,21 +1,36 @@
 - val app = new org.fusesource.esbaudit.web.Controller
-%subtitle
-  Dashboard ESB Audit
-.menu
-  %ul
-    %li
-      .selected All Flows
-    %li
-      %a{:title => "Active", :href => "/flows/active"}
-        Active
-    %li Done
-    %li Error
+.subtitle
+  %h2 ESB Audit > Dashboard
+.menutitle_flows
+  Flows
+.menu_flows
+  %table
+    %tr
+      %td
+        %img{:src => "/theme/main/images/spinner.gif"}
+      %td
+        %a{:title => "Active", :href => "/flows/active"}
+          Active
+    %tr
+      %td
+        %img{:src => "/theme/main/images/done16.png"}
+      %td
+        %a{:title => "Active", :href => "/flows/active"}
+          Done
+    %tr
+      %td
+        %img{:src => "/theme/main/images/error16.png"}
+      %td
+        %a{:title => "Active", :href => "/flows/active"}
+          Error
+.menutitle_tags
+  Tags
 %article
-  .search
+  .title
     Active Flows
   .view
-    %div(id="list-all")
-      %ul(id="list")
+    .list
+      .listitem
         - for (flow <- app.page(5, 20))
           %li(id="flows")
             -
@@ -30,5 +45,5 @@
             - for (tag <- flow.tags)
               %button
                 %a{:class =>"tag", :title => {tag}, :href => {"flows/tag/%s".format(tag)}}= tag
-            %a{:class => "body", :title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.in.body.toString().substring(0, 100)
+
 

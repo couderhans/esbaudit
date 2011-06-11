@@ -1,6 +1,6 @@
 /* General Layout of the body */
 html { width: 100%; height: 100%; margin: 0; overflow: hidden; }
-body { font-family: Verdana, Arial, sans-serif; margin: 0px auto; width: 100%; font-size: .8em; background-color: #bddcfb; }
+body { font-family: Verdana, Arial, sans-serif; margin: 0px auto; width: 100%; font-size: .8em; background-color: #ffffff; }
 a.flow { text-decoration: none; }
 a.flow:hover { text-decoration: underline; }
 ul { margin: 0px; text-decoration: none; list-style: none; }
@@ -8,17 +8,25 @@ ul.list { position: absolute; left: 1px; }
 
 
 /* Some header stuff, the header contains 2 horizontal bars */
-header           { position: absolute; top: 0px; margin: 0; padding-right: .64em; width: 100%; height: 320px; background-color: #bddcfb;
+header           { position: absolute; top: 0px; margin: 0; padding-right: .64em; width: 100%; height: 80px; background-color: #ffffff;
                    background-image: url('/theme/main/images/bg.png'); background-repeat: repeat-x; }
 header .title    { position: absolute; top: 2px; left: 69px; color: #ffffff; font-size: 2.2em; }
 header .logo { position: absolute; top: 5px; left: 5px; }
-subtitle { position: absolute; top: 21px; left: 80%; color: #ffffff; font-size: 2.2em; }
+.subtitle { position: absolute; top: 80px; width: 100%; height: 32px; background-color: #336894 }
+.subtitle h2 { position: absolute; left: 75px; color: #ffffff; font-size: 1.2em; }
 
 
 /* Menu Left */
-div.menu { position: absolute; top: 125px; width: 12%; border-bottom: solid 1px white; }
-div.menu li { height: 23px; }
-div.menu li .selected { position: absolute; width: 12%; background-color: #336699; }
+.menu_flows { position: absolute; top: 210px; left: 75px; width: 250px; }
+.menu_tags { position: absolute; top: 320px; left: 75px; width: 250px; }
+.menutitle_flows { position: absolute; top: 180px; left: 75px; width: 250px; border-bottom: solid 1px lightgrey; font-size: 1.2em; }
+.menutitle_tags { position: absolute; top: 300px; left: 75px; width: 250px; border-bottom: solid 1px lightgrey;font-size: 1.2em;  }
+table.selected { width: 150px; }
+table.remaining { position: absolute; left: 175px; width: 100px; }
+a.selected { text-decoration: none; color: green; }
+a.selected:hover { text-decoration: underline; }
+a.remaining { text-decoration: none; color: red; }
+a.remaining:hover { text-decoration: underline; }
 
 /* Footer stuff */
 footer        { position: absolute; margin: 0; padding-right: .64em; width: 100%; height: 4%; top: 98%; background-color: transparent; }
@@ -26,13 +34,13 @@ footer .title { height: 28px; width: 100%; text-align: center; color: #ffffff; b
                 border-top: solid 1px #1d5987; border-bottom: solid 1px #1d5987; }
 
 /* The article */
-article { position: absolute; left: 12%; top: 82px; width: 92%; height: 100%; background-color: #ffffff;
-          -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; border: solid 5px lightgrey;}
-
+article { position: absolute; left: 370px; top: 180px; width: 73%; background-color: #ffffff;
+          -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; border: solid 0px #336894;}
+article .title { position: absolute; z-index: 2; width: 100%; border-bottom: solid 1px lightgrey; font-size: 1.2em; }
 article .rounded-corners { -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
 
 /* Search */
-div.search { position: absolute; z-index: 2; width: 100%; height: 28px; background-color: lightgrey; }
+
 div.search form input { position: absolute; top: 0px; left: 61%; width: 36%; }
 
 .tag button a { width: 45px; color: #000000; text-decoration: none; }
@@ -40,15 +48,16 @@ div.search form input { position: absolute; top: 0px; left: 61%; width: 36%; }
 #accordion { font-size: 1.1em; height: 100%; }
 
 /* Flow page */
-div.view    { position: relative; left: 0px; top: 32px; width: 99%; height: 91%; background-color: #ffffff; }
-div.view h2 { color: #336699; border-bottom: solid 1px silver; }
-div.view list-all { width: 99%; }
+.view    { position: absolute; left: 1px; top: 21px; width: 91%;}
+.view h2 { color: #336699; border-bottom: solid 1px silver; }
+.list { width: 99%; }
+.listitem { background-color: #ffffff; }
 
-div.flow     { position: absolute; left: 69px; top: 73px; width: 91%; }
+div.flow     { position: absolute; left: 9px; top: 7px; width: 91%; }
 div.flow .h1 { width: 100%; height: 25px; background-color: #defffc; color: #336699; font-weight: bold;
                font-size: 1.8em; border-bottom: solid 1px blue; }
 
-#flows { text-decoration: none; height: 25px; border-bottom: solid 1px silver; }
+#flows { text-decoration: none; height: 25px; border-bottom: solid 0px silver; }
 #flows a { color: #000000; text-decoration: none; font-weight: bold; }
 #flows a.tag { font-weight: lighter; font-size: 0.8em; }
 #flows a.body { font-weight: lighter; font-size: 0.8em; color: #848484; }

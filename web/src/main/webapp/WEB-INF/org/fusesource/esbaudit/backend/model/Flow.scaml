@@ -1,9 +1,38 @@
 -@ import val it : Flow
+.subtitle
+  %h2= "ESB Audit > Flows > Flow > %s".format(id)
+.menutitle_flows
+  Flows
+.menu_flows
+  %table
+    %tr
+      %td
+        %img{:src => "/theme/main/images/spinner.gif"}
+      %td
+        %a{:title => "Active", :href => "/flows/active"}
+          Active
+    %tr
+      %td
+        %img{:src => "/theme/main/images/done16.png"}
+      %td
+        %a{:title => "Active", :href => "/flows/active"}
+          Done
+    %tr
+      %td
+        %img{:src => "/theme/main/images/error16.png"}
+      %td
+        %a{:title => "Active", :href => "/flows/active"}
+          Error
+.menutitle_tags
+  Tags
 %article
-  .subtitle
-    ="Flow: " + id + " " +  "Status: %s".format(status)
   .flow
     %div(id="accordion")
+      %h3
+        %a(href="#") Body
+      %div
+        %pre(name="code" class="xml")
+        %p= in.body
       %h3
         %a(href="#") Properties
       %div
@@ -22,10 +51,3 @@
               = header._1
               &rarr;
               = header._2
-      %h3
-        %a(href="#") Body
-      %div
-        %pre(name="code" class="xml")
-        %p= in.body
-  %a{:href => "/"}
-    %p Back
