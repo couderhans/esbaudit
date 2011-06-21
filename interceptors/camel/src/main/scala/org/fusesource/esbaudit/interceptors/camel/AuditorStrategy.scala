@@ -25,7 +25,9 @@ import collection.mutable.ListBuffer
 import org.apache.camel.spi.{Synchronization, InterceptStrategy}
 import org.fusesource.esbaudit.backend.model._
 import scala.collection.JavaConversions.asScalaMap
+import scala.collection.mutable.Map
 import org.fusesource.esbaudit.backend.model.Flow._
+import java.io.Serializable
 
 
 /**
@@ -87,13 +89,36 @@ case class AuditorStrategy(val adapter: Adapter) extends InterceptStrategy with 
     Flow(exchange.getExchangeId,
          IN_MESSAGE -> toModel(exchange.getIn()),
          STATUS -> Active(),
-         PROPERTIES -> asScalaMap(exchange.getProperties).toMap,
+         PROPERTIES -> extractProperties(exchange), //asScalaMap(exchange.getProperties).toMap,
          TAGS -> tags.toSeq,
          EXCEPTION -> exchange.getException)
   }
 
   def toModel(camel: Message) : org.fusesource.esbaudit.backend.model.Message = {
-    org.fusesource.esbaudit.backend.model.Message(camel.getBody(),
-                                                  asScalaMap(camel.getHeaders).toMap)
+    val body = camel.getBody(classOf[java.io.Serializable])
+    org.fusesource.esbaudit.backend.model.Message(if (body == null) camel.getBody(classOf[String]) else body,
+                                                  extractHeaders(camel))
   }
+
+  def extractHeaders(message: Message) = {
+    val result = Map[String, AnyRef]()
+    for ( (key,value) <- asScalaMap(message.getHeaders).toMap) {
+      val serializable = message.getHeader(key, classOf[Serializable])
+      result(key) = if (serializable == null) message.getHeader(key, classOf[String]) else serializable
+    }
+    result.toMap
+
+  }
+
+
+  def extractProperties(exchange: Exchange) = {
+    val result = Map[String, AnyRef]()
+    for ( (key,value) <- asScalaMap(exchange.getProperties).toMap) {
+      val serializable = exchange.getProperty(key, classOf[Serializable])
+      result(key) = if (serializable == null) exchange.getProperty(key, classOf[String]) else serializable
+    }
+    result.toMap
+
+  }
+
 }

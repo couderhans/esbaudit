@@ -24,7 +24,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.fusesource.esbaudit</groupId>
-  <artifactId>audit</artifactId>
+  <artifactId>org.fusesource.esbaudit.audit</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>ESB Audit</name>
@@ -33,12 +33,13 @@
     <module>web</module>
     <module>backend</module>
     <module>interceptors</module>
+      <module>features</module>
   </modules>
 
   <properties>
     <!-- OSGi stuff -->
     <bundle.plugin.version>2.1.0</bundle.plugin.version>
-    <esbaudit.osgi.export>${project.artifactId}</esbaudit.osgi.export>
+    <esbaudit.osgi.export>${project.artifactId}*</esbaudit.osgi.export>
     <esbaudit.osgi.import>*</esbaudit.osgi.import>
     <esbaudit.osgi.private/>
 

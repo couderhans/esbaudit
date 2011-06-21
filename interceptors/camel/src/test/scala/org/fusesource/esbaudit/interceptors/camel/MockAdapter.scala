@@ -28,7 +28,7 @@ class MockAdapter extends Adapter {
 
   val flows = new ListBuffer[Flow]
 
-  def store(flow: Flow) = flows += flow
+  def store(flow: Flow) = flows += validate(flow)
 
   def update(flow: Flow) = {
     flows.find(_.id == flow.id) match {
@@ -42,6 +42,11 @@ class MockAdapter extends Adapter {
       }
       case None => throw new IllegalArgumentException("Unable to update %s - flow does not exist in store".format(flow.id))
     }
+  }
+
+  def validate(flow: Flow) : Flow = {
+    if (!flow.in.body.isInstanceOf[java.io.Serializable]) throw new IllegalStateException("Payload should have been serializable")
+    flow
   }
 
   def reset = {
