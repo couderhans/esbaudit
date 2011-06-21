@@ -136,7 +136,7 @@
       <!-- Project modules -->
       <dependency>
         <groupId>org.fusesource.esbaudit</groupId>
-        <artifactId>backend</artifactId>
+        <artifactId>org.fusesource.esbaudit.backend</artifactId>
         <version>${project.version}</version>
       </dependency>
 

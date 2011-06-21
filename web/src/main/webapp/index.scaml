@@ -31,7 +31,7 @@
   .view
     .list
       .listitem
-        - for (flow <- app.page(5, 20))
+        - for (flow <- app.page(0, 20))
           %li(id="flows")
             -
               val icon: String = flow.status.toString() match {
