@@ -28,7 +28,7 @@ import model.Flow._
  */
 class MongoDB(val collection: String) extends Backend with Adapter with Log {
 
-  val connection = MongoConnection()
+  val connection = MongoConnection("127.0.0.1")
   val database = connection("test")
 
   def all = for (val found <- database(collection).find) yield toFlow(found)
@@ -38,6 +38,11 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
     val query = "tags" $all tags
     for (val found <- database(collection).find(query)) yield toFlow(found)
 
+  }
+
+  def flowsByStatus(status: String) = {
+    val query = "status" $all status
+    for (val found <- database(collection).find(query)) yield toFlow(found)
   }
 
   def search(queryString: String) = {

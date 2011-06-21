@@ -30,6 +30,8 @@ trait Backend {
 
   def flowsByTags(tags: Seq[String]) : Iterator[Flow]
 
+  def flowsByStatus(status: String) : Iterator[Flow]
+
   def search(query: String) : Iterator[Flow]
 
 }

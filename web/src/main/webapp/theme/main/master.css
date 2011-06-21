@@ -1,6 +1,6 @@
 /* General Layout of the body */
 html { width: 100%; height: 100%; margin: 0; overflow: hidden; }
-body { font-family: Verdana, Arial, sans-serif; margin: 0px auto; width: 100%; font-size: .8em; background-color: #bddcfb; }
+body { font-family: Verdana, Arial, sans-serif; margin: 0px auto; width: 100%; font-size: .8em; background-color: #ffffff; }
 a.flow { text-decoration: none; }
 a.flow:hover { text-decoration: underline; }
 ul { margin: 0px; text-decoration: none; list-style: none; }
@@ -8,49 +8,56 @@ ul.list { position: absolute; left: 1px; }
 
 
 /* Some header stuff, the header contains 2 horizontal bars */
-header           { margin: 0; padding-right: .64em; width: 100%; height: 28px; background-color: #336894; border-bottom: solid 2px white; }
-header .title    { position: absolute; top: 5px; left: 10px; color: #ffffff; font-size: 1.2em; }
-header .subtitle { position: absolute; top: 29px; width: 100%; height: 192px;
-                   background-color: #336894; background-image: url('/theme/main/images/bg.png'); background-repeat: repeat-x; }
-/* Search */
-header .search h2 { position: absolute; top: 0px; left: 52%; color: #ffffff; text-align: ; }
-header .search form input { position: absolute; top: 0px; left: 61%; width: 36%; }
+header           { position: absolute; top: 0px; margin: 0; padding-right: .64em; width: 100%; height: 80px; background-color: #ffffff;
+                   background-image: url('/theme/main/images/bg.png'); background-repeat: repeat-x; }
+header .title    { position: absolute; top: 2px; left: 69px; color: #ffffff; font-size: 2.2em; }
+header .logo { position: absolute; top: 5px; left: 5px; }
+.subtitle { position: absolute; top: 80px; width: 100%; height: 32px; background-color: #336894 }
+.subtitle h2 { position: absolute; left: 75px; color: #ffffff; font-size: 1.2em; }
+
+
+/* Menu Left */
+.menu_flows { position: absolute; top: 210px; left: 75px; width: 250px; }
+.menu_tags { position: absolute; top: 320px; left: 75px; width: 250px; }
+.menutitle_flows { position: absolute; top: 180px; left: 75px; width: 250px; border-bottom: solid 1px lightgrey; font-size: 1.2em; }
+.menutitle_tags { position: absolute; top: 300px; left: 75px; width: 250px; border-bottom: solid 1px lightgrey;font-size: 1.2em;  }
+table.selected { width: 150px; }
+table.remaining { position: absolute; left: 175px; width: 100px; }
+a.selected { text-decoration: none; color: green; }
+a.selected:hover { text-decoration: underline; }
+a.remaining { text-decoration: none; color: red; }
+a.remaining:hover { text-decoration: underline; }
 
 /* Footer stuff */
-footer        { position: absolute; margin: 0; padding-right: .64em; width: 100%; height: 2%; top: 98%; background-color: transparent; }
-footer .title { height: 21px; width: 100%; text-align: center; color: #ffffff; background-color: #336894;
+footer        { position: absolute; margin: 0; padding-right: .64em; width: 100%; height: 4%; top: 98%; background-color: transparent; }
+footer .title { height: 28px; width: 100%; text-align: center; color: #ffffff; background-color: #336894;
                 border-top: solid 1px #1d5987; border-bottom: solid 1px #1d5987; }
 
 /* The article */
-article { position: absolute; left: 9%; top: 73px; width: 82%; height: 100%; background-color: #ffffff;
-          -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; border: solid 3px grey;}
-
-article div.subsection { z-index: 1; position: relative; left: 15px; top: 3px; width: 98%; height: 64px; border-bottom: solid 2px #336699; }
-article div.logo-subsection  { z-index: 1; position: relative; left: 5px; top: 5px; }
-article div.title-subsection { z-index: 1; position: absolute; left: 64px; top: 15px; font-size: 1.8em; font-weight: bold; color: #336699; }
-
+article { position: absolute; left: 370px; top: 180px; width: 73%; background-color: #ffffff;
+          -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; border: solid 0px #336894;}
+article .title { position: absolute; z-index: 2; width: 100%; border-bottom: solid 1px lightgrey; font-size: 1.2em; }
 article .rounded-corners { -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
 
-#datepicker { position: absolute; margin: 0px; left: 86%; top: 21px; width: 161px; height: 40px; padding: 12px;
-              font-family: "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif"; }
+/* Search */
 
-#tabs            { position: relative; left: 1px; top: 32px; width: 85%; spacing: 0; }
-#tabs .title     { height: 32px; color: #ffffff; font-weight: bold; background-color: silver; }
-#tabs .tabs-1 li { width: 98%; }
+div.search form input { position: absolute; top: 0px; left: 61%; width: 36%; }
 
 .tag button a { width: 45px; color: #000000; text-decoration: none; }
 
 #accordion { font-size: 1.1em; height: 100%; }
 
 /* Flow page */
-div.view    { position: relative; left: 21px; top: 25px; width: 91%; height: 91%; background-color: #ffffff; }
-div.view h2 { color: #336699; border-bottom: solid 1px silver; }
+.view    { position: absolute; left: 1px; top: 21px; width: 91%;}
+.view h2 { color: #336699; border-bottom: solid 1px silver; }
+.list { width: 99%; }
+.listitem { background-color: #ffffff; }
 
-div.flow     { position: absolute; left: 69px; top: 73px; width: 91%; }
+div.flow     { position: absolute; left: 9px; top: 7px; width: 91%; }
 div.flow .h1 { width: 100%; height: 25px; background-color: #defffc; color: #336699; font-weight: bold;
                font-size: 1.8em; border-bottom: solid 1px blue; }
 
-#flows { text-decoration: none; height: 25px; border-bottom: solid 1px silver; }
+#flows { text-decoration: none; height: 25px; border-bottom: solid 0px silver; }
 #flows a { color: #000000; text-decoration: none; font-weight: bold; }
 #flows a.tag { font-weight: lighter; font-size: 0.8em; }
 #flows a.body { font-weight: lighter; font-size: 0.8em; color: #848484; }
