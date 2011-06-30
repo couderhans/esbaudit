@@ -1,0 +1,57 @@
+-@ import val it : org.fusesource.esbaudit.web.FlowsByStatus
+.subtitle
+  .logo
+    %img{:src => "/theme/main/images/dashboard.png" }
+  %h2
+    ESB Audit > Flows by Status
+%article
+  .menutitle_flows
+    Flows
+  .menu_flows
+    %table
+      %tr
+        %td
+          %img{:src => "/theme/main/images/spinner.gif"}
+        %td
+          %a{:title => "Active", :href => "/flows/active"}
+            Active
+      %tr
+        %td
+          %img{:src => "/theme/main/images/done16.png"}
+        %td
+          %a{:title => "Active", :href => "/flows/done"}
+            Done
+      %tr
+        %td
+          %img{:src => "/theme/main/images/error16.png"}
+        %td
+          %a{:title => "Active", :href => "/flows/error"}
+            Error
+  .view_title
+    Active Flows
+  .view
+    %table{:id => "example", :class => "tablesorter"}
+      %thead
+        %tr
+          %th Status
+          %th Id
+          %th Tags
+      %tbody
+        - for (val flow <- flows)
+          %tr
+            %td
+              -
+                val icon: String = flow.status.toString() match {
+                  case "active" => "/theme/main/images/spinner.gif";
+                  case "done" => "/theme/main/images/done16.png";
+                  case "error" => "/theme/main/images/error16.png";
+                  case _ => "unknown";
+                }
+              %img(src=icon)
+              =flow.status.toString()
+            %td
+              %a{:title => {flow.id}, :href => {"/flows/flow/%s".format(flow.id)}}= flow.id
+            %td
+              - for (tag <- flow.tags)
+                %button
+                  %a{:class =>"tag", :title => {tag}, :href => {"/flows/tag/%s".format(tag)}}= tag

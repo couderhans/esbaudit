@@ -1,49 +1,57 @@
 - val app = new org.fusesource.esbaudit.web.Controller
 .subtitle
-  %h2 ESB Audit > Dashboard
-.menutitle_flows
-  Flows
-.menu_flows
-  %table
-    %tr
-      %td
-        %img{:src => "/theme/main/images/spinner.gif"}
-      %td
-        %a{:title => "Active", :href => "/flows/active"}
-          Active
-    %tr
-      %td
-        %img{:src => "/theme/main/images/done16.png"}
-      %td
-        %a{:title => "Active", :href => "/flows/active"}
-          Done
-    %tr
-      %td
-        %img{:src => "/theme/main/images/error16.png"}
-      %td
-        %a{:title => "Active", :href => "/flows/active"}
-          Error
-.menutitle_tags
-  Tags
+  .logo
+    %img{:src => "/theme/main/images/dashboard.png" }
+  %h2
+    ESB Audit > Dashboard
 %article
-  .title
+  .menutitle_flows
+    Flows
+  .menu_flows
+    %table
+      %tr
+        %td
+          %img{:src => "/theme/main/images/spinner.gif"}
+        %td
+          %a{:title => "Active", :href => "/flows/bystatus/active"}
+            Active
+      %tr
+        %td
+          %img{:src => "/theme/main/images/done16.png"}
+        %td
+          %a{:title => "Active", :href => "/flows/bystatus/done"}
+            Done
+      %tr
+        %td
+          %img{:src => "/theme/main/images/error16.png"}
+        %td
+          %a{:title => "Active", :href => "/flows/bystatus/error"}
+            Error
+  .view_title
     Active Flows
   .view
-    .list
-      .listitem
-        - for (flow <- app.page(0, 20))
-          %li(id="flows")
-            -
-              val icon: String = flow.status.toString() match {
-                case "active" => "/theme/main/images/spinner.gif";
-                case "done" => "/theme/main/images/done16.png";
-                case "error" => "/theme/main/images/error16.png";
-                case _ => "unknown";
-              }
-            %img(src=icon)
-            %a{:title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.id
-            - for (tag <- flow.tags)
-              %button
-                %a{:class =>"tag", :title => {tag}, :href => {"flows/tag/%s".format(tag)}}= tag
-
-
+    %table{:id => "example", :class => "tablesorter"}
+      %thead
+        %tr
+          %th Status
+          %th Id
+          %th Tags
+      %tbody
+        - for (flow <- app.page(0, 10))
+          %tr
+            %td
+              -
+                val icon: String = flow.status.toString() match {
+                  case "active" => "/theme/main/images/spinner.gif";
+                  case "done" => "/theme/main/images/done16.png";
+                  case "error" => "/theme/main/images/error16.png";
+                  case _ => "unknown";
+                }
+              %img(src=icon)
+              =flow.status.toString()
+            %td
+              %a{:title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.id
+            %td
+              - for (tag <- flow.tags)
+                %button
+                  %a{:class =>"tag", :title => {tag}, :href => {"flows/tag/%s".format(tag)}}= tag

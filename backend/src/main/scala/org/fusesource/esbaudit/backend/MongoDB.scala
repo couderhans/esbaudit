@@ -41,7 +41,7 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
   }
 
   def flowsByStatus(status: String) = {
-    val query = "status" $all status
+    val query = MongoDBObject("status" -> status)
     for (val found <- database(collection).find(query)) yield toFlow(found)
   }
 

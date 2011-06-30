@@ -9,8 +9,10 @@
         <title>ESB Audit</title>
 
         <link rel="stylesheet" type="text/css" href="${uri("/theme/main/master.css")}"/>
+        <link type="text/css" rel="stylesheet" href="${uri("/theme/main/demo_table.css")}"></link>
+        <link rel="stylesheet" href="${uri("/theme/main/style.css")}" type="text/css" media="screen, projection"/>
+        <link type="text/css" rel="stylesheet" href="${uri("/theme/custom/jquery-ui-1.8.11.custom.css")}"></link>
 
-        <link type="text/css" rel="stylesheet" href="${uri("/theme/SyntaxHighlighter.css")}"></link>
         <script language="javascript" src="${uri("/js/shCore.js")}"></script>
         <script language="javascript" src="${uri("/js/shBrushXml.js")}"></script>
         <script language="javascript">
@@ -18,21 +20,31 @@
            dp.SyntaxHighlighter.HighlightAll('code', 'showColumns');
         </script>
 
-        <link rel="stylesheet" href="${uri("/theme/custom/jquery-ui-1.8.11.custom.css")}">
-        <script src="${uri("/js/jquery-1.4.4.js")}"></script>
+
+
+        <script src="${uri("/js/jquery-1.6.1.min.js")}"></script>
         <script src="${uri("/js/jquery.ui.core.js")}"></script>
         <script src="${uri("/js/jquery.ui.widget.js")}"></script>
         <script src="${uri("/js/jquery.ui.datepicker.js")}"></script>
         <script src="${uri("/js/jquery.ui.tabs.js")}"></script>
-        <script src="${uri("/js/jquery.ui.accordion.js")}"></script>
-	<script>
+        <script type="text/javascript" src="${uri("/js/jquery.ui.accordion.js")}"></script>
+        <script type="text/javascript" src="${uri("/js/jquery.dataTables.min.js")}"></script>
+        <script type="text/javascript" language="javascript" src="${uri("/js/jquery.dropdownPlain.js")}"></script>
+        <script type="text/javascript">
+
 	$(function() {
 		$( "#datepicker" ).datepicker();
-        $( "#accordion" ).accordion({active: 0 });
+
         $( "#tabs" ).tabs();
-        $( "button, input:submit, a", ".tag-button" ).button();
 		$( "a", ".tag-button" ).click(function() { return false; });
+
 	});
+
+			$(document).ready(function() {
+			    $('#accordion-body').accordion({active: 0 });
+			    $('#accordion-props').accordion();
+				$('#example').dataTable();
+			} );
 	</script>
 
      </head>
@@ -44,6 +56,31 @@
         <img src="/theme/main/images/smx-logo66x265.png"></img>
       </div>
     </header>
+    <div class="top_navbar">
+      <div class="selected">
+        <ul class="dropdown">
+          <li>
+            <a href="#">ESB Audit</a>
+            <ul class="sub_menu">
+              <li><a href="/">Dashboard</a></li>
+              <li><a href="/flows/bystatus/active">Active Flows</a></li>
+              <li><a href="/flows/bystatus/done">Done</a></li>
+              <li><a href="/flows/bystatus/error">Errors</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="search"><!--
+        <form method="get" class="form">
+		  <table>
+            <tr>
+              <td><input id="send2" type="submit" value="Search it!" /></td>
+              <td><input id="search2" type="text" value="Search the web..." /></td>
+            </tr>
+          </table>
+        </form>-->
+      </div>
+    </div>
     <%= body %>
     <footer>
       <div class="title">© 2004-2010 The Apache Software Foundation</div>
