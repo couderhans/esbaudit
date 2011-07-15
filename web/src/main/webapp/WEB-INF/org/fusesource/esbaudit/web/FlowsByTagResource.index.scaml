@@ -28,6 +28,7 @@
         %tr
           %th Status
           %th Id
+          %th Date
       %tbody
         - for (val flow <- flows)
           %tr
@@ -43,3 +44,6 @@
               =flow.status.toString()
             %td
               %a{:title => {flow.id}, :href => {"/flows/flow/%s".format(flow.id)}}= flow.id
+            %td
+              %h3
+                =flow.timestamp.time

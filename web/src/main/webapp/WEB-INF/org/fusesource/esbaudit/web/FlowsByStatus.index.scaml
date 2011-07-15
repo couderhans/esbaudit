@@ -13,19 +13,19 @@
         %td
           %img{:src => "/theme/main/images/spinner.gif"}
         %td
-          %a{:title => "Active", :href => "/flows/active"}
+          %a{:title => "Active", :href => "/flows/bystatus/active"}
             Active
       %tr
         %td
           %img{:src => "/theme/main/images/done16.png"}
         %td
-          %a{:title => "Active", :href => "/flows/done"}
+          %a{:title => "Active", :href => "/flows/bystatus/done"}
             Done
       %tr
         %td
           %img{:src => "/theme/main/images/error16.png"}
         %td
-          %a{:title => "Active", :href => "/flows/error"}
+          %a{:title => "Active", :href => "/flows/bystatus/error"}
             Error
   .view_title
     Active Flows
@@ -36,6 +36,7 @@
           %th Status
           %th Id
           %th Tags
+          %th Date
       %tbody
         - for (val flow <- flows)
           %tr
@@ -55,3 +56,6 @@
               - for (tag <- flow.tags)
                 %button
                   %a{:class =>"tag", :title => {tag}, :href => {"/flows/tag/%s".format(tag)}}= tag
+            %td
+              %h3
+                =flow.timestamp.time
