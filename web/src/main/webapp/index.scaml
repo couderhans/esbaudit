@@ -36,6 +36,7 @@
           %th Status
           %th Id
           %th Tags
+          %th Date
       %tbody
         - for (flow <- app.page(0, 10))
           %tr
@@ -55,3 +56,6 @@
               - for (tag <- flow.tags)
                 %button
                   %a{:class =>"tag", :title => {tag}, :href => {"flows/tag/%s".format(tag)}}= tag
+            %td
+              %h3
+                =flow.timestamp

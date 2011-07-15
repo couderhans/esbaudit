@@ -32,6 +32,8 @@ trait Backend {
 
   def flowsByStatus(status: String) : Iterator[Flow]
 
+  def flowsByDate(date: String) : Iterator[Flow]
+
   def search(query: String) : Iterator[Flow]
 
 }

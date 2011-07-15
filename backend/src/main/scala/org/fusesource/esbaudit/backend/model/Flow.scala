@@ -18,6 +18,7 @@
 package org.fusesource.esbaudit.backend.model
 
 import org.fusesource.esbaudit.backend.Log
+import java.util.Date
 
 /**
  * Models a Flow
@@ -45,6 +46,8 @@ class Flow(val id: String, val data: Map[String, AnyRef]) {
 
   lazy val exception = extract[Exception](EXCEPTION)
 
+  lazy val timestamp = extract[String](TIMESTAMP)
+
   override def toString = "Flow[%s](%s)".format(id, data)
 }
 
@@ -63,6 +66,7 @@ object Flow extends Log {
   val TAGS = "tags"
   val PROPERTIES = "properties"
   val EXCEPTION = "exception"
+  val TIMESTAMP = "timestamp"
 
   def apply(id: String, data: (String, AnyRef)*) = {
     new Flow(id, validate(data))
@@ -78,6 +82,7 @@ object Flow extends Log {
         case TAGS if !tuple._2.isInstanceOf[Iterable[String]] => warn("Invalid type for %s - skipping", tuple)
         case EXCEPTION if !tuple._2.isInstanceOf[Exception] => warn("Invalid type for %s - skipping", tuple)
         case PROPERTIES if !tuple._2.isInstanceOf[Map[String, AnyRef]] => warn("Invalid type for %s - skipping", tuple)
+        case TIMESTAMP if !tuple._2.isInstanceOf[String] => warn("Invalid type for %s - skipping", tuple)
         case _ => result += tuple
       }
     }

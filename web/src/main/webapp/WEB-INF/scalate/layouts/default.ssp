@@ -70,15 +70,15 @@
           </li>
         </ul>
       </div>
-      <div class="search"><!--
-        <form method="get" class="form">
+      <div class="search">
+        <form method="POST" action="flows/searched">
 		  <table>
             <tr>
-              <td><input id="send2" type="submit" value="Search it!" /></td>
-              <td><input id="search2" type="text" value="Search the web..." /></td>
+              <td><input type="submit" value="Search it!" /></td>
+              <td><input id="query" name="query" type="text" value="Search the web..." /></td>
             </tr>
           </table>
-        </form>-->
+        </form>
       </div>
     </div>
     <%= body %>
