@@ -21,13 +21,14 @@ class MongoDBSearchTest extends MongoAware {
                 IN_MESSAGE -> Message(
                   "COOKIES IN A JAR"
                 ),
-                STATUS -> Active()))
+                STATUS -> Active(),
+                TIMESTAMP -> Timestamp("yyyy-DD-dd","HH:mm")))
     mongo.store(Flow("record-02",
                 IN_MESSAGE -> Message(
                   "BISCUITS IN A JAR"
                 ),
-                STATUS -> Active()))
-
+                STATUS -> Active(),
+                TIMESTAMP -> Timestamp("yyyy-DD-dd","HH:mm")))
     val flows = mongo.search("COOKIES").toBuffer
     assertEquals("We should have found 1 matching flow", 1, flows.size)
     assertEquals("We wanted cookies and not biscuits", flows.head.in.body, "COOKIES IN A JAR")
@@ -40,14 +41,15 @@ class MongoDBSearchTest extends MongoAware {
                   "COOKIES IN A JAR"
                 ),
                 STATUS -> Active(),
-                TAGS -> Seq("cookie")))
+                TAGS -> Seq("cookie"),
+                TIMESTAMP -> Timestamp("yyyy-DD-dd","HH:mm")))
     mongo.store(Flow("record-02",
                 IN_MESSAGE -> Message(
                   "BISCUITS IN A JAR"
                 ),
                 STATUS -> Active(),
-                TAGS -> Seq("biscuit")))
-
+                TAGS -> Seq("biscuit"),
+                TIMESTAMP -> Timestamp("yyyy-DD-dd","HH:mm")))
     val flows = mongo.search("label:cookie").toBuffer
     assertEquals("We should have found 1 matching flow", 1, flows.size)
     assertEquals("We wanted cookies and not biscuits", flows.head.in.body, "COOKIES IN A JAR")
@@ -60,14 +62,15 @@ class MongoDBSearchTest extends MongoAware {
                   "COOKIES IN A JAR"
                 ),
                 STATUS -> Active(),
-                TAGS -> Seq("cookie")))
+                TAGS -> Seq("cookie"),
+                TIMESTAMP -> Timestamp("yyyy-DD-dd","HH:mm")))
     mongo.store(Flow("record-02",
                 IN_MESSAGE -> Message(
                   "BISCUITS IN A JAR"
                 ),
                 STATUS -> Active(),
-                TAGS -> Seq("biscuit")))
-
+                TAGS -> Seq("biscuit"),
+                TIMESTAMP -> Timestamp("yyyy-DD-dd","HH:mm")))
     val flows = mongo.search("COOKIES label:cookie").toBuffer
     assertEquals("We should have found 1 matching flow", 1, flows.size)
     assertEquals("We wanted cookies and not biscuits", flows.head.in.body, "COOKIES IN A JAR")

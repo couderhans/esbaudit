@@ -33,7 +33,8 @@ for (i <- 1 to 1000) {
                        STATUS -> Active(),
                        PROPERTIES -> Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
                          "date" -> new Date().toString() ),
-                       TAGS -> Seq("Invoice", "Test")))
+                       TAGS -> Seq("Invoice", "Test"),
+                       TIMESTAMP -> Timestamp("2011-07-12","00:00")))
 
 }
 
@@ -44,7 +45,8 @@ for (i <- 1100 to 2000) {
                        STATUS -> Done(),
                        PROPERTIES -> Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
                           "date" -> new Date().toString() ),
-                       TAGS -> Seq("po", "inbound")))
+                       TAGS -> Seq("po", "inbound"),
+                       TIMESTAMP -> Timestamp("2011-07-13","00:00")))
 
 }
 
@@ -55,8 +57,8 @@ for (i <- 2100 to 3000) {
                        STATUS -> Error(),
                        PROPERTIES -> Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
                           "date" -> new Date().toString() ),
-                       TAGS -> Seq("da", "outbound")))
-
+                       TAGS -> Seq("da", "outbound"),
+                       TIMESTAMP -> Timestamp("2011-07-14","00:00")))
 }
 
 for (i <- 3100 to 4000) {
@@ -66,8 +68,8 @@ for (i <- 3100 to 4000) {
                        STATUS -> Done(),
                        PROPERTIES -> Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
                           "date" -> new Date().toString() ),
-                       TAGS -> Seq("po", "outbound")))
-
+                       TAGS -> Seq("po", "outbound"),
+                       TIMESTAMP -> Timestamp("2011-07-15","00:00")))
 }
 
 for (i <- 4100 to 5000) {
@@ -77,6 +79,6 @@ for (i <- 4100 to 5000) {
                        STATUS -> Done(),
                        PROPERTIES -> Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
                           "date" -> new Date().toString() ),
-                       TAGS -> Seq("da", "inbound")))
-
+                       TAGS -> Seq("da", "inbound"),
+                       TIMESTAMP -> Timestamp("2011-07-16","00:00")))
 }

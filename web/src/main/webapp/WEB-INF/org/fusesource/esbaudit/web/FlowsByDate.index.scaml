@@ -1,9 +1,8 @@
-- val app = new org.fusesource.esbaudit.web.Controller
+-@ import val it : org.fusesource.esbaudit.web.FlowsByDate
 .subtitle
   .logo
     %img{:src => "/theme/main/images/dashboard.png" }
-  %h2
-    ESB Audit > Dashboard
+  %h2="ESB Audit > Flows by Date > %s".format(date)
 %article
   .menutitle_flows
     Flows
@@ -13,19 +12,19 @@
         %td
           %img{:src => "/theme/main/images/spinner.gif"}
         %td
-          %a{:title => "Active", :href => "/flows/bystatus/active"}
+          %a{:title => "Active", :href => "/flows/active"}
             Active
       %tr
         %td
           %img{:src => "/theme/main/images/done16.png"}
         %td
-          %a{:title => "Active", :href => "/flows/bystatus/done"}
+          %a{:title => "Active", :href => "/flows/done"}
             Done
       %tr
         %td
           %img{:src => "/theme/main/images/error16.png"}
         %td
-          %a{:title => "Active", :href => "/flows/bystatus/error"}
+          %a{:title => "Active", :href => "/flows/error"}
             Error
   .view_title
     Active Flows
@@ -39,7 +38,7 @@
           %th Tags
           %th Date
       %tbody
-        - for (flow <- app.page(0, 10))
+        - for (val flow <- flows)
           %tr
             %td
               -
@@ -52,11 +51,11 @@
               %img(src=icon)
               =flow.status.toString()
             %td
-              %a{:title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.id
+              %a{:title => {flow.id}, :href => {"/flows/flow/%s".format(flow.id)}}= flow.id
             %td
               - for (tag <- flow.tags)
                 %button
-                  %a{:class =>"tag", :title => {tag}, :href => {"flows/tag/%s".format(tag)}}= tag
+                  %a{:class =>"tag", :title => {tag}, :href => {"/flows/tag/%s".format(tag)}}= tag
             %td
               %h3
                 =flow.timestamp.time

@@ -46,7 +46,7 @@ class Flow(val id: String, val data: Map[String, AnyRef]) {
 
   lazy val exception = extract[Exception](EXCEPTION)
 
-  lazy val timestamp = extract[String](TIMESTAMP)
+  lazy val timestamp = extract[Timestamp](TIMESTAMP)
 
   override def toString = "Flow[%s](%s)".format(id, data)
 }
@@ -82,7 +82,7 @@ object Flow extends Log {
         case TAGS if !tuple._2.isInstanceOf[Iterable[String]] => warn("Invalid type for %s - skipping", tuple)
         case EXCEPTION if !tuple._2.isInstanceOf[Exception] => warn("Invalid type for %s - skipping", tuple)
         case PROPERTIES if !tuple._2.isInstanceOf[Map[String, AnyRef]] => warn("Invalid type for %s - skipping", tuple)
-        case TIMESTAMP if !tuple._2.isInstanceOf[String] => warn("Invalid type for %s - skipping", tuple)
+        case TIMESTAMP if !tuple._2.isInstanceOf[Timestamp] => warn("Invalid type for %s - skipping", tuple)
         case _ => result += tuple
       }
     }

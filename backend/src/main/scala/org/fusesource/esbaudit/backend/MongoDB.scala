@@ -19,8 +19,8 @@ package org.fusesource.esbaudit.backend
 
 import com.mongodb.Mongo
 import com.mongodb.casbah.Imports._
+import model._
 import scala.collection.JavaConversions._
-import model.{Flow,Message, Active, Status, Done, Error}
 import model.Flow._
 import java.util.Date
 import java.text.SimpleDateFormat
@@ -38,7 +38,7 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
   def all = for (val found <- database(collection).find) yield toFlow(found)
 
   def flowsByDate(date: String) = {
-    val query = MongoDBObject("timestamp" -> date)
+    val query = MongoDBObject("timestamp.date" -> date)
     for (val found <- database(collection).find(query)) yield toFlow(found)
   }
 
@@ -79,7 +79,7 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
                             TAGS -> toSeq(record.getAs[BasicDBList]("tags")),
                             PROPERTIES -> toMap(record.getAs[DBObject]("properties")),
                             EXCEPTION -> record.getAs[DBObject]("exception").toString,
-                            TIMESTAMP -> toDate(record.getAs[String]("timestamp")))
+                            TIMESTAMP -> toTimestamp(record.getAs[DBObject]("timestamp")))
       case None => warn("Unable to find exchange id in %s", record); null;
     }
   }
@@ -93,9 +93,11 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
     }
   }
 
-  def toDate(option: Option[String]) : String = {
+  def toTimestamp(option: Option[DBObject]) : Timestamp = {
     option match {
-      case Some(timestamp) => timestamp
+      case Some(record) => {
+        Timestamp(record.get("date").toString, record.get("time").toString)
+      }
       case _ => null
     }
   }
@@ -148,7 +150,6 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
       record += "tags" -> flow.tags
     }
 
-
     val headers = MongoDBObject.newBuilder
     for (header <- flow.in.headers) headers += header._1.replaceAll("\\.", "_") -> header._2
 
@@ -157,11 +158,11 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
     record += "in" -> in.result.asDBObject
 
     val timestamp = MongoDBObject.newBuilder
-
-    val now = new Date()
-    timestamp += "date" -> new SimpleDateFormat("yyyy-MM-dd").format(now).toString
-    timestamp += "time" -> new SimpleDateFormat("HH:mm:ss").format(now).toString
-
+    timestamp += "date" -> flow.timestamp.date
+    timestamp += "time" -> flow.timestamp.time
+    //val now = new Date()
+    //timestamp += "date" -> new SimpleDateFormat("yyyy-MM-dd").format(now).toString
+    //timestamp += "time" -> new SimpleDateFormat("HH:mm:ss").format(now).toString
 
     record += "timestamp" -> timestamp.result.asDBObject
 

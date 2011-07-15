@@ -32,20 +32,30 @@
         <script type="text/javascript" language="javascript" src="${uri("/js/jquery.dropdownPlain.js")}"></script>
         <script type="text/javascript">
 
-	$(function() {
-		$( "#datepicker" ).datepicker();
+	        $(function() {
+                $( "#datepicker" ).datepicker({
+                    onSelect: function(date) {
+                        alert(date);
+                        document.location='/flows/bydate/' + date;
+                    },
+                    selectWeek: true,
+                    inline: true,
+                    startDate: '01/01/2000',
+                    firstDay: 1,
+                    dateFormat: 'yy-mm-dd'
+                });
+                $( "#tabs" ).tabs();
+		        $( "a", ".tag-button" ).click(function() { return false; });
 
-        $( "#tabs" ).tabs();
-		$( "a", ".tag-button" ).click(function() { return false; });
-
-	});
+	        });
 
 			$(document).ready(function() {
 			    $('#accordion-body').accordion({active: 0 });
 			    $('#accordion-props').accordion();
 				$('#example').dataTable();
 			} );
-	</script>
+
+	    </script>
 
      </head>
 

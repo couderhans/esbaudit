@@ -51,6 +51,7 @@ article a.remaining:hover { text-decoration: underline; }
 article .view_title { position: absolute; top: 21px; left: 15px; width: 65%; border-bottom: solid 1px lightgrey; font-size: 1.2em; }
 article .view    { position: absolute; left: 15px; top: 48px; width: 65%; }
 
+#datepicker { position: absolute; top: 210px; left: 75%; width: 250px; border-bottom: solid 1px lightgrey;font-size: 1.2em;  }
 
 /* tables */
 table.tablesorter {
