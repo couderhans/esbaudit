@@ -57,7 +57,7 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
   def search(queryString: String) = {
     val reqs = for (part <- queryString.split("\\s")) yield {
       if (part.startsWith("label:")) {
-        val tags = part.split(":").slice(1,2)
+        val tags = part.split(":").slice(1, 2)
         "tags" $all tags
       } else {
         val builder = MongoDBObject.newBuilder
@@ -73,18 +73,18 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
   def toFlow(record: DBObject) = {
     record.getAs[String]("exchange_id") match {
       case Some(id) => Flow(id,
-                            IN_MESSAGE -> toMessage(record.getAs[DBObject]("in")),
-                            OUT_MESSAGE -> toMessage(record.getAs[DBObject]("out")),
-                            STATUS -> toStatus(record.getAs[String]("status")),
-                            TAGS -> toSeq(record.getAs[BasicDBList]("tags")),
-                            PROPERTIES -> toMap(record.getAs[DBObject]("properties")),
-                            EXCEPTION -> record.getAs[DBObject]("exception").toString,
-                            TIMESTAMP -> toTimestamp(record.getAs[DBObject]("timestamp")))
+        IN_MESSAGE -> toMessage(record.getAs[DBObject]("in")),
+        OUT_MESSAGE -> toMessage(record.getAs[DBObject]("out")),
+        STATUS -> toStatus(record.getAs[String]("status")),
+        TAGS -> toSeq(record.getAs[BasicDBList]("tags")),
+        PROPERTIES -> toMap(record.getAs[DBObject]("properties")),
+        EXCEPTION -> record.getAs[DBObject]("exception").toString,
+        TIMESTAMP -> toTimestamp(record.getAs[DBObject]("timestamp")))
       case None => warn("Unable to find exchange id in %s", record); null;
     }
   }
 
-  def toStatus(option: Option[String]) : Status = {
+  def toStatus(option: Option[String]): Status = {
     option match {
       case Some("done") => Done()
       case Some("error") => Error()
@@ -93,7 +93,7 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
     }
   }
 
-  def toTimestamp(option: Option[DBObject]) : Timestamp = {
+  def toTimestamp(option: Option[DBObject]): Timestamp = {
     option match {
       case Some(record) => {
         Timestamp(record.get("date").toString, record.get("time").toString)
@@ -102,7 +102,7 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
     }
   }
 
-  def toMessage(option: Option[DBObject]) : Message = {
+  def toMessage(option: Option[DBObject]): Message = {
     option match {
       case Some(record) => {
         Message(record.get("body"), toMap(record.getAs[DBObject]("headers")))
@@ -111,20 +111,20 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
     }
   }
 
-  def toMap(option: Option[DBObject]) : Map[String, AnyRef] = {
+  def toMap(option: Option[DBObject]): Map[String, AnyRef] = {
     val result = scala.collection.mutable.Map[String, AnyRef]()
     option match {
       case Some(record) => {
-        for(val row <- record) result += row._1 -> row._2
+        for (val row <- record) result += row._1 -> row._2
         result.toMap
       }
       case None => null
     }
   }
 
-  def toSeq(option: Option[BasicDBList]) : Seq[String] = {
+  def toSeq(option: Option[BasicDBList]): Seq[String] = {
     //val result = scala.collection.mutable.Seq[String]()
-   option match {
+    option match {
       case Some(list) => for (item <- list.toSeq) yield item.toString
       case None => Seq()
     }
@@ -137,10 +137,10 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
     record += "status" -> flow.status.toString
 
     if (flow.data.contains(PROPERTIES)) {
-    val properties = MongoDBObject.newBuilder
-    for (property <- flow.properties) properties += property._1.replaceAll("\\.", "_") -> property._2
+      val properties = MongoDBObject.newBuilder
+      for (property <- flow.properties) properties += property._1.replaceAll("\\.", "_") -> property._2
 
-    record += "properties" -> properties.result.asDBObject
+      record += "properties" -> properties.result.asDBObject
     }
 
     val in = MongoDBObject.newBuilder
@@ -171,7 +171,7 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
   }
 
 
-  def flow(id: String) : Option[Flow] = {
+  def flow(id: String): Option[Flow] = {
     val query = MongoDBObject("exchange_id" -> id)
     database(collection).findOne(query) match {
       case Some(record) => Some(toFlow(record))
@@ -181,13 +181,48 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
 
 
   def update(flow: Flow) = {
-    println("Not updating %s - not implemented yet".format(flow))
+
+    val query = MongoDBObject("exchange_id" -> flow.id)
+
+    val update = MongoDBObject.newBuilder
+    update += "exchange_id" -> flow.id
+    update += "status" -> flow.status.toString
+
+    if (flow.data.contains(PROPERTIES)) {
+      val properties = MongoDBObject.newBuilder
+      for (property <- flow.properties) properties += property._1.replaceAll("\\.", "_") -> property._2
+      update += "properties" -> properties.result.asDBObject
+    }
+
+    val in = MongoDBObject.newBuilder
+    in += "body" -> flow.in.body
+
+    if (flow.data.contains(TAGS)) {
+      update += "tags" -> flow.tags
+    }
+
+    val headers = MongoDBObject.newBuilder
+    for (header <- flow.in.headers) headers += header._1.replaceAll("\\.", "_") -> header._2
+
+    in += "headers" -> headers.result.asDBObject
+
+    update += "in" -> in.result.asDBObject
+
+    val timestamp = MongoDBObject.newBuilder
+    timestamp += "date" -> flow.timestamp.date
+    timestamp += "time" -> flow.timestamp.time
+
+    update += "timestamp" -> timestamp.result.asDBObject
+
+    database(collection).update(query, update.result.asDBObject, true, false)
   }
+
 }
 
 object MongoDB {
 
   def apply() = new MongoDB("servicemix")
+
   def apply(collection: String) = new MongoDB(collection)
 
 }
