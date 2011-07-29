@@ -8,23 +8,27 @@
     <head>
         <title>ESB Audit</title>
 
-        <link rel="stylesheet" type="text/css" href="${uri("/theme/main/master.css")}"/>
-        <link type="text/css" rel="stylesheet" href="${uri("/theme/main/demo_table.css")}"></link>
-        <link rel="stylesheet" href="${uri("/theme/main/style.css")}" type="text/css" media="screen, projection"/>
-        <link type="text/css" rel="stylesheet" href="${uri("/theme/custom/jquery-ui-1.8.11.custom.css")}"></link>
-	    <link type="text/css" rel="stylesheet" href="${uri("/theme/main/shCoreDefault.css")}"/>
+        <link type="text/css" rel="stylesheet" href="${uri("/theme/main/master.css")}"/>
+        <link type="text/css" rel="stylesheet" href="${uri("/theme/main/datatable.css")}"></link>
+        <link type="text/css" rel="stylesheet" href="${uri("/theme/main/menu.css")}" media="screen, projection"/>
+        <link type="text/css" rel="stylesheet" href="${uri("/theme/main/custom.jquery-ui.css")}"></link>
+	    <link type="text/css" rel="stylesheet" href="${uri("/theme/main/syntaxHighlighting.css")}"/>
 
-        <script src="${uri("/js/jquery-1.6.1.min.js")}"></script>
-        <script src="${uri("/js/jquery.ui.core.js")}"></script>
-        <script src="${uri("/js/jquery.ui.widget.js")}"></script>
-        <script src="${uri("/js/jquery.ui.datepicker.js")}"></script>
-        <script src="${uri("/js/jquery.ui.tabs.js")}"></script>
-        <script type="text/javascript" src="${uri("/js/jquery.ui.accordion.js")}"></script>
-        <script type="text/javascript" src="${uri("/js/jquery.dataTables.min.js")}"></script>
-        <script type="text/javascript" language="javascript" src="${uri("/js/jquery.dropdownPlain.js")}"></script>
-        <script type="text/javascript" src="${uri("/js/shCore.js")}"></script>
-	    <script type="text/javascript" src="${uri("/js/shBrushXml.js")}"></script>
-	    <script type="text/javascript">SyntaxHighlighter.all();</script>
+        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery-1.6.1.min.js")}"></script>
+        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.ui.core.js")}"></script>
+        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.ui.widget.js")}"></script>
+        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.ui.datepicker.js")}"></script>
+        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.ui.tabs.js")}"></script>
+        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.ui.accordion.js")}"></script>
+        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.dataTables.min.js")}"></script>
+        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.dropdownPlain.js")}"></script>
+        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.easing.1.3.js")}"></script>
+        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.jBreadCrumb.1.1.js")}"></script>
+
+        <script type="text/javascript" language="javascript" src="${uri("/scripts/shCore.js")}"></script>
+	    <script type="text/javascript" language="javascript" src="${uri("/scripts/shBrushXml.js")}"></script>
+	    <script type="text/javascript" language="javascript">SyntaxHighlighter.all();</script>
+
         <script type="text/javascript">
 
 	        $(function() {
@@ -43,54 +47,57 @@
                 $( "#tabs" ).tabs();
 		        $( "a", ".tag-button" ).click(function() { return false; });
 
-	        });
+                /* attach a submit handler to the form */
+                $("#searchForm").submit(function(event) {
+                    event.preventDefault();
+                    var $form = $( this ),
+                        term = $form.find( 'input[name="query"]' ).val(),
+                        url = $form.attr( 'action' ) + term;
+                    window.location.href = url;
+                });
+            });
 
 			$(document).ready(function() {
 			    $('#accordion-body').accordion({active: 0 });
 			    $('#accordion-props').accordion();
-				$('#example').dataTable();
-			} );
+				$('#flows').dataTable({
+		            "bJQueryUI": true,
+		            "bProcessing": true,
+		            "sPaginationType": "full_numbers"
+	            });
+				$('#breadCrumb0').jBreadCrumb();
+			});
 
 	    </script>
 
      </head>
 
     <body>
+
     <header>
-      <img src="/theme/main/images/logodesign66x66.png" class="logo"></img>
+      <img src="/theme/main/images/logodesign48x48.png" class="logo"></img>
       <div class="title">
-        <img src="/theme/main/images/smx-logo66x265.png"></img>
+        <img src="/theme/main/images/smx-logo.png"></img>
       </div>
-    </header>
-    <div class="top_navbar">
-      <div class="selected">
-        <ul class="dropdown">
-          <li>
-            <a href="#">ESB Audit</a>
-            <ul class="sub_menu">
-              <li><a href="/">Dashboard</a></li>
-              <li><a href="/flows/bystatus/active">Active Flows</a></li>
-              <li><a href="/flows/bystatus/done">Done</a></li>
-              <li><a href="/flows/bystatus/error">Errors</a></li>
-            </ul>
-          </li>
-        </ul>
+      <div class="subtitle">
+        <h1>ESB Audit</h1>
       </div>
       <div class="search">
-        <form method="POST" action="flows/searched">
-		  <table>
-            <tr>
-              <td><input type="submit" value="Search it!" /></td>
-              <td><input id="query" name="query" type="text" value="Search the web..." /></td>
-            </tr>
-          </table>
+        <form action="/flows/searched/" id="searchForm">
+          <span class="sbox_l"></span>
+          <span class="sbox">
+            <input name="query" type="search" id="srch_fld" placeholder="Search..." autosave="applestyle_srch" results="5"/>
+          </span>
+          <span class="sbox_r" id="srch_clear"></span>
         </form>
       </div>
-    </div>
-    <%= body %>
-    <footer>
-      <div class="title">© 2004-2010 The Apache Software Foundation</div>
+    </header>
 
+    <%= body %>
+
+    <footer>
+      <div class="title">© 2004-2011 The Apache Software Foundation</div>
     </footer>
+
     </body>
 </html>

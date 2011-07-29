@@ -34,7 +34,6 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
   val connection = MongoConnection("127.0.0.1")
   val database = connection("test")
 
-
   def all = for (val found <- database(collection).find) yield toFlow(found)
 
   def flowsByDate(date: String) = {
@@ -59,6 +58,18 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
       if (part.startsWith("label:")) {
         val tags = part.split(":").slice(1, 2)
         "tags" $all tags
+      } else if (part.startsWith("on:")) {
+        val date = part.split(":").slice(1, 2)
+        "timestamp.date" $all date
+      } else if (part.startsWith("status:")) {
+        val status = part.split(":").slice(1, 2)
+        "status" $all status
+      } else if (part.startsWith("property:")) {
+        val property = part.split(":").slice(1, 2)
+        "properties" $all property
+      } else if (part.startsWith("header:")) {
+        val header = part.split(":").slice(1, 2)
+        "headers" $all header
       } else {
         val builder = MongoDBObject.newBuilder
         builder += "in.body" -> part.r
@@ -123,7 +134,6 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
   }
 
   def toSeq(option: Option[BasicDBList]): Seq[String] = {
-    //val result = scala.collection.mutable.Seq[String]()
     option match {
       case Some(list) => for (item <- list.toSeq) yield item.toString
       case None => Seq()
@@ -132,6 +142,7 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
 
 
   def store(flow: Flow) = {
+
     val record = MongoDBObject.newBuilder
     record += "exchange_id" -> flow.id
     record += "status" -> flow.status.toString
@@ -160,9 +171,6 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
     val timestamp = MongoDBObject.newBuilder
     timestamp += "date" -> flow.timestamp.date
     timestamp += "time" -> flow.timestamp.time
-    //val now = new Date()
-    //timestamp += "date" -> new SimpleDateFormat("yyyy-MM-dd").format(now).toString
-    //timestamp += "time" -> new SimpleDateFormat("HH:mm:ss").format(now).toString
 
     record += "timestamp" -> timestamp.result.asDBObject
 

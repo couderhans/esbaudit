@@ -1,31 +1,44 @@
 -@ import val it : Flow
-.subtitle
-  .logo
-    %img{:src => "/theme/main/images/dashboard.png" }
-  %h2= "Flows > Flow > %s".format(id)
 %article
-  .flow
-    %div(id="accordion-body")
-      %h3
-        %a(href="#") Body
-      %div
-        %pre(id="code" class="brush: xml;")= in.body
-    %div(id="accordion-props")
-      %h3
-        %a(href="#") Properties
-      %div
+  .right
+    .right_title
+      .cb_title
+        Control Board
+      .flow
+        %div(id="accordion-props")
+          %h3
+            %a(href="#") Properties
+          %div
+            %ul
+              - for (val property <- properties)
+                %li
+                  = property._1
+                  &rarr;
+                  = property._2
+          %h3
+            %a(href="#") Headers
+          %div
+            %ul
+              - for (val header <- in.headers)
+                %li
+                  = header._1
+                  &rarr;
+                  = header._2
+  .main
+    .view_title
+      %div{:id => "breadCrumb0", :class => "breadCrumb module"}
         %ul
-          - for (val property <- properties)
-            %li
-              = property._1
-              &rarr;
-              = property._2
-      %h3
-        %a(href="#") Headers
-      %div
-        %ul
-          - for (val header <- in.headers)
-            %li
-              = header._1
-              &rarr;
-              = header._2
+          %li
+            %a{:href => "#"}
+              ESB Audit
+          %li
+            %a{:href => "localhost:8080/"}
+              Dashboard
+    .view
+      .flow
+        %div(id="accordion-body")
+          %h3
+            %a(href="#") Body
+          %div
+            %pre(id="code" class="brush: xml;")= in.body
+

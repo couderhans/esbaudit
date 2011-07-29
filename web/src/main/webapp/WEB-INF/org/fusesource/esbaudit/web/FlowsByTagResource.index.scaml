@@ -1,49 +1,62 @@
 -@ import val it : org.fusesource.esbaudit.web.FlowsByTagResource
-.subtitle
-  .logo
-    %img{:src => "/theme/main/images/dashboard.png" }
-  %h2= "ESB Audit > Showing flows By Tag"
 %article
-  .menutitle_tags
-    Tags
-  .menu_tags
-    %table
-      %tr
-        %td
-          %table(id="selected")
-            - for (tag <- selected)
-              %tr
-                %td
-                  %a{:class =>"selected", :title => {tag}, :href => {urlRemove(tag)}}= tag
-        %td
-          %table(id="remaining")
-            - for (tag <- remaining)
-              %tr
-                %td
-                  %a{:class =>"remaining", :title => {tag}, :href => {urlAdd(tag)}}= tag
-  .view_title="Showing flows for %s".format(tags)
-  .view
-    %table{:id => "example", :class => "tablesorter"}
-      %thead
+  .right
+    .right_title
+      .cb_title
+        Control Board
+    .menutitle_tags
+      Tags
+    .menu_tags
+      %table
         %tr
-          %th Status
-          %th Id
-          %th Date
-      %tbody
-        - for (val flow <- flows)
+          %td
+            %table(id="selected")
+              - for (tag <- selected)
+                %tr
+                  %td
+                    %a{:class =>"selected", :title => {tag}, :href => {urlRemove(tag)}}= tag
+          %td
+            %table(id="remaining")
+              - for (tag <- remaining)
+                %tr
+                  %td
+                    %a{:class =>"remaining", :title => {tag}, :href => {urlAdd(tag)}}= tag
+    %div(id="datepicker")
+  .main
+    .view_title
+      %div{:id => "breadCrumb0", :class => "breadCrumb module"}
+        %ul
+          %li
+            %a{:href => "http://localhost:8080"}
+              ESB Audit
+          %li
+            %a{:href => "http://localhost:8080"}
+              Flows
+          %li
+            %a{:href => "#"}
+              ="Flows By Tags: %s".format(selected)
+    .view
+      %table{:id => "flows", :class => "tablesorter"}
+        %thead
           %tr
-            %td
-              -
-                val icon: String = flow.status.toString() match {
-                  case "active" => "/theme/main/images/spinner.gif";
-                  case "done" => "/theme/main/images/done16.png";
-                  case "error" => "/theme/main/images/error16.png";
-                  case _ => "unknown";
-                }
-              %img(src=icon)
-              =flow.status.toString()
-            %td
-              %a{:title => {flow.id}, :href => {"/flows/flow/%s".format(flow.id)}}= flow.id
-            %td
-              %h3
-                =flow.timestamp.time
+            %th Status
+            %th Id
+            %th Date
+        %tbody
+          - for (val flow <- flows)
+            %tr
+              %td
+                -
+                  val icon: String = flow.status.toString() match {
+                    case "active" => "/theme/main/images/spinner.gif";
+                    case "done" => "/theme/main/images/done16.png";
+                    case "error" => "/theme/main/images/error16.png";
+                    case _ => "unknown";
+                  }
+                %img(src=icon)
+                  =flow.status.toString()
+              %td
+                %a{:title => {flow.id}, :href => {"/flows/flow/%s".format(flow.id)}}= flow.id
+              %td
+                %h3
+                  =flow.timestamp.time

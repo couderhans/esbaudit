@@ -1,123 +1,135 @@
-/* General Layout of the body */
-html { width: 100%; height: 100%; margin: 0; overflow: hidden; }
-body { font-family: Verdana, Arial, sans-serif; margin: 0px auto; width: 100%; font-size: .8em; background-color: #f3f9ff; }
-a.flow { text-decoration: none; }
+/* General Layout
+----------------------------------------------------------------------------------------------------------------------*/
+html         { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+body         { font-family: Verdana, Arial, sans-serif;
+               margin: 0px auto; width: 100%; font-size: .8em; background-color: #bddcfb; }
+a.flow       { text-decoration: none; }
 a.flow:hover { text-decoration: underline; }
-ul { margin: 0px; text-decoration: none; list-style: none; }
-ul.list { position: absolute; left: 1px; }
+ul           { margin: 0px; text-decoration: none; list-style: none; }
+ul.list      { position: absolute; left: 1px; }
 
-/* Some header stuff, the header contains 2 horizontal bars */
-header           { position: absolute; top: 0px; margin: 0; padding-right: .64em; width: 100%; height: 80px; background-color: #ffffff;
-                   background-image: url('/theme/main/images/bg.png'); background-repeat: repeat-x; }
-header .title    { position: absolute; top: 2px; left: 69px; color: #ffffff; font-size: 2.2em; }
-header .logo { position: absolute; top: 5px; left: 5px; }
 
-/* Menu style subtitle */
-.top_navbar            { position: absolute; top: 80px; width: 100%; height: 25px; background-color: #336894 }
-.top_navbar .selected  { position: absolute; left: 75px; width: 75px; height: 32px; color: #336699; background-color: #f3f9ff; font-size: 1.0em; }
-.top_navbar .selected .dropdown .sub_menu { z-index: 1; }
+/* Header with Servicemix Logo and Servicemix Title
+----------------------------------------------------------------------------------------------------------------------*/
+header        { position: absolute; top: 0px; margin: 0; padding-right: .64em; width: 100%; height: 92px;
+                background-color: #ffffff; background-image: url('/theme/main/images/bg.png');
+                background-repeat: repeat-x; border-bottom: solid 1px white; }
+header .title { position: absolute; top: 0px; left: 73px; color: #ffffff; font-size: 2.2em; }
+header .logo  { position: absolute; top: 6px; left: 15px; }
+header .subtitle { position: absolute; top: 23px; left: 78%; width: 20%; height: 18px; }
+header .subtitle h1 { font-size: 1.8em; color: #ffffff; }
 
-/* Footer stuff */
-footer        { position: absolute; margin: 0; padding-right: .64em; width: 100%; height: 4%; top: 98%; background-color: transparent; }
-footer .title { height: 28px; width: 100%; text-align: center; color: #336699; }
+/* Breadcrumb stuff
+ ---------------------------------------------------------------------------------------------------------------------*/
 
-/* Subtitle article */
-.subtitle { position: absolute; left: 1%; top: 124px; width: 100%; height: 25px; }
-.subtitle .logo { height: 25px; }
-.subtitle h2 { position: absolute; top: 16px; left: 64px; font-size: 2.1em; color: #336699; }
+.module:after    { clear: both; content: "."; display: block; height: 0; visibility: hidden; }
+/* float clearing for IE6 */
+* html .module   { height: 1%; overflow: visible; }
+/* float clearing for IE7 */
+* + html .module { min-height: 1%; }
 
-/* The article */
-article { position: absolute; left: 1%; top: 180px; width: 98%; height: 75%; background-color: white;
-          -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; border: solid 1px #336894; }
-article .title { position: absolute; z-index: 2; border-bottom: solid 1px lightgrey; font-size: 1.2em; }
-article .rounded-corners { -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
+.breadCrumb                          { position: absolute; left: 1%; top: 1px; margin: 0; padding: 0;
+                                       display: block; height: 21px; overflow: hidden; width: 91%; padding: 5px; }
+.breadCrumb ul                       { margin: 0; padding: 0; height: 21px; display: block; }
+.breadCrumb ul li                    { display: block; float: left; position: relative; height: 21px;
+                                       overflow: hidden; line-height: 21px; margin: 0px 6px 0px 0;
+                                       padding: 0px 10px 0px 0; font-size: .9167em;
+                                       background: url(/theme/main/images/Chevron.gif) no-repeat 100% 0; }
+.breadCrumb ul li div.chevronOverlay { position: absolute; right: 0; top: 0; z-index: 2; }
+.breadCrumb ul li span               { display: block; overflow: hidden; }
+.breadCrumb ul li a                  { display: block; position: relative; height: 21px;
+                                       line-height: 21px; overflow: hidden; float: left; }
+.breadCrumb ul li.first a            { height: 16px !important; text-indent:-1000em; width:16px; padding: 0;
+                                       margin-top: 2px; overflow: hidden;
+                                       background:url(/theme/main/images/IconHome.gif) no-repeat 0 0; }
+.breadCrumb ul li.first a:hover      { background-position: 0 -16px; }
+.breadCrumb ul li.last               { background: none; margin-right: 0; padding-right: 0; }
 
-/* Menu Left */
-article .menutitle_flows { position: absolute; top: 21px; left: 75%; width: 250px; border-bottom: solid 1px lightgrey; font-size: 1.2em; }
-article .menu_flows { position: absolute; top: 52px; left: 75%; width: 250px; }
+.chevronOverlay                      { display: none; background:
+                                       url(/theme/main/images/ChevronOverlay.png) no-repeat 100% 0;
+                                       width: 13px; height: 20px; }
 
-article .menutitle_tags { position: absolute; top: 21px; left: 75%; width: 250px; border-bottom: solid 1px lightgrey;font-size: 1.2em;  }
-article .menu_tags { position: absolute; top: 52px; left: 75%; width: 250px; }
 
-article table.selected { width: 280px; }
-article table.remaining { left: 175px; width: 100px; }
+/* The article
+----------------------------------------------------------------------------------------------------------------------*/
+article                   { position: absolute; left: 15px; top: 85px; width: 99%; height: 99%; }
 
-article a.selected { text-decoration: none; color: green; }
-article a.selected:hover { text-decoration: underline; }
-article a.remaining { text-decoration: none; color: red; }
+article .main             { position: absolute; left: 0px; top: 37px; width: 75%; height: 82%;
+                            margin: 0; padding: 0; background-color: white;
+                            -moz-border-radius: 7px; -webkit-border-radius: 7px; -khtml-border-radius: 7px;
+                            border-radius: 7px; border: solid 1px #959696; overflow: auto;  }
+
+article .right             { position: absolute; left: 78%; top: 37px; width: 21%; height: 82%;
+                            margin: 0; padding: 0; background-color: white;
+                            -moz-border-radius: 7px; -webkit-border-radius: 7px; -khtml-border-radius: 7px;
+                            border-radius: 7px; border: solid 1px #959696; }
+
+article .title            { position: absolute; z-index: 2; border-bottom: solid 1px lightgrey; font-size: 1.2em; }
+article .rounded-corners  { -moz-border-radius: 5px; -webkit-border-radius: 5px;
+                            -khtml-border-radius: 5px; border-radius: 5px; }
+
+
+article .menutitle_flows  { position: relative; top: 75px; left: 7%; width: 250px;
+                            border-bottom: solid 1px lightgrey; font-size: 1.2em; }
+article .menu_flows       { position: relative; top: 95px; left: 7%; width: 250px; }
+article .menutitle_tags   { position: relative; top: 57px; left: 7%; width: 250px;
+                            border-bottom: solid 1px lightgrey; font-size: 1.2em; }
+article .menu_tags        { position: relative; top: 75px; left: 7%; width: 250px; }
+article table.selected    { width: 280px; }
+article table.remaining   { left: 175px; width: 100px; }
+
+article a.selected        { text-decoration: none; color: green; }
+article a.selected:hover  { text-decoration: underline; }
+article a.remaining       { text-decoration: none; color: red; }
 article a.remaining:hover { text-decoration: underline; }
+article .view_title       { position: absolute; width: 100%; height: 37px;
+                            border-bottom: solid 1px lightgrey; font-size: 1.2em;
+                            background-image: url('/theme/main/images/bg_title.png'); background-repeat: repeat-x;
+                            -moz-border-radius-topleft: 7px; border-top-left-radius: 7px;
+                            -moz-border-radius-topright: 7px; border-top-right-radius: 7px;
+                            border: solid 0px #336894; }
+article .right_title       { position: absolute; width: 100%; height: 37px;
+                            border-bottom: solid 1px lightgrey; font-size: 1.2em;
+                            background-image: url('/theme/main/images/bg_title.png'); background-repeat: repeat-x;
+                            -moz-border-radius-topleft: 7px; border-top-left-radius: 7px;
+                            -moz-border-radius-topright: 7px; border-top-right-radius: 7px;
+                            border: solid 0px #336894; }
 
-/* Flow page */
-article .view_title { position: absolute; top: 21px; left: 15px; width: 65%; border-bottom: solid 1px lightgrey; font-size: 1.2em; }
-article .view    { position: absolute; left: 15px; top: 48px; width: 65%; }
+article .cb_title         { position: absolute; left: 1%; top: 2px; margin: 0; padding: 0; font-size: .8em;
+                            display: block; height: 21px; overflow: hidden; width: 91%; padding: 5px; }
+article .view             { position: absolute; left: 1%; top:43px; width: 98%; heigth: 99%; }
 
-#datepicker { position: absolute; top: 210px; left: 75%; width: 250px; border-bottom: solid 1px lightgrey;font-size: 1.2em;  }
+article #datepicker { position: absolute; top: 210px; left: 7%; width: 250px; border-bottom: solid 1px lightgrey; font-size: 1.2em;  }
 
 /* tables */
-table.tablesorter {
-    font-family:arial;
-	background-color: #CDCDCD;
-	margin:10px 0pt 15px;
-	font-size: 8pt;
-	width: 100%;
-	text-align: left;
-}
-table.tablesorter thead tr th, table.tablesorter tfoot tr th {
-	background-color: #e6EEEE;
-	border: 1px solid #FFF;
-	font-size: 8pt;
-	padding: 4px;
-}
-table.tablesorter thead tr .header {
-	background-image: url(images/bg.gif);
-	background-repeat: no-repeat;
-	background-position: center right;
-	cursor: pointer;
-}
-table.tablesorter tbody td {
-	color: #3D3D3D;
-	padding: 4px;
-	background-color: #FFF;
-	vertical-align: top;
-}
-table.tablesorter tbody tr.odd td {
-	background-color:#F0F0F6;
-}
-table.tablesorter thead tr .headerSortUp {
-	background-image: url(images/asc.gif);
-}
-table.tablesorter thead tr .headerSortDown {
-	background-image: url(images/desc.gif);
-}
-table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-    background-color: #8dbdd8;
-}
+table.tablesorter         { width: 100%; border: 2px solid #336699; }
+
 
 /* Search */
-
-div.search form { position: absolute; top: 0px; left: 82%; }
+div.search      { position: absolute; top: 61px; left: 78%; width: 20%; height: 18px; }
+div.search form input { position: absolute; left: 0px; width: 100%; height: 18px; border: 0px solid #000000;}
 
 .tag button a { width: 45px; color: #000000; text-decoration: none; }
 
-#accordion-body { font-size: 1.1em; height: 100%; width: 65%; }
-#accordion-props { position: absolute; top: 1px; left: 70%; width: 30%; }
-
+#accordion-body { font-size: 1.1em; height: 100%; width: 98%; }
+#accordion-props { position: absolute; top: 57px; left: 7%; width: 90%; }
 
 
 div.flow     { position: absolute; left: 9px; top: 7px; width: 91%; }
 div.flow .h1 { height: 25px; background-color: #defffc; color: #336699; font-weight: bold;
                font-size: 1.8em; border-bottom: solid 1px blue; }
 
-#flows { text-decoration: none; height: 25px; border-bottom: solid 0px silver; }
-#flows a { color: #000000; text-decoration: none; font-weight: bold; }
-#flows a.tag { font-weight: lighter; font-size: 0.8em; }
+#flows        { text-decoration: none; witdh: 100%; height: 25px; border-bottom: solid 0px silver; }
+#flows a      { color: #000000; text-decoration: none; font-weight: bold; }
+#flows a.tag  { font-weight: lighter; font-size: 0.8em; }
 #flows a.body { font-weight: lighter; font-size: 0.8em; color: #848484; }
 
 
-
-
-
-/* DEMO DATEPICKER */
+/* Footer stuff
+----------------------------------------------------------------------------------------------------------------------*/
+footer        { position: absolute; margin: 0; padding-right: .64em; width: 100%;
+                height: 4%; top: 98%; background-color: transparent; }
+footer .title { height: 28px; width: 100%; text-align: center; color: #336699; }
 
 
 

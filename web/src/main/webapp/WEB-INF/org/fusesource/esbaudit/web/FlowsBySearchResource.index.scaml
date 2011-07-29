@@ -1,30 +1,75 @@
 -@ import val it : org.fusesource.esbaudit.web.FlowsBySearchResource
-%div
-  .tabs
 %article
-  %h1= "Showing flow for query %s".format(query)
-  .widget
-    .title List of Flows
-    .body
-      %table(id="list")
+  .right
+    .right_title
+      .cb_title
+        Control Board
+    .search
+      %form{:action => "/flows/searched/", :id => "searchForm"}
+        %input{:name => "query", :type => "text", :placeHolder => "Search..."}
+    .menutitle_flows
+      Flows
+    .menu_flows
+      %table
+        %tr
+          %td
+            %img{:src => "/theme/main/images/spinner.gif"}
+          %td
+            %a{:title => "Active", :href => "/flows/bystatus/active"}
+              Active
+        %tr
+          %td
+            %img{:src => "/theme/main/images/done16.png"}
+          %td
+            %a{:title => "Active", :href => "/flows/bystatus/done"}
+              Done
+        %tr
+          %td
+            %img{:src => "/theme/main/images/error16.png"}
+          %td
+            %a{:title => "Active", :href => "/flows/bystatus/error"}
+              Error
+    %div(id="datepicker")
+  .main
+    .view_title
+      %div{:id => "breadCrumb0", :class => "breadCrumb module"}
+        %ul
+          %li
+            %a{:href => "http://localhost:8080/"}
+              ESB Audit
+          %li
+            %a{:href => "http://localhost:8080/"}
+              Flows
+          %li
+            %a{:href => "localhost:8080"}
+              = "Showing flow for query %s".format(query)
+    .view
+      %table{:id => "flows", :class => "tablesorter"}
         %thead
           %tr
             %th Status
-            %th ID
+            %th Id
             %th Tags
+            %th Date
         %tbody
-          - for (val flow <- flows)
+          - for (flow <- flows)
             %tr
-              -
-                val icon: String = flow.status.toString match {
-                  case "active" => "/theme/main/images/spinner.gif";
-                  case "done" => "/theme/main/images/done16.png";
-                  case "error" => "/theme/main/images/error16.png";
-                  case _ => "unknown";
-                }
               %td
+                -
+                  val icon: String = flow.status.toString() match {
+                    case "active" => "/theme/main/images/spinner.gif";
+                    case "done" => "/theme/main/images/done16.png";
+                    case "error" => "/theme/main/images/error16.png";
+                    case _ => "unknown";
+                  }
                 %img(src=icon)
+                =flow.status.toString()
               %td
-                %a{:title => {flow.id},
-                   :href => {"flows/flow/%s".format(flow.id)}}= flow.id
-              %td= flow.tags
+                %a{:title => {flow.id}, :href => {"/flows/flow/%s".format(flow.id)}}= flow.id
+              %td
+                - for (tag <- flow.tags)
+                  %button
+                    %a{:class =>"tag", :title => {tag}, :href => {"/flows/tag/%s".format(tag)}}= tag
+              %td
+                %h3
+                  =flow.timestamp.time

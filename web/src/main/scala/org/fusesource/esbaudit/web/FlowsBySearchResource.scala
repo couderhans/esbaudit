@@ -7,7 +7,7 @@ import javax.ws.rs._
 
 @ImplicitProduces(Array("text/html;qs=5"))
 @Path("/flows/searched/{query}")
-class FlowsBySearchResource(@FormParam("query") val query: String) {
+class FlowsBySearchResource(@PathParam("query") val query: String) {
 
   lazy val backend : Backend = MongoDB()
   //lazy val selected = query.split("\\+").toSeq
