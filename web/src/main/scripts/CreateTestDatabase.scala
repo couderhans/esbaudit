@@ -15,7 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import java.util.Date
+
+import java.util.{Calendar, Date}
 import org.fusesource.esbaudit.backend.MongoDB
 import org.fusesource.esbaudit.backend.model._
 import org.fusesource.esbaudit.backend.model.Flow._
@@ -33,7 +34,7 @@ for (i <- 1 to 1000) {
                        PROPERTIES -> Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
                          "date" -> new Date().toString() ),
                        TAGS -> Seq("Invoice", "Test"),
-                       TIMESTAMP -> Timestamp("2011-07-12","00:00")))
+                       TIMESTAMP -> Calendar.getInstance()))
 
 }
 
@@ -45,7 +46,7 @@ for (i <- 1100 to 2000) {
                        PROPERTIES -> Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
                           "date" -> new Date().toString() ),
                        TAGS -> Seq("po", "inbound"),
-                       TIMESTAMP -> Timestamp("2011-07-13","00:00")))
+                       TIMESTAMP -> Calendar.getInstance()))
 
 }
 
@@ -57,7 +58,7 @@ for (i <- 2100 to 3000) {
                        PROPERTIES -> Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
                           "date" -> new Date().toString() ),
                        TAGS -> Seq("da", "outbound"),
-                       TIMESTAMP -> Timestamp("2011-07-14","00:00")))
+                       TIMESTAMP -> Calendar.getInstance()))
 }
 
 for (i <- 3100 to 4000) {
@@ -68,7 +69,7 @@ for (i <- 3100 to 4000) {
                        PROPERTIES -> Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
                           "date" -> new Date().toString() ),
                        TAGS -> Seq("po", "outbound"),
-                       TIMESTAMP -> Timestamp("2011-07-15","00:00")))
+                       TIMESTAMP -> Calendar.getInstance()))
 }
 
 for (i <- 4100 to 5000) {
@@ -79,5 +80,5 @@ for (i <- 4100 to 5000) {
                        PROPERTIES -> Map("my-property-%05d".format(i) -> "my-value-%05d".format(i),
                           "date" -> new Date().toString() ),
                        TAGS -> Seq("da", "inbound"),
-                       TIMESTAMP -> Timestamp("2011-07-16","00:00")))
+                       TIMESTAMP -> Calendar.getInstance()))
 }

@@ -19,6 +19,8 @@ package org.fusesource.esbaudit.web
 
 import org.fusesource.esbaudit.backend.MongoDB
 import org.fusesource.esbaudit.backend.model._
+import java.text.SimpleDateFormat
+import java.util.{Date, Calendar}
 
 /**
  * Web application controller
@@ -27,10 +29,14 @@ class Controller {
 
   val backend = MongoDB()
 
-  def all = backend.flowsByDate("2011-07-14")
-  //def all = backend.all
+  val date = Calendar.getInstance()
+  date.set(Calendar.YEAR,2011)
+  def all = backend.flowsByDate(date)
 
   def page(begin: Int, end: Int) = all.slice(begin, end)
 
+  def dateformat(date: Date, formatstring: String): String = {
+    new SimpleDateFormat(formatstring).format(date).toString
+  }
 
 }

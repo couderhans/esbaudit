@@ -6,7 +6,7 @@
 <html dir="ltr">
 
     <head>
-        <title>ESB Audit</title>
+        <title>ServiceMix ESB Audit</title>
 
         <link type="text/css" rel="stylesheet" href="${uri("/theme/main/master.css")}"/>
         <link type="text/css" rel="stylesheet" href="${uri("/theme/main/datatable.css")}"></link>
@@ -44,8 +44,20 @@
                     firstDay: 1,
                     dateFormat: 'yy-mm-dd'
                 });
-                $( "#tabs" ).tabs();
-		        $( "a", ".tag-button" ).click(function() { return false; });
+
+                $( "#dashboard_tabs0" ).tabs({
+			        ajaxOptions: {
+				        error: function( xhr, status, index, anchor ) {
+					        $( anchor.hash ).html(
+						        "Couldn't load this tab. We'll try to fix this as soon as possible. " +
+						        "If this wouldn't be a demo." );
+				        }
+			        }
+		        });
+
+                $( "#accordion0" ).accordion();
+
+                $( "a", ".tag-button" ).click(function() { return false; });
 
                 /* attach a submit handler to the form */
                 $("#searchForm").submit(function(event) {
@@ -55,6 +67,7 @@
                         url = $form.attr( 'action' ) + term;
                     window.location.href = url;
                 });
+
             });
 
 			$(document).ready(function() {
@@ -75,28 +88,16 @@
     <body>
 
     <header>
-      <img src="/theme/main/images/logodesign48x48.png" class="logo"></img>
-      <div class="title">
-        <img src="/theme/main/images/smx-logo.png"></img>
-      </div>
-      <div class="subtitle">
-        <h1>ESB Audit</h1>
-      </div>
-      <div class="search">
-        <form action="/flows/searched/" id="searchForm">
-          <span class="sbox_l"></span>
-          <span class="sbox">
-            <input name="query" type="search" id="srch_fld" placeholder="Search..." autosave="applestyle_srch" results="5"/>
-          </span>
-          <span class="sbox_r" id="srch_clear"></span>
-        </form>
+      <img src="/theme/main/images/logodesign48x48.png" id="header_logo"></img>
+      <div id="header_title" class="title">
+        <img src="/theme/main/images/smx-logo-196x48.png"></img>
       </div>
     </header>
 
     <%= body %>
 
     <footer>
-      <div class="title">© 2004-2011 The Apache Software Foundation</div>
+      <div id="footer_title" class="title">© 2004-2011 The Apache Software Foundation</div>
     </footer>
 
     </body>
