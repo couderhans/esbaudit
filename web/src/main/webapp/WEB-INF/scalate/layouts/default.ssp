@@ -9,76 +9,18 @@
         <title>ServiceMix ESB Audit</title>
 
         <link type="text/css" rel="stylesheet" href="${uri("/theme/main/master.css")}"/>
-        <link type="text/css" rel="stylesheet" href="${uri("/theme/main/datatable.css")}"></link>
-        <link type="text/css" rel="stylesheet" href="${uri("/theme/main/menu.css")}" media="screen, projection"/>
-        <link type="text/css" rel="stylesheet" href="${uri("/theme/main/custom.jquery-ui.css")}"></link>
 	    <link type="text/css" rel="stylesheet" href="${uri("/theme/main/syntaxHighlighting.css")}"/>
 
         <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery-1.6.1.min.js")}"></script>
-        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.ui.core.js")}"></script>
-        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.ui.widget.js")}"></script>
-        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.ui.datepicker.js")}"></script>
-        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.ui.tabs.js")}"></script>
-        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.ui.accordion.js")}"></script>
-        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.dataTables.min.js")}"></script>
-        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.dropdownPlain.js")}"></script>
-        <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.easing.1.3.js")}"></script>
         <script type="text/javascript" language="javascript" src="${uri("/scripts/jquery.jBreadCrumb.1.1.js")}"></script>
-
         <script type="text/javascript" language="javascript" src="${uri("/scripts/shCore.js")}"></script>
 	    <script type="text/javascript" language="javascript" src="${uri("/scripts/shBrushXml.js")}"></script>
 	    <script type="text/javascript" language="javascript">SyntaxHighlighter.all();</script>
 
         <script type="text/javascript">
 
-	        $(function() {
-
-                $( "#datepicker" ).datepicker({
-                    onSelect: function(date) {
-                        alert(date);
-                        document.location='/flows/bydate/' + date;
-                    },
-                    selectWeek: true,
-                    inline: true,
-                    startDate: '01/01/2000',
-                    firstDay: 1,
-                    dateFormat: 'yy-mm-dd'
-                });
-
-                $( "#dashboard_tabs0" ).tabs({
-			        ajaxOptions: {
-				        error: function( xhr, status, index, anchor ) {
-					        $( anchor.hash ).html(
-						        "Couldn't load this tab. We'll try to fix this as soon as possible. " +
-						        "If this wouldn't be a demo." );
-				        }
-			        }
-		        });
-
-                $( "#accordion0" ).accordion();
-
-                $( "a", ".tag-button" ).click(function() { return false; });
-
-                /* attach a submit handler to the form */
-                $("#searchForm").submit(function(event) {
-                    event.preventDefault();
-                    var $form = $( this ),
-                        term = $form.find( 'input[name="query"]' ).val(),
-                        url = $form.attr( 'action' ) + term;
-                    window.location.href = url;
-                });
-
-            });
-
 			$(document).ready(function() {
-			    $('#accordion-body').accordion({active: 0 });
-			    $('#accordion-props').accordion();
-				$('#flows').dataTable({
-		            "bJQueryUI": true,
-		            "bProcessing": true,
-		            "sPaginationType": "full_numbers"
-	            });
-				$('#breadCrumb0').jBreadCrumb();
+				$('#breadCrumb').jBreadCrumb();
 			});
 
 	    </script>
@@ -88,8 +30,8 @@
     <body>
 
     <header>
-      <img src="/theme/main/images/logodesign48x48.png" id="header_logo"></img>
-      <div id="header_title" class="title">
+      <img src="/theme/main/images/logodesign48x48.png" class="logo"></img>
+      <div class="title">
         <img src="/theme/main/images/smx-logo-196x48.png"></img>
       </div>
     </header>
