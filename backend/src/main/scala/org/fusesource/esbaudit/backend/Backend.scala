@@ -17,7 +17,8 @@
  */
 package org.fusesource.esbaudit.backend
 
-import model.Flow
+import java.util.Date
+import model.{Timestamp, Flow}
 
 /**
  * Interface to represent a storage backend
@@ -32,7 +33,9 @@ trait Backend {
 
   def flowsByStatus(status: String) : Iterator[Flow]
 
-  def flowsByDate(date: String) : Iterator[Flow]
+  def flowsByDate(date: Date) : Iterator[Flow]
+
+  def flowsByDate(date: Timestamp) : Iterator[Flow]
 
   def search(query: String) : Iterator[Flow]
 

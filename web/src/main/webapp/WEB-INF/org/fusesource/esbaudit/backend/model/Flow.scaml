@@ -1,44 +1,53 @@
 -@ import val it : Flow
-%article
-  .controlboard
-    .right_title
-      .title
-        Control Board
-      .flow
-        %div(id="accordion-props")
-          %h3
-            %a(href="#") Properties
-          %div
-            %ul
-              - for (val property <- properties)
-                %li
-                  = property._1
-                  &rarr;
-                  = property._2
-          %h3
-            %a(href="#") Headers
-          %div
-            %ul
-              - for (val header <- in.headers)
-                %li
-                  = header._1
-                  &rarr;
-                  = header._2
-  .main
-    .view_title
-      %div{:id => "breadCrumb0", :class => "breadCrumb module"}
-        %ul
-          %li
-            %a{:href => "#"}
-              ESB Audit
-          %li
-            %a{:href => "localhost:8080/"}
-              Dashboard
-    .view
-      .flow
-        %div(id="accordion-body")
-          %h3
-            %a(href="#") Body
-          %div
-            %pre(id="code" class="brush: xml;")= in.body
+%section{:class => "flows"}
+  %header
+    %img{:src => "/theme/main/images/flows24x24.png"}
+    %h1
+      Flows
+  %div{:class => "flows"}
+    %table
+      %tr
+        %td
+          %img{:src => "/theme/main/images/spinner.gif"}
+        %td
+          %a{:title => "Active", :href => "/flows/bystatus/active"}
+            Active
+      %tr
+        %td
+          %img{:src => "/theme/main/images/done16.png"}
+        %td
+          %a{:title => "Active", :href => "/flows/bystatus/done"}
+            Done
+      %tr
+        %td
+          %img{:src => "/theme/main/images/error16.png"}
+        %td
+          %a{:title => "Active", :href => "/flows/bystatus/error"}
+            Error
+%section{:class => "dashboard"}
+  %header
+    %img{:src => "/theme/main/images/dashboard24x24.png"}
+    %h1
+      Dashboard
+    %div{:class => "dashboard"}
+  %navigation
+    %div{:id => "breadCrumb", :class => "breadcrumb"}
+      %ul{:class => "crumbs"}
+        %li{:class => "first"}
+          %a{:href => "#", :style => "z-index:8;"}
+            ESB Audit
+        %li{:class => "last"}
+          %a{:href => "localhost:8080", :style => "z-index:7;"}
+            Dashboard
+      %div{:class => "search"}
+        %form{:action => "/flows/searched/", :class => "search"}
+          %span{:class => "sbox_l"}
+            %span{:class => "sbox"}
+              %input{:name => "query", :type => "search", :id => "srch_fld", :placeholder => "Search...", :autosave => "applestyle_srch", :results => "5"}
+            %span{:class => "sbox_r", :id => "srch_clear"}
+  %div(id="accordion-body")
+    %h3
+      %a(href="#") Body
+    %div
+      %pre(id="code" class="brush: xml;")= in.body
 

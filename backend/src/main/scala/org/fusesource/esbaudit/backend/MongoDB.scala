@@ -36,11 +36,15 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
 
   def all = for (val found <- database(collection).find) yield toFlow(found)
 
-  def flowsByDate(date: String) = {
+  def flowsByDate(date: Date) = {
     val query = MongoDBObject("timestamp.date" -> date)
     for (val found <- database(collection).find(query)) yield toFlow(found)
   }
 
+  def flowsByDate(timestamp: Timestamp) = {
+    val query = MongoDBObject("timestamp.date" -> timestamp.date, "timestamp.time" -> timestamp.time)
+    for (val found <- database(collection).find(query)) yield toFlow(found)
+  }
 
   def flowsByTags(tags: Seq[String]) = {
     val query = "tags" $all tags

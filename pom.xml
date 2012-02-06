@@ -33,7 +33,7 @@
     <module>web</module>
     <module>backend</module>
     <module>interceptors</module>
-      <module>features</module>
+    <module>features</module>
   </modules>
 
   <properties>
