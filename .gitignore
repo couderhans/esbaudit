@@ -9,3 +9,4 @@ target
 *bin*
 .svn
 .DS_Store
+.directory
