@@ -146,13 +146,41 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
   }
 
 
-  def store(flow: Flow) = {
+  def store(flow: Flow) = database(collection) += toRecord(flow)
 
+  def flow(id: String): Option[Flow] = {
+    val query = MongoDBObject("exchange_id" -> id)
+    database(collection).findOne(query) match {
+      case Some(record) => Some(toFlow(record))
+      case None => None
+    }
+  }
+  def update(flow: Flow) = {
+
+    val record = MongoDBObject.newBuilder.result().asDBObject
+    val updates = for ((key, value) <- flow.data)
+      yield (key, value match {
+        case message: Message => Some(toRecord(message))
+        case string: String => Some(string)
+        case list: Seq[String] => Some(list)
+        case status: Status => Some(status.toString)
+        case map: Map[String, AnyRef] => Some(toRecord(map))
+        case timestamp: Timestamp => Some(toRecord(timestamp))
+        case _ => warn("Unable to convert %s - unknown value type %s", value, value.getClass); None;
+      })
+
+    println($set(updates.filterNot(_._2.isEmpty).toSeq.map(tuple => tuple._1 -> tuple._2.get) : _*))
+    database(collection).update(MongoDBObject("exchange_id" -> flow.id),
+                                $set(updates.filterNot(_._2.isEmpty).toSeq.map(tuple => tuple._1 -> tuple._2.get) : _*),
+                                true, false)
+  }
+
+
+  def toRecord(flow: Flow) : DBObject = {
     val record = MongoDBObject.newBuilder
     record += "exchange_id" -> flow.id
 
     for ((key, value) <- flow.data) {
-      println(key)
       val transformedValue : Option[AnyRef] = value match {
         case message: Message => Some(toRecord(message))
         case string: String => Some(string)
@@ -162,61 +190,12 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
         case timestamp: Timestamp => Some(toRecord(timestamp))
         case _ => warn("Unable to convert %s - unknown value type %s", value, value.getClass); None;
       }
-      println(transformedValue)
       transformedValue match {
         case Some(value) => record += key -> value
         case None => warn("Skip persisting value for key %s", key)
       }
     }
-
-    database(collection) += record.result.asDBObject
-  }
-
-
-  def flow(id: String): Option[Flow] = {
-    val query = MongoDBObject("exchange_id" -> id)
-    database(collection).findOne(query) match {
-      case Some(record) => Some(toFlow(record))
-      case None => None
-    }
-  }
-
-
-  def update(flow: Flow) = {
-
-    val query = MongoDBObject("exchange_id" -> flow.id)
-
-    val update = MongoDBObject.newBuilder
-    update += "exchange_id" -> flow.id
-    update += "status" -> flow.status.toString
-
-    if (flow.data.contains(PROPERTIES)) {
-      val properties = MongoDBObject.newBuilder
-      for (property <- flow.properties) properties += property._1.replaceAll("\\.", "_") -> property._2
-      update += "properties" -> properties.result.asDBObject
-    }
-
-    val in = MongoDBObject.newBuilder
-    in += "body" -> flow.in.body
-
-    if (flow.data.contains(TAGS)) {
-      update += "tags" -> flow.tags
-    }
-
-    val headers = MongoDBObject.newBuilder
-    for (header <- flow.in.headers) headers += header._1.replaceAll("\\.", "_") -> header._2
-
-    in += "headers" -> headers.result.asDBObject
-
-    update += "in" -> in.result.asDBObject
-
-    val timestamp = MongoDBObject.newBuilder
-    timestamp += "date" -> flow.timestamp.date
-    timestamp += "time" -> flow.timestamp.time
-
-    update += "timestamp" -> timestamp.result.asDBObject
-
-    database(collection).update(query, update.result.asDBObject, true, false)
+    record.result.asDBObject
   }
   
   def toRecord(timestamp: Timestamp) : DBObject = {
