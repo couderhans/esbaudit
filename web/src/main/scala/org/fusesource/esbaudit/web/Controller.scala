@@ -28,7 +28,7 @@ class Controller {
 
   val backend = MongoDB()
 
-  def all = backend.flowsByDate(Timestamp("",""))
+  def all = backend.all
 
   def page(begin: Int, end: Int) = all.slice(begin, end)
 

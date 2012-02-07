@@ -1,29 +1,63 @@
 -@ import val it : org.fusesource.esbaudit.web.FlowsActive
-%subtitle
-  Dashboard ESB Audit
-.menu
-  %ul
-    %li All Flows
-    %li Active
-    %li Done
-    %li Error
-%article
-  .view
-    %div(id="list-all")
-      %ul(id="list")
-        - for (flow <- flows)
-          %li(id="flows")
-            -
-              val icon: String = flow.status.toString() match {
-                case "active" => "/theme/main/images/spinner.gif";
-                case "done" => "/theme/main/images/done16.png";
-                case "error" => "/theme/main/images/error16.png";
-                case _ => "unknown";
-              }
-            %img(src=icon)
-            %a{:title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.id
-            - for (tag <- flow.tags)
-              %button
-                %a{:class =>"tag", :title => {tag}, :href => {"flows/tag/%s".format(tag)}}= tag
-            %a{:class => "body", :title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.in.body.toString().substring(0, 100)
-
+%section{:class => "flows"}
+  %header
+    %img{:src => "/theme/main/images/flows24x24.png"}
+    %h1
+      Flows
+  %div{:class => "flows"}
+    %table
+      %tr
+        %td
+          %img{:src => "/theme/main/images/spinner.gif"}
+        %td
+          %a{:title => "Active", :href => "/flows/bystatus/active"}
+            Active
+      %tr
+        %td
+          %img{:src => "/theme/main/images/done16.png"}
+        %td
+          %a{:title => "Active", :href => "/flows/bystatus/done"}
+            Done
+      %tr
+        %td
+          %img{:src => "/theme/main/images/error16.png"}
+        %td
+          %a{:title => "Active", :href => "/flows/bystatus/error"}
+            Error
+%section{:class => "dashboard"}
+  %header
+    %img{:src => "/theme/main/images/dashboard24x24.png"}
+    %h1
+      Dashboard
+    %div{:class => "dashboard"}
+  %navigation
+    %div{:id => "breadCrumb", :class => "breadcrumb"}
+      %ul{:class => "crumbs"}
+        %li{:class => "first"}
+          %a{:href => "#", :style => "z-index:8;"}
+            ESB Audit
+        %li{:class => "last"}
+          %a{:href => "localhost:8080", :style => "z-index:7;"}
+            Dashboard
+      %div{:class => "search"}
+        %form{:action => "/flows/searched/", :class => "search"}
+          %span{:class => "sbox_l"}
+            %span{:class => "sbox"}
+              %input{:name => "query", :type => "search", :id => "srch_fld", :placeholder => "Search...", :autosave => "applestyle_srch", :results => "5"}
+            %span{:class => "sbox_r", :id => "srch_clear"}
+  %div{:class => "resultset"}
+    - for (flow <- app.page(0, 25))
+      %article
+        -
+          val icon: String = flow.status.toString() match {
+            case "active" => "/theme/main/images/spinner.gif";
+            case "done" => "/theme/main/images/done16.png";
+            case "error" => "/theme/main/images/error16.png";
+            case _ => "unknown";
+          }
+        %img(src=icon)
+          =flow.status.toString()
+        %a{:title => {flow.id}, :href => {"flows/flow/%s".format(flow.id)}}= flow.id
+        - for (tag <- flow.tags)
+          %button
+            %a{:class =>"tag", :title => {tag}, :href => {"flows/tag/%s".format(tag)}}= tag

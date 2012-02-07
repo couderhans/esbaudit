@@ -1,4 +1,4 @@
--@ import val it : Flow
+- val app = new org.fusesource.esbaudit.web.Controller
 %section{:class => "flows"}
   %header
     %img{:src => "/theme/main/images/flows24x24.png"}
@@ -45,9 +45,10 @@
             %span{:class => "sbox"}
               %input{:name => "query", :type => "search", :id => "srch_fld", :placeholder => "Search...", :autosave => "applestyle_srch", :results => "5"}
             %span{:class => "sbox_r", :id => "srch_clear"}
-  %div(id="accordion-body")
-    %h3
-      %a(href="#") Body
-    %div
-      %pre(id="code" class="brush: xml;")= in.body
+  %div{:class => "resultset"}
+    %div(id="accordion-body")
+      %h3
+        %a(href="#") Body
+      %div
+        %pre(id="code" class="brush: xml;")= in.body
 
