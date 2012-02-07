@@ -56,7 +56,6 @@
             case _ => "unknown";
           }
         %img(src=icon)
-          =flow.status.toString()
         %a{:title => {flow.id}, :href => {"/flows/flow/%s".format(flow.id)}}= flow.id
         - for (tag <- flow.tags)
           %button
