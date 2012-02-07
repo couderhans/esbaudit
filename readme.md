@@ -36,7 +36,26 @@ Add the interceptors to your Camel route
 
 In the Blueprint XML file defining your CamelContext, add these elements:
 
-    //TODO: @Joris, can you copy-paste this from your example
+    <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+        <camelContext xmlns="http://camel.apache.org/schema/blueprint">
+            <route>
+                <from uri="timer:test" />
+                <to uri="log:test" />
+            </route>
+        </camelContext>
+
+        <bean class="org.fusesource.esbaudit.interceptors.camel.AuditorStrategy">
+          <argument>
+            <bean class="org.fusesource.esbaudit.backend.MongoDB">
+              <argument>
+                <value>servicemix</value>
+              </argument>
+            </bean>
+          </argument>
+        </bean>
+
+    </blueprint>
     
 Run the web console
 -------------------

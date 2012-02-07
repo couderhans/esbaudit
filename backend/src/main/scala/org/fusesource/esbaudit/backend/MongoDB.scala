@@ -24,6 +24,7 @@ import scala.collection.JavaConversions._
 import model.Flow._
 import java.util.Date
 import java.text.SimpleDateFormat
+import com.mongodb.casbah.commons.MongoDBObjectBuilder
 
 
 /**
@@ -149,35 +150,24 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
 
     val record = MongoDBObject.newBuilder
     record += "exchange_id" -> flow.id
-    record += "status" -> flow.status.toString
 
-    if (flow.data.contains(PROPERTIES)) {
-      val properties = MongoDBObject.newBuilder
-      for (property <- flow.properties) properties += property._1.replaceAll("\\.", "_") -> property._2
-
-      record += "properties" -> properties.result.asDBObject
+    for ((key, value) <- flow.data) {
+      println(key)
+      val transformedValue : Option[AnyRef] = value match {
+        case message: Message => Some(toRecord(message))
+        case string: String => Some(string)
+        case list: Seq[String] => Some(list)
+        case status: Status => Some(status.toString)
+        case map: Map[String, AnyRef] => Some(toRecord(map))
+        case timestamp: Timestamp => Some(toRecord(timestamp))
+        case _ => warn("Unable to convert %s - unknown value type %s", value, value.getClass); None;
+      }
+      println(transformedValue)
+      transformedValue match {
+        case Some(value) => record += key -> value
+        case None => warn("Skip persisting value for key %s", key)
+      }
     }
-
-    val in = MongoDBObject.newBuilder
-    in += "body" -> flow.in.body
-
-    if (flow.data.contains(TAGS)) {
-      record += "tags" -> flow.tags
-    }
-
-    val headers = MongoDBObject.newBuilder
-    for (header <- flow.in.headers) headers += header._1.replaceAll("\\.", "_") -> header._2
-
-    in += "headers" -> headers.result.asDBObject
-
-    record += "in" -> in.result.asDBObject
-
-    val timestamp = MongoDBObject.newBuilder
-    timestamp += "date" -> flow.timestamp.date
-    timestamp += "time" -> flow.timestamp.time
-
-    record += "timestamp" -> timestamp.result.asDBObject
-
 
     database(collection) += record.result.asDBObject
   }
@@ -228,6 +218,33 @@ class MongoDB(val collection: String) extends Backend with Adapter with Log {
 
     database(collection).update(query, update.result.asDBObject, true, false)
   }
+  
+  def toRecord(timestamp: Timestamp) : DBObject = {
+    val result = MongoDBObject.newBuilder
+    result += "date" -> timestamp.date
+    result += "time" -> timestamp.time
+    result.result().asDBObject
+  }
+
+  def toRecord(message: Message) : DBObject = {
+    val record = MongoDBObject.newBuilder
+    record += "body" -> message.body
+
+    val headers = MongoDBObject.newBuilder
+    for (header <- message.headers)
+      headers += header._1.replaceAll("\\.", "_") -> header._2
+
+    record += "headers" -> headers.result.asDBObject
+
+    record.result().asDBObject
+  }
+
+  def toRecord(map: Map[String, AnyRef]) = {
+    val record = MongoDBObject.newBuilder
+    for ((key, value) <- map) record += key.replaceAll("\\.", "_") -> value
+    record.result.asDBObject
+  }
+
 
 }
 
