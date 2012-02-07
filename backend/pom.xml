@@ -35,7 +35,7 @@
   <dependencies>
     <dependency>
       <groupId>com.mongodb.casbah</groupId>
-      <artifactId>casbah_2.8.1</artifactId>
+      <artifactId>casbah_${scala.version}</artifactId>
       <type>pom</type>
         <exclusions>
             <exclusion>
